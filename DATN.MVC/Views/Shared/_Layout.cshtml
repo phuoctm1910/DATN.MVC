@@ -1,0 +1,490 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DATN.MVC</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/color.css" asp-append-version="true" />
+    <link id="dark-theme" rel="stylesheet" href="~/css/dark-theme.css" disabled asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/my.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DATN.MVC.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/icons/themify-icons/themify-icons.css" asp-append-version="true">
+
+</head>
+<body>
+    <div class="theme-layout" style="background: #edf2f6;">
+        <div class="postoverlay" style="display: none;"></div>
+        <div class="responsive-header">
+            <div class="mh-head first mm-sticky mh-btns-left mh-btns-right mh-sticky">
+                <span class="mh-btns-left">
+                    <a class="" href="#menu">
+                        <svg class="svg-inline--fa fa-align-justify" aria-hidden="true"
+                             focusable="false" data-prefix="fas" data-icon="align-justify" role="img"
+                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                            <path fill="currentColor"
+                                  d="M416 416H31.1C14.33 416 0 430.3 0 448S14.33 480 31.1 480h384C433.7 480 448 465.7 448 448S433.7 416 416 416zM416 288H31.1C14.33 288 0 302.3 0 320S14.33 352 31.1 352h384C433.7 352 448 337.7 448 320S433.7 288 416 288zM416 160H31.1C14.33 160 0 174.3 0 192S14.33 224 31.1 224h384C433.7 224 448 209.7 448 192S433.7 160 416 160zM416 32H31.1C14.33 32 0 46.33 0 64S14.33 96 31.1 96h384C433.7 96 448 81.67 448 64S433.7 32 416 32z">
+                            </path>
+                        </svg><!-- <i class="fa fa-align-justify"></i> -->
+                    </a>
+                </span>
+                <span class="mh-text">
+                    <a href="newsfeed.html" title=""><img src="images/logo2.png" alt=""></a>
+                </span>
+                <span class="mh-btns-right">
+                    <svg class="svg-inline--fa fa-sliders" href="#shoppingbag" aria-hidden="true" focusable="false"
+                         data-prefix="fas" data-icon="sliders" role="img" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 512 512" data-fa-i2svg="">
+                        <path fill="currentColor"
+                              d="M480 384H249.2C236.9 355.8 208.8 336 176 336S115.1 355.8 102.8 384H32c-17.67 0-32 14.33-32 32s14.33 32 32 32h70.75C115.1 476.2 143.2 496 176 496s60.89-19.77 73.25-48H480c17.67 0 32-14.33 32-32S497.7 384 480 384zM176 448c-17.64 0-32-14.36-32-32s14.36-32 32-32s32 14.36 32 32S193.6 448 176 448zM480 224h-70.75C396.9 195.8 368.8 176 336 176S275.1 195.8 262.8 224H32C14.33 224 0 238.3 0 256s14.33 32 32 32h230.8C275.1 316.2 303.2 336 336 336s60.89-19.77 73.25-48H480c17.67 0 32-14.33 32-32S497.7 224 480 224zM336 288c-17.64 0-32-14.36-32-32s14.36-32 32-32s32 14.36 32 32S353.6 288 336 288zM32 128h102.8C147.1 156.2 175.2 176 208 176s60.89-19.77 73.25-48H480c17.67 0 32-14.33 32-32s-14.33-32-32-32h-198.8C268.9 35.77 240.8 16 208 16S147.1 35.77 134.8 64H32C14.33 64 0 78.33 0 96S14.33 128 32 128zM208 64c17.64 0 32 14.36 32 32s-14.36 32-32 32s-32-14.36-32-32S190.4 64 208 64z">
+                        </path>
+                    </svg><!-- <a class="fa fa-sliders" href="#shoppingbag"></a> -->
+                </span>
+            </div>
+            <div class="mh-head second">
+                <form class="mh-form">
+                    <input placeholder="search">
+                    <svg href="#/" class="svg-inline--fa fa-magnifying-glass" aria-hidden="true" focusable="false"
+                         data-prefix="fas" data-icon="magnifying-glass" role="img" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 512 512" data-fa-i2svg="">
+                        <path fill="currentColor"
+                              d="M500.3 443.7l-119.7-119.7c27.22-40.41 40.65-90.9 33.46-144.7C401.8 87.79 326.8 13.32 235.2 1.723C99.01-15.51-15.51 99.01 1.724 235.2c11.6 91.64 86.08 166.7 177.6 178.9c53.8 7.189 104.3-6.236 144.7-33.46l119.7 119.7c15.62 15.62 40.95 15.62 56.57 0C515.9 484.7 515.9 459.3 500.3 443.7zM79.1 208c0-70.58 57.42-128 128-128s128 57.42 128 128c0 70.58-57.42 128-128 128S79.1 278.6 79.1 208z">
+                        </path>
+                    </svg><!-- <a href="#/" class="fa fa-search"></a> -->
+                </form>
+            </div>
+
+
+        </div>
+        @{ 
+            Html.RenderPartial("~/Views/Shared/_header.cshtml");
+        }
+        @{ 
+            Html.RenderPartial("~/Views/Shared/_SidebarRight.cshtml");
+        }
+        <!--Menu Sidebar-->
+        <div class="fixed-sidebar left">
+            <div class="menu-left">
+                <ul class="left-menu ps-container ps-theme-default" data-ps-id="19722989-04c1-bf4b-400f-abe7105d9b0a">
+                    <li>
+                        <a class="menu-small" href="#" title="">
+                            <i class="fa-solid fa-bars"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="timeline-friends.html" title="" data-toggle="tooltip" data-placement="right"
+                           data-original-title="Friends">
+                            <i class="fa-regular fa-user"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="chat-messenger.html" title="" data-toggle="tooltip" data-placement="right"
+                           data-original-title="Messages">
+                            <i class="fa-regular fa-message"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="notifications.html" title="" data-toggle="tooltip" data-placement="right"
+                           data-original-title="Notification">
+                            <i class="fa-regular fa-bell"></i><!-- <i class="fa-regular fa-bell"></i> -->
+                        </a>
+                    </li>
+                    <li>
+                        <a href="support-and-help.html" title="" data-toggle="tooltip" data-placement="right"
+                           data-original-title="Help">
+                            <i class="fa-regular fa-circle-question"></i><!-- <i class="fa-regular fa-square-question"></i> -->
+                        </a>
+                    </li>
+                    <li>
+                        <a href="faq.html" title="" data-toggle="tooltip" data-placement="right"
+                           data-original-title="Faq's">
+                            <i class="fa-regular fa-circle-question"></i><!-- <i class="fa-regular fa-lightbulb-on"></i> -->
+                        </a>
+                    </li>
+                    <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
+                        <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                    </div>
+                    <div class="ps-scrollbar-y-rail" style="top: 0px; right: 0px;">
+                        <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+        <!--Menu Sidebar-->
+        <!--Middle-->
+        <section>
+            @RenderBody()
+
+        </section>
+    </div>
+    <div class="side-panel">
+        <h4 class="panel-title">General Setting</h4>
+        <form method="post">
+            <div class="setting-row">
+                <span>use night mode</span>
+                <input type="checkbox" id="nightmode">
+                <label for="nightmode" data-on-label="ON" data-off-label="OFF"></label>
+            </div>
+            <div class="setting-row">
+                <span>Notifications</span>
+                <input type="checkbox" id="switch22">
+                <label for="switch22" data-on-label="ON" data-off-label="OFF"></label>
+            </div>
+            <div class="setting-row">
+                <span>Notification sound</span>
+                <input type="checkbox" id="switch33">
+                <label for="switch33" data-on-label="ON" data-off-label="OFF"></label>
+            </div>
+        </form>
+    </div>
+    <div class="popup-wraper1">
+        <div class="popup direct-mesg">
+            <span class="popup-closed"><i class="ti-close"></i></span>
+            <div class="popup-meta">
+                <div class="popup-head">
+                    <h5>Send Message</h5>
+                </div>
+                <div class="send-message">
+                    <form method="post" class="c-form">
+                        <input type="text" placeholder="Sophia">
+                        <textarea placeholder="Write Message"></textarea>
+                        <button type="submit" class="main-btn">Send</button>
+                    </form>
+                    <div class="add-smiles">
+                        <div class="uploadimage">
+                            <i class="fa fa-image"></i>
+                            <label class="fileContainer">
+                                <input type="file">
+                            </label>
+                        </div>
+                        <span title="add icon" class="em em-expressionless"></span>
+                        <div class="smiles-bunch">
+                            <i class="em em---1"></i>
+                            <i class="em em-smiley"></i>
+                            <i class="em em-anguished"></i>
+                            <i class="em em-laughing"></i>
+                            <i class="em em-angry"></i>
+                            <i class="em em-astonished"></i>
+                            <i class="em em-blush"></i>
+                            <i class="em em-disappointed"></i>
+                            <i class="em em-worried"></i>
+                            <i class="em em-kissing_heart"></i>
+                            <i class="em em-rage"></i>
+                            <i class="em em-stuck_out_tongue"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div><!-- send message popup -->
+    <div class="popup-wraper2">
+        <div class="popup post-sharing">
+            <span class="popup-closed"><i class="ti-close"></i></span>
+            <div class="popup-meta">
+                <div class="popup-head">
+                    <select data-placeholder="Share to friends..." multiple class="chosen-select multi">
+                        <option>Share in your feed</option>
+                        <option>Share in friend feed</option>
+                        <option>Share in a page</option>
+                        <option>Share in a group</option>
+                        <option>Share in message</option>
+                    </select>
+                    <div class="post-status">
+                        <span><i class="fa fa-globe"></i></span>
+                        <ul>
+                            <li><a href="#" title=""><i class="fa fa-globe"></i> Post Globaly</a></li>
+                            <li><a href="#" title=""><i class="fa fa-user"></i> Post Private</a></li>
+                            <li><a href="#" title=""><i class="fa fa-user-plus"></i> Post Friends</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="postbox">
+                    <div class="post-comt-box">
+                        <form method="post">
+                            <input type="text" placeholder="Search Friends, Pages, Groups, etc....">
+                            <textarea placeholder="Say something about this..."></textarea>
+                            <div class="add-smiles">
+                                <span title="add icon" class="em em-expressionless"></span>
+                                <div class="smiles-bunch">
+                                    <i class="em em---1"></i>
+                                    <i class="em em-smiley"></i>
+                                    <i class="em em-anguished"></i>
+                                    <i class="em em-laughing"></i>
+                                    <i class="em em-angry"></i>
+                                    <i class="em em-astonished"></i>
+                                    <i class="em em-blush"></i>
+                                    <i class="em em-disappointed"></i>
+                                    <i class="em em-worried"></i>
+                                    <i class="em em-kissing_heart"></i>
+                                    <i class="em em-rage"></i>
+                                    <i class="em em-stuck_out_tongue"></i>
+                                </div>
+                            </div>
+
+                            <button type="submit"></button>
+                        </form>
+                    </div>
+                    <figure><img src="images/resources/share-post.jpg" alt=""></figure>
+                    <div>
+                        <div class="friend-info">
+                            <figure>
+                                <img alt="" src="images/resources/admin.jpg">
+                            </figure>
+                            <div class="friend-name">
+                                <ins>
+                                    <a title="" href="time-line.html">Jack Carter</a> share <a title=""
+                                                                                               href="#">link</a>
+                                </ins>
+                                <span>
+                                    Yesterday with Jack Piller and Emily Stone at the concert of # Rock'n'Rolla in
+                                    Ontario.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="share-to-other">
+                        <span>Share to other socials</span>
+                        <ul>
+                            <li>
+                                <a class="facebook-color" href="#" title=""><i class="fa fa-facebook-square"></i></a>
+                            </li>
+                            <li>
+                                <a class="twitter-color" href="#" title=""><i class="fa fa-twitter-square"></i></a>
+                            </li>
+                            <li><a class="dribble-color" href="#" title=""><i class="fa fa-dribbble"></i></a></li>
+                            <li>
+                                <a class="instagram-color" href="#" title=""><i class="fa fa-instagram"></i></a>
+                            </li>
+                            <li>
+                                <a class="pinterest-color" href="#" title=""><i class="fa fa-pinterest-square"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="copy-email">
+                        <span>Copy & Email</span>
+                        <ul>
+                            <li><a href="#" title="Copy Post Link"><i class="fa fa-link"></i></a></li>
+                            <li><a href="#" title="Email this Post"><i class="fa fa-envelope"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="we-video-info">
+                        <button class="main-btn color" data-ripple="">Submit</button>
+                        <button class="main-btn cancel" data-ripple="">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- share popup -->
+    <div class="modal fade" id="img-comt">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="pop-image">
+                                <div id="demo" class="carousel slide" data-interval="false" data-ride="carousel"
+                                     data-pause="hover">
+                                    <!-- The slideshow -->
+                                    <div class="pop-item">
+                                        <div class="carousel-item active">
+                                            <img src="images/resources/blog-detail.jpg" alt="">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="images/resources/blog-detail2.jpg" alt="">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="images/resources/blog2.jpg" alt="">
+                                        </div>
+                                    </div>
+
+                                    <!-- Left and right controls -->
+                                    <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                                        <span class="carousel-control-prev-icon"></span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#demo" data-slide="next">
+                                        <span class="carousel-control-next-icon"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="user">
+                                <figure><img src="images/resources/user1.jpg" alt=""></figure>
+                                <div class="user-information">
+                                    <h4><a href="#" title="">Danile Walker</a></h4>
+                                    <span>2 hours ago</span>
+                                </div>
+                                <a href="#" title="Follow" data-ripple="">Follow</a>
+                            </div>
+                            <div class="we-video-info">
+                                <div class="interaction-bar">
+                                    <div class="reaction-summary">
+                                        <span class="reaction-icons">
+                                            <!-- <i class="fa fa-heart"></i> -->
+                                            <i class="fa fa-thumbs-up"></i>
+                                            <!-- <i class="fa fa-smile"></i> -->
+                                        </span>
+                                        <span class="reaction-count">2K</span>
+                                    </div>
+                                    <div class="interaction-summary">
+                                        <span class="comment-count" style="margin-right: 5px;">1 bình luận</span>
+                                        <span class="share-count" style="margin-right: 5px;">16 lượt chia sẻ</span>
+                                    </div>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="action-btn like-btn">
+                                        <i class="fa fa-thumbs-up"
+                                           style="margin-right: 7px;"></i> Thích
+                                    </button>
+                                    <button class="action-btn comment-btn">
+                                        <i class="fa fa-comment"
+                                           style="margin-right: 7px;"></i> Bình
+                                        luận
+                                    </button>
+                                    <button class="action-btn share-btn">
+                                        <i class="fa fa-share"
+                                           style="margin-right: 7px;"></i> Chia sẻ
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="display: block;" class="coment-area">
+                                <ul class="we-comet">
+                                    <li>
+                                        <div class="comet-avatar">
+                                            <img alt="" src="images/resources/nearly3.jpg">
+                                        </div>
+                                        <div class="we-comment">
+                                            <h5><a title="" href="time-line.html">Jason borne</a></h5>
+                                            <p>
+                                                we are working for the dance and sing songs. this video is very
+                                                awesome
+                                                for the youngster. please vote this video and like our channel
+                                            </p>
+                                            <div class="inline-itms">
+                                                <span>1 year ago</span>
+                                                <a title="Reply" href="#" class="we-reply">
+                                                    <i class="fa fa-reply"></i>
+                                                </a>
+                                                <a title="" href="#">
+                                                    <i class="fa-solid fa-circle-check"></i><span>20</span>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    </li>
+                                    <li>
+                                        <div class="comet-avatar">
+                                            <img alt="" src="images/resources/comet-4.jpg">
+                                        </div>
+                                        <div class="we-comment">
+                                            <h5><a title="" href="time-line.html">Sophia</a></h5>
+                                            <p>
+                                                we are working for the dance and sing songs. this video is very
+                                                awesome
+                                                for the youngster.
+                                                <i class="em em-smiley"></i>
+                                            </p>
+                                            <div class="inline-itms">
+                                                <span>1 year ago</span>
+                                                <a title="Reply" href="#" class="we-reply">
+                                                    <i class="fa fa-reply"></i>
+                                                </a>
+                                                <a title="" href="#">
+                                                    <i class="fa-solid fa-circle-check"></i><span>20</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="comet-avatar">
+                                            <img alt="" src="images/resources/comet-4.jpg">
+                                        </div>
+                                        <div class="we-comment">
+                                            <h5><a title="" href="time-line.html">Sophia</a></h5>
+                                            <p>
+                                                we are working for the dance and sing songs. this video is very
+                                                awesome
+                                                for the youngster.
+                                                <i class="em em-smiley"></i>
+                                            </p>
+                                            <div class="inline-itms">
+                                                <span>1 year ago</span>
+                                                <a title="Reply" href="#" class="we-reply">
+                                                    <i class="fa fa-reply"></i>
+                                                </a>
+                                                <a title="" href="#">
+                                                    <i class="fa-solid fa-circle-check"></i><span>20</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="showmore underline" title="" href="#">more comments+</a>
+                                    </li>
+                                    <li class="post-comment">
+                                        <div class="comet-avatar">
+                                            <img alt="" src="images/resources/nearly1.jpg">
+                                        </div>
+                                        <div class="post-comt-box">
+                                            <form method="post">
+                                                <textarea placeholder="Post your comment"></textarea>
+                                                <div class="add-smiles">
+                                                    <div class="uploadimage">
+                                                        <i class="fa fa-image"></i>
+                                                        <label class="fileContainer">
+                                                            <input type="file">
+                                                        </label>
+                                                    </div>
+                                                    <span title="add icon" class="em em-expressionless"></span>
+                                                    <div class="smiles-bunch">
+                                                        <i class="em em---1"></i>
+                                                        <i class="em em-smiley"></i>
+                                                        <i class="em em-anguished"></i>
+                                                        <i class="em em-laughing"></i>
+                                                        <i class="em em-angry"></i>
+                                                        <i class="em em-astonished"></i>
+                                                        <i class="em em-blush"></i>
+                                                        <i class="em em-disappointed"></i>
+                                                        <i class="em em-worried"></i>
+                                                        <i class="em em-kissing_heart"></i>
+                                                        <i class="em em-rage"></i>
+                                                        <i class="em em-stuck_out_tongue"></i>
+                                                    </div>
+                                                </div>
+
+                                                <button type="submit"></button>
+                                            </form>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - DATN.MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>*@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/main.min.js" asp-append-version="true"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
