@@ -15,9 +15,17 @@ namespace DATN.MVC.Controllers
 
         public IActionResult Index()
         {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = true, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = true // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+
             return View();
         }
-
+    
         public IActionResult Privacy()
         {
             return View();

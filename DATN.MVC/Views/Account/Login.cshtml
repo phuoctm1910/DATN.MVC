@@ -1,0 +1,156 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+}
+@section Styles{ 
+    <style>
+
+        .recent-login {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .recent-login h4 {
+                font-weight: bold;
+                color: #535165;
+            }
+
+            .recent-login p {
+                color: #727895;
+                font-size: 12px;
+                margin-bottom: 25px;
+            }
+
+            .recent-login .user-card {
+                text-align: center;
+                margin-right: 20px;
+            }
+
+            .recent-login img {
+                border-radius: 50%;
+                width: 90px;
+                height: 90px;
+                object-fit: cover;
+            }
+
+            .recent-login button {
+                border: 1px dashed #727895;
+                background: none;
+                border-radius: 50%;
+                width: 90px;
+                height: 90px;
+                font-size: 24px;
+                color: #727895;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+        .login-box .form-login2 {
+            margin-top: 20px;
+        }
+
+        .form-login2 input {
+            background: #fff;
+            border-radius: 35px;
+            border: 1px solid grey;
+            color: #535165;
+            font-size: 14px;
+            padding: 14px 20px;
+            width: 100%;
+            margin-bottom: 15px;
+            outline: none; /* Remove the default focus outline */
+            transition: border-color 0.3s, box-shadow 0.3s; /* Transition for smooth effects */
+        }
+
+            .form-login2 input:hover {
+                border-color: #fa6342; /* Change border color on hover */
+                box-shadow: 0 2px 5px rgba(250, 99, 66, 0.5); /* Add shadow on hover */
+            }
+
+            .form-login2 input:focus {
+                border-color: rgb(182, 182, 182); /* Keep the border color consistent when focused */
+                box-shadow: none; /* Remove any shadow on focus */
+            }
+
+        .form-login2 button {
+            background-color: #fa6342;
+            color: white;
+            border-radius: 30px;
+            padding: 10px 30px;
+            border: none;
+            transition: background-color 0.3s, transform 0.3s; /* Transition for button effects */
+        }
+
+            .form-login2 button:hover {
+                background-color: #ff7f5c; /* Change button color on hover */
+                transform: scale(1.05); /* Slightly enlarge the button */
+            }
+
+        .register {
+            background-color: #fa6342;
+            color: white;
+            border-radius: 30px;
+            padding: 10px 30px;
+            border: none;
+            text-decoration: none;
+            transition: background-color 0.3s; /* Transition for hover effect */
+        }
+
+            .register:hover {
+                background-color: #ff7f5c; /* Change background color on hover */
+            }
+
+        .login-info {
+            font-size: 12px;
+            color: #727895;
+            margin-top: 10px;
+        }
+
+            .login-info a {
+                color: #fa6342;
+                text-decoration: none;
+            }
+    </style>
+}
+<div class="row">
+    <!-- Recent Login Section -->
+    <div class="col-md-6">
+        <div class="recent-login">
+            <h4>Recent Login</h4>
+            <p>Next time you log in, click your picture. To remove an account from this page, click cross.</p>
+            <div class="d-flex">
+                <div class="user-card">
+                    <img src="images/resources/author.jpg" alt="User 1">
+                    <p>Duy</p>
+                </div>
+                <div class="user-card">
+                    <img src="images/resources/author.jpg" alt="User 2">
+                    <p>Duy</p>
+                </div>
+                <div class="user-card">
+                    <button type="button">+</button>
+                    <p>Add Account</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Form Section -->
+    <div class="col-md-6">
+        <div class="login-box">
+            <h4><i class="fa-solid fa-right-to-bracket"></i> Login</h4>
+            <p class="login-info">Login again, you have recently signed out from here</p>
+
+            <form class="form-login2">
+                <input type="text" placeholder="User Name" value="Adam James">
+                <input type="password" placeholder="Password" value="12345678">
+                <button name="login" type="submit">Login</button>
+                <p class="register-info">Bạn chưa có tài khoản? <a style="color: blue; text-decoration: underline;" href="register.html">Đăng ký</a></p>
+            </form>
+        </div>
+    </div>
+</div>
+

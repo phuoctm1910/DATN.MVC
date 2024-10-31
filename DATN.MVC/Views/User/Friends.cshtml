@@ -1,0 +1,189 @@
+﻿
+@{
+    ViewData["Title"] = "Friends";
+}
+@section Styles{
+    <style>
+        .sidebar {
+            background-color: #f0f2f5;
+            padding: 20px;
+            max-height: 100%;
+            width: 500px;
+        }
+
+            .sidebar .menu-item {
+                display: flex;
+                align-items: center;
+                padding: 20px;
+                font-size: 20px;
+                border: none;
+            }
+
+                .sidebar .menu-item img {
+                    width: 24px;
+                    height: 24px;
+                }
+
+        .menu-item:hover {
+            color: grey;
+        }
+
+        .friend-requests {
+            padding: 30px;
+        }
+
+        .friend-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            padding: 10px;
+        }
+
+            .friend-card img {
+                border-radius: 8px;
+                width: 100%;
+                height: 280px; /* Thiết lập chiều cao cố định */
+                object-fit: cover; /* Cắt ảnh để vừa chiều cao và chiều rộng */
+            }
+
+            .friend-card .btn-group {
+                width: 100%;
+                gap: 10px;
+            }
+    </style>
+
+}
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h5 class="fw-bold">Bạn bè</h5>
+        <button class="menu-item">
+            <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Trang chủ" class="imgpadding">
+            <span>Trang chủ</span>
+        </button>
+
+        <button class="menu-item">
+            <a href="addfriends.html" title="" data-toggle="tooltip" data-placement="right"
+               data-original-title="Friends">
+                <img src="https://img.icons8.com/ios-filled/50/000000/user-male.png" alt="Lời mời kết bạn" class="imgpadding">
+
+                <span>Lời mời kết bạn  </span>
+        </button>
+        <button class="menu-item">
+            <a href="GoiYFirends.html" title="" data-toggle="tooltip" data-placement="right"
+               data-original-title="Friends">
+                <img src="https://img.icons8.com/ios-filled/50/000000/add-user-male.png" alt="Gợi ý" class="imgpadding">
+                <span>Gợi ý</span>
+        </button>
+        <button class="menu-item">
+            <a href="allfriends.html" title="" data-toggle="tooltip" data-placement="right"
+               data-original-title="Friends">
+                <img src="https://img.icons8.com/ios-filled/50/000000/user-group-man-man.png" alt="Tất cả bạn bè" class="imgpadding">
+                <span>Tất cả bạn bè</span>
+        </button>
+
+    </div>
+
+    <!-- Friend Requests -->
+
+    <div class="friend-requests flex-grow-1">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold">Lời mời kết bạn</h5>
+            <a href="#" class="text-primary">Xem tất cả</a>
+        </div>
+
+
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            <div class="col">
+                <div class="friend-card">
+                    <img src="~/images/resources/Hau.jpg" alt="Friend">
+                    <h6 class="mt-2">Hậu Dương</h6>
+                    <div class="btn-group">
+                        <button class="btn btn-primary w-100">Xác nhận</button>
+                        <button class="btn btn-danger w-100">Xóa</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="friend-card">
+                    <img src="~/images/resources/Phuoc2.jpg" alt="Friend">
+                    <h6 class="mt-2">Phước Tạ</h6>
+                    <small class="text-muted">13 bạn chung</small>
+                    <div class="btn-group">
+                        <button class="btn btn-primary w-100">Xác nhận</button>
+                        <button class="btn btn-danger w-100">Xóa</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="friend-card">
+                    <img src="~/images/resources/Duymai2.jpg" alt="Friend">
+                    <h6 class="mt-2">Mai Huỳnh Anh Duy</h6>
+                    <small class="text-muted">2 bạn chung</small>
+                    <div class="btn-group">
+                        <button class="btn btn-primary w-100">Xác nhận</button>
+                        <button class="btn btn-danger w-100">Xóa</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="friend-card">
+                    <img src="~/images/resources/kha.jpg" alt="Friend">
+                    <h6 class="mt-2">Nhị Thiếu Gia</h6>
+                    <small class="text-muted">6 bạn chung</small>
+                    <div class="btn-group">
+                        <button class="btn btn-primary w-100">Xác nhận</button>
+                        <button class="btn btn-danger w-100">Xóa</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="friend-card">
+                    <img src="~/images/resources/kha.jpg" alt="Friend">
+                    <h6 class="mt-2">Nhị Thiếu Gia</h6>
+                    <small class="text-muted">6 bạn chung</small>
+                    <div class="btn-group">
+                        <button class="btn btn-primary w-100">Xác nhận</button>
+                        <button class="btn btn-danger w-100">Xóa</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="friend-card">
+                    <img src="~/images/resources/kha.jpg" alt="Friend">
+                    <h6 class="mt-2">Nhị Thiếu Gia</h6>
+                    <small class="text-muted">6 bạn chung</small>
+                    <div class="btn-group">
+                        <button class="btn btn-primary w-100">Xác nhận</button>
+                        <button class="btn btn-danger w-100">Xóa</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="friend-card">
+                    <img src="~/images/resources/kha.jpg" alt="Friend">
+                    <h6 class="mt-2">Nhị Thiếu Gia</h6>
+                    <small class="text-muted">6 bạn chung</small>
+                    <div class="btn-group">
+                        <button class="btn btn-primary w-100">Xác nhận</button>
+                        <button class="btn btn-danger w-100">Xóa</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="friend-card">
+                    <img src="~/images/resources/kha.jpg" alt="Friend">
+                    <h6 class="mt-2">Nhị Thiếu Gia</h6>
+                    <small class="text-muted">6 bạn chung</small>
+                    <div class="btn-group">
+                        <button class="btn btn-primary w-100">Xác nhận</button>
+                        <button class="btn btn-danger w-100">Xóa</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Add more friend requests here if needed -->
+        </div>
+    </div>
+</div>
+
+

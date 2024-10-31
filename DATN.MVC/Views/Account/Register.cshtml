@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewData["Title"] = "Register";
+}
+@section Styles{
+    <style>
+        body {
+            background-color: #e9eef4;
+        }
+
+        .container {
+            height: 100vh;
+        }
+
+        .registration-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .registration-box h4 {
+                font-weight: bold;
+                color: #535165;
+            }
+
+            .registration-box p {
+                color: #727895;
+                font-size: 12px;
+                margin-bottom: 25px;
+            }
+
+        .form-registration {
+            margin-top: 20px;
+        }
+
+            .form-registration input {
+                background: #fff;
+                border-radius: 35px;
+                border: 1px solid rgb(182, 182, 182);
+                color: #535165;
+                font-size: 14px;
+                padding: 14px 20px;
+                width: 100%;
+                margin-bottom: 15px;
+                transition: border-color 0.3s, box-shadow 0.3s; /* Transition for smooth effects */
+                outline: none; /* Remove the default focus outline */
+            }
+
+                .form-registration input:hover {
+                    border-color: #fa6342; /* Change border color on hover */
+                    box-shadow: 0 2px 5px rgba(250, 99, 66, 0.5); /* Add shadow on hover */
+                }
+
+            .form-registration button {
+                background-color: #fa6342;
+                color: white;
+                border-radius: 30px;
+                padding: 10px 30px;
+                border: none;
+                transition: background-color 0.3s, transform 0.3s; /* Transition for button effects */
+            }
+
+                .form-registration button:hover {
+                    background-color: #ff7f5c; /* Change button color on hover */
+                    transform: scale(1.05); /* Slightly enlarge the button */
+                }
+
+            .form-registration .login-info {
+                font-size: 12px;
+                color: #727895;
+                margin-top: 10px;
+            }
+
+                .form-registration .login-info a {
+                    color: #fa6342;
+                    text-decoration: none;
+                }
+    </style>
+}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="registration-box">
+                <h4><i class="fa-solid fa-user-plus"></i> Register</h4>
+                <p>Vui lòng điền thông tin dưới đây để tạo tài khoản mới</p>
+
+                <form class="form-registration">
+                    <input type="text" placeholder="Tên người dùng" required>
+                    <input type="email" placeholder="Email" required>
+                    <input type="text" placeholder="Số điện thoại" required>
+                    <input type="password" placeholder="Mật khẩu" required>
+                    <input type="text" placeholder="Nhập OTP" required>
+                    <button type="submit">SignUp</button>
+                </form>
+                <p class="login-info">Đã có tài khoản? <a style="color: blue; text-decoration: underline;" href="login.html">Đăng nhập</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Respone\" />
-    <Folder Include="Request\" />
+    <Folder Include="Request\Post\" />
+    <Folder Include="Respone\Post\" />
     <Folder Include="wwwroot\images\New folder\" />
   </ItemGroup>
 

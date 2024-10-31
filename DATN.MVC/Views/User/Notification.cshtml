@@ -1,0 +1,483 @@
+﻿
+@{
+    ViewData["Title"] = "Notification";
+}
+
+<div class="gap2 gray-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-10 col-xl-11 col-md-12 mx-auto">
+                <div class="row merged20" id="page-contents">
+                    <div class="col-12">
+                        <!-- Notifications Content -->
+                        <div class="notifications-content bg-white p-3 rounded-3 shadow-sm">
+                            <h4 class="mb-3">Thông báo</h4>
+                            <div class="d-flex justify-content-start mb-3">
+                                <div class="notification-filter">
+                                    <span class="filter-option active" id="all">Tất cả</span>
+                                    <span class="filter-option" id="unread">Chưa đọc</span>
+                                </div>
+                            </div>
+                            <h6 class="mb-3">Trước đó</h6>
+                            <ul class="list-unstyled">
+                                <!-- Skeleton Loading Placeholder -->
+                                <div class="skeleton-loader">
+                                    <div class="skeleton d-flex align-items-center mb-3">
+                                        <div class="skeleton-avatar"></div>
+                                        <div class="flex-grow-1">
+                                            <div class="skeleton-line" style="width: 60%;"></div>
+                                            <div class="skeleton-line" style="width: 40%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="skeleton d-flex align-items-center mb-3">
+                                        <div class="skeleton-avatar"></div>
+                                        <div class="flex-grow-1">
+                                            <div class="skeleton-line" style="width: 70%;"></div>
+                                            <div class="skeleton-line" style="width: 50%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="skeleton d-flex align-items-center mb-3">
+                                        <div class="skeleton-avatar"></div>
+                                        <div class="flex-grow-1">
+                                            <div class="skeleton-line" style="width: 80%;"></div>
+                                            <div class="skeleton-line" style="width: 60%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="skeleton d-flex align-items-center mb-3">
+                                        <div class="skeleton-avatar"></div>
+                                        <div class="flex-grow-1">
+                                            <div class="skeleton-line" style="width: 75%;"></div>
+                                            <div class="skeleton-line" style="width: 50%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="skeleton d-flex align-items-center mb-3">
+                                        <div class="skeleton-avatar"></div>
+                                        <div class="flex-grow-1">
+                                            <div class="skeleton-line" style="width: 85%;"></div>
+                                            <div class="skeleton-line" style="width: 45%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="skeleton d-flex align-items-center mb-3">
+                                        <div class="skeleton-avatar"></div>
+                                        <div class="flex-grow-1">
+                                            <div class="skeleton-line" style="width: 65%;"></div>
+                                            <div class="skeleton-line" style="width: 55%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="skeleton d-flex align-items-center mb-3">
+                                        <div class="skeleton-avatar"></div>
+                                        <div class="flex-grow-1">
+                                            <div class="skeleton-line" style="width: 60%;"></div>
+                                            <div class="skeleton-line" style="width: 40%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="skeleton d-flex align-items-center mb-3">
+                                        <div class="skeleton-avatar"></div>
+                                        <div class="flex-grow-1">
+                                            <div class="skeleton-line" style="width: 70%;"></div>
+                                            <div class="skeleton-line" style="width: 50%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="skeleton d-flex align-items-center mb-3">
+                                        <div class="skeleton-avatar"></div>
+                                        <div class="flex-grow-1">
+                                            <div class="skeleton-line" style="width: 85%;"></div>
+                                            <div class="skeleton-line" style="width: 55%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="skeleton d-flex align-items-center mb-3">
+                                        <div class="skeleton-avatar"></div>
+                                        <div class="flex-grow-1">
+                                            <div class="skeleton-line" style="width: 75%;"></div>
+                                            <div class="skeleton-line" style="width: 45%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Notification Items -->
+                                <li class="notification-item mb-2 unread-notification">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon like-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 1</strong> đã thích bài viết của
+                                                bạn.
+                                            </p>
+                                            <span class="text-muted small">14 giờ</span>
+                                        </div>
+                                        <div class="notification-status ms-auto unread-toggle">
+                                            <span class="unread-indicator bg-primary rounded-circle"
+                                                  style="width: 10px; height: 10px; display: inline-block;"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2" style="display: none;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon comment-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 2</strong> đã bình luận vào bài
+                                                viết của bạn.
+                                            </p>
+                                            <span class="text-muted small">15 giờ</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2" style="display: none;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon mention-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 3</strong> đã nhắc đến bạn trong
+                                                một bài viết.
+                                            </p>
+                                            <span class="text-muted small">19 giờ</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- More notification items can be added similarly -->
+                                <li class="notification-item mb-2 unread-notification">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon like-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 1</strong> đã thích bài viết của
+                                                bạn.
+                                            </p>
+                                            <span class="text-muted small">14 giờ</span>
+                                        </div>
+                                        <div class="notification-status ms-auto unread-toggle">
+                                            <span class="unread-indicator bg-primary rounded-circle"
+                                                  style="width: 10px; height: 10px; display: inline-block;"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2" style="display: none;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon comment-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 2</strong> đã bình luận vào bài
+                                                viết của bạn.
+                                            </p>
+                                            <span class="text-muted small">15 giờ</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2" style="display: none;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon mention-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 3</strong> đã nhắc đến bạn trong
+                                                một bài viết.
+                                            </p>
+                                            <span class="text-muted small">19 giờ</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2 unread-notification">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon like-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 1</strong> đã thích bài viết của
+                                                bạn.
+                                            </p>
+                                            <span class="text-muted small">14 giờ</span>
+                                        </div>
+                                        <div class="notification-status ms-auto unread-toggle">
+                                            <span class="unread-indicator bg-primary rounded-circle"
+                                                  style="width: 10px; height: 10px; display: inline-block;"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2" style="display: none;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon comment-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 2</strong> đã bình luận vào bài
+                                                viết của bạn.
+                                            </p>
+                                            <span class="text-muted small">15 giờ</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2" style="display: none;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon mention-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 3</strong> đã nhắc đến bạn trong
+                                                một bài viết.
+                                            </p>
+                                            <span class="text-muted small">19 giờ</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2 unread-notification">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon like-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 1</strong> đã thích bài viết của
+                                                bạn.
+                                            </p>
+                                            <span class="text-muted small">14 giờ</span>
+                                        </div>
+                                        <div class="notification-status ms-auto unread-toggle">
+                                            <span class="unread-indicator bg-primary rounded-circle"
+                                                  style="width: 10px; height: 10px; display: inline-block;"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2" style="display: none;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon comment-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 2</strong> đã bình luận vào bài
+                                                viết của bạn.
+                                            </p>
+                                            <span class="text-muted small">15 giờ</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2" style="display: none;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon mention-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 3</strong> đã nhắc đến bạn trong
+                                                một bài viết.
+                                            </p>
+                                            <span class="text-muted small">19 giờ</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2 unread-notification">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon like-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 1</strong> đã thích bài viết của
+                                                bạn.
+                                            </p>
+                                            <span class="text-muted small">14 giờ</span>
+                                        </div>
+                                        <div class="notification-status ms-auto unread-toggle">
+                                            <span class="unread-indicator bg-primary rounded-circle"
+                                                  style="width: 10px; height: 10px; display: inline-block;"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2" style="display: none;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon comment-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 2</strong> đã bình luận vào bài
+                                                viết của bạn.
+                                            </p>
+                                            <span class="text-muted small">15 giờ</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2" style="display: none;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon mention-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 3</strong> đã nhắc đến bạn trong
+                                                một bài viết.
+                                            </p>
+                                            <span class="text-muted small">19 giờ</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2 unread-notification">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon like-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 1</strong> đã thích bài viết của
+                                                bạn.
+                                            </p>
+                                            <span class="text-muted small">14 giờ</span>
+                                        </div>
+                                        <div class="notification-status ms-auto unread-toggle">
+                                            <span class="unread-indicator bg-primary rounded-circle"
+                                                  style="width: 10px; height: 10px; display: inline-block;"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2 unread-notification">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon like-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 1</strong> đã thích bài viết của
+                                                bạn.
+                                            </p>
+                                            <span class="text-muted small">14 giờ</span>
+                                        </div>
+                                        <div class="notification-status ms-auto unread-toggle">
+                                            <span class="unread-indicator bg-primary rounded-circle"
+                                                  style="width: 10px; height: 10px; display: inline-block;"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="notification-item mb-2 unread-notification">
+                                    <div class="d-flex align-items-center">
+                                        <div class="notification-avatar me-3 position-relative">
+                                            <img src="~/images/resources/avatar.jpg" alt="User Avatar"
+                                                 class="rounded-circle" width="40">
+                                            <span class="notification-icon like-icon"></span>
+                                        </div>
+                                        <div class="notification-text">
+                                            <p class="mb-0">
+                                                <strong>User 1</strong> đã thích bài viết của
+                                                bạn.
+                                            </p>
+                                            <span class="text-muted small">14 giờ</span>
+                                        </div>
+                                        <div class="notification-status ms-auto unread-toggle">
+                                            <span class="unread-indicator bg-primary rounded-circle"
+                                                  style="width: 10px; height: 10px; display: inline-block;"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div class="text-center mt-3 d-flex" id="view-all-container">
+                                <button class="btn view-all-btn w-100" id="view-all-btn">
+                                    Xem tất cả thông
+                                    báo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        function showNotifications(isUnread, countToShow = 5) {
+            $('.notification-item').hide();
+            $('.skeleton-loader').appendTo('.list-unstyled').show();
+            setTimeout(function () {
+                $('.skeleton-loader').hide();
+                let count = 0;
+                $('.notification-item').each(function () {
+                    if (isUnread && !$(this).hasClass('unread-notification')) {
+                        return;
+                    }
+                    if (countToShow === 'all' || count < countToShow) {
+                        $(this).show();
+                        count++;
+                    }
+                });
+            }, 750);
+        }
+
+        $(function () {
+            let isAllClicked = true;
+            let currentDisplayCount = 5;
+            showNotifications(false, currentDisplayCount);
+
+            $('#unread').on('click', function () {
+                $('.filter-option').removeClass('active');
+                $(this).addClass('active');
+                isAllClicked = false;
+                $('#view-all-btn').hide();
+                showNotifications(true, 'all');
+            });
+
+            $('#all').on('click', function () {
+                $('.filter-option').removeClass('active');
+                $(this).addClass('active');
+                isAllClicked = true;
+                $('#view-all-btn').show();
+                showNotifications(false, currentDisplayCount);
+            });
+
+            $('.view-all-btn').on('click', function () {
+                if (isAllClicked) {
+                    $(this).hide();
+                    showNotifications(false, 'all');
+                }
+            });
+        });
+    </script>
+
+}
