@@ -1,50 +1,635 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<div class="gap2 gray-bg">
+@section Styles {
+    <style>
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .privacy-selection {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+            .privacy-selection label {
+                margin-right: 10px;
+                font-weight: bold;
+                color: #333;
+            }
+
+            .privacy-selection select {
+                padding: 5px 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                background-color: #f9f9f9;
+                font-size: 14px;
+                color: #333;
+                outline: none;
+                cursor: pointer;
+            }
+
+                .privacy-selection select:focus {
+                    border-color: #007bff;
+                    background-color: #fff;
+                }
+
+
+
+        .comment-item {
+            display: block;
+            position: relative;
+            transition: margin-left 0.3s ease;
+        }
+
+            .comment-item.depth-0 {
+                padding-left: 0px !important;
+            }
+
+        .comment-body {
+            display: flex;
+            align-items: flex-start;
+            padding-left: 20px;
+        }
+
+        .comment-replies {
+            position: relative;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            /*            margin-left: 40px;
+        */ /*padding-left: 40px;*/ /* Indentation for replies */
+        }
+
+            .comment-replies .comment-item {
+                padding-top: 5px;
+                padding-bottom: 5px;
+                position: relative;
+            }
+
+                .comment-replies .comment-item::before {
+                    top: -10px; /* Ensure the line extends properly */
+                    height: calc(100% + 10px);
+                }
+
+        .comment-body .comment-content {
+            background-color: #f2f3f5;
+            padding: 8px 10px;
+            border-radius: 18px;
+        }
+
+        .comment-actions {
+            display: block;
+            font-size: 0.8em;
+            color: #606770;
+            margin-top: 5px;
+        }
+
+            .comment-actions span {
+                cursor: pointer;
+                margin-right: 10px;
+            }
+
+                .comment-actions span:hover {
+                    text-decoration: underline;
+                }
+
+        .timestamp {
+            font-size: 0.75em;
+            color: #90949c;
+        }
+
+        /* Add Comment Input Field */
+        .add-comment {
+            background-color: #f4f7fa; /* Light grayish background like Facebook */
+            border-radius: 25px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for flat design */
+        }
+
+            .add-comment .avatar {
+                width: 40px;
+                height: 40px;
+            }
+
+        .box-input {
+            position: relative;
+            width: 100%;
+        }
+
+            .box-input input {
+                width: 100%;
+                height: 40px;
+                border: none;
+                background-color: #eef1f4;
+                padding-left: 50px;
+                border-radius: 20px;
+                padding-right: 120px;
+                box-shadow: none; /* Remove default input shadows */
+                transition: background-color 0.2s ease;
+            }
+
+                .box-input input:focus {
+                    background-color: #e7e9ec; /* Slightly darker when focused */
+                    outline: none; /* Remove blue outline on focus */
+                }
+
+            .box-input .input-icons {
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                display: flex;
+                gap: 10px;
+                color: #9a9a9a;
+            }
+
+        .input-icons i {
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        button {
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+            button i {
+                font-size: 20px;
+                color: #9a9a9a;
+            }
+
+                button i:hover {
+                    color: #333;
+                }
+
+
+
+        /* See More Comments Button */
+        .see-more-comments-container {
+            margin-top: 10px; /* Adjust the space above the button */
+        }
+        /*.see-more-comments-container .comment-border {
+                        margin-top: 10px;*/ /* Adjust the space above the button */
+        /*}*/
+        .see-more-comments {
+            color: #606770;
+            font-size: 0.85em;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+            .see-more-comments.depth-0 {
+                margin-left: 43px;
+            }
+
+            .see-more-comments.depth-1 {
+                margin-left: 83px;
+            }
+
+            .see-more-comments:hover {
+                text-decoration: underline;
+            }
+
+        /*        .comment-border {
+                    border-left: 2px solid #ccd0d5;
+                    border-bottom: 2px solid #ccd0d5;
+                    border-bottom-left-radius: 10px;
+                    width: 20px;
+                    height: 20px;
+                    position: absolute;
+                }
+                .comment-border.depth-0 {
+                    position: absolute;
+                    left: 15px;
+                    bottom: 10px;
+                }*/
+        .post-wrapper {
+            border: 1px solid #ddd;
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .original-post {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+        }
+
+        .post-image img {
+            width: 100%;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .original-post-details {
+            font-size: 12px;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        .user-post .content {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        .content {
+            font-size: 14px;
+        }
+    </style>
+}
+
+
+
+@section Scripts{
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                posts: [],
+                postReactions: [],
+                commentReactions: [],
+                selectedPost: {},
+                comments: [],
+                commentsNotBuild: [],
+                newComment: '',
+                replyTarget: null,
+                newPostContent: '',
+                userId: 2, // thay đổi thành session
+                newPostFor: 0
+            },
+            created() {
+                this.loadPosts();
+            },
+            methods: {
+                async postingPost() {
+                    // Use Moment.js to get the current time in VN timezone (UTC+7) with milliseconds
+                    const createdDate = moment().utcOffset(7).format('YYYY-MM-DDTHH:mm:ss.SSSZ'); // ISO-like format with milliseconds and UTC+7
+
+                    const postData = {
+                        UserId: this.userId, // ID người dùng
+                        PostId: null, // Nếu muốn cập nhật bài viết hiện có, có thể thay đổi
+                        Content: this.newPostContent, // Nội dung bài viết
+                        CreatedDate: createdDate, // Use moment.js to format the current time
+                        PostFor: parseInt(this.newPostFor) // Chọn mức độ hiển thị (0, 1, 2)
+                    };
+
+                    try {
+                        console.log(postData);
+                        // Gửi yêu cầu POST tới controller trong backend
+                        const response = await fetch('/Post/AddNew', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json charset=utf-8' // Define the content type
+                            },
+                            body: JSON.stringify(postData) // Send the postData as JSON
+                        });
+
+                        // Kiểm tra phản hồi từ server
+                        const data = await response.json();
+
+                        if (response.ok && data.success) {
+                            // Nếu thành công, tải lại danh sách bài viết
+                            this.loadPosts();
+
+                            // Đặt lại trạng thái các biến sau khi đăng thành công
+                            this.newPostContent = '';
+                            this.newPostFor = '0'; // Đặt lại mức độ hiển thị về mặc định là công khai
+                        } else {
+                            // Xử lý lỗi nếu bài viết không được đăng thành công
+                            console.error('Lỗi khi đăng bài:', data.message || 'Có lỗi xảy ra');
+                        }
+                    } catch (error) {
+                        // Xử lý lỗi nếu có vấn đề trong quá trình gửi yêu cầu
+                        console.error('Lỗi khi gửi yêu cầu:', error);
+                    }
+                },
+                async sharePost(post) {
+                    // Use Moment.js to get the current time in VN timezone (UTC+7) with milliseconds
+                    const createdDate = moment().utcOffset(7).format('YYYY-MM-DDTHH:mm:ss.SSSZ'); // ISO-like format with milliseconds and UTC+7
+
+                    const postData = {
+                        UserId: this.userId, // ID người dùng
+                        PostId: post.id, // Nếu muốn cập nhật bài viết hiện có, có thể thay đổi
+                        CreatedDate: createdDate, // Use moment.js to format the current time
+                    };
+
+                    try {
+                        console.log(postData);
+                        const response = await fetch('/Post/ShareAndAddNew', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json charset=utf-8' // Define the content type
+                            },
+                            body: JSON.stringify(postData) // Send the postData as JSON
+                        });
+
+                        // Kiểm tra phản hồi từ server
+                        const data = await response.json();
+
+                        if (response.ok && data.success) {
+                            // Nếu thành công, tải lại danh sách bài viết
+                            this.loadPosts();
+
+                            // Đặt lại trạng thái các biến sau khi đăng thành công
+                            this.newPostContent = '';
+                            this.newPostFor = '0'; // Đặt lại mức độ hiển thị về mặc định là công khai
+                        } else {
+                            // Xử lý lỗi nếu bài viết không được đăng thành công
+                            console.error('Lỗi khi đăng bài:', data.message || 'Có lỗi xảy ra');
+                        }
+                    } catch (error) {
+                        // Xử lý lỗi nếu có vấn đề trong quá trình gửi yêu cầu
+                        console.error('Lỗi khi gửi yêu cầu:', error);
+                    }
+                },
+                async loadPosts() {
+                    try {
+                        const response = await fetch('/Post/GetAll');
+                        const data = await response.json();
+
+                        this.posts = data.apiData.map(post => {
+                            // Convert Unix timestamps to JS Date objects for display
+                            const createdDate = new Date(post.createdDate * 1000);
+                            post.displayDate = this.getRelativeTime(createdDate);
+
+                            // Fetch reactions for the post and store them in postReactions
+                            this.getPostReactions(post);
+
+                            return post;
+
+                        });
+                    } catch (error) {
+                        console.error('Error fetching posts:', error);
+                    }
+                },
+                async getPostReactions(post) {
+                    try {
+                        const response = await fetch(`/Post/GetReactionByPost?postid=${post.id}`);
+                        const data = await response.json();
+
+                        // Add reactions to the postReactions array for this specific post
+                        this.$set(this.postReactions, post.id, data.apiData);
+
+                        if (!post.hasOwnProperty('likedByCurrentUser')) {
+                            Vue.set(post, 'likedByCurrentUser', false); // Default to false if not set
+                        }
+
+                        // Check if the current user has reacted to this post within postReactions[post.id]
+                        if (this.postReactions[post.id] != null) {
+                            post.likedByCurrentUser = this.postReactions[post.id].some(reaction => reaction.userId === this.userId);
+                        } else {
+                            post.likedByCurrentUser = false
+                        }
+
+                    } catch (error) {
+                        console.error('Error fetching reactions:', error);
+                    }
+                },
+                async likePost(post) {
+                    const postData = {
+                        UserId: this.userId,
+                        PostId: post.id,
+                        type: post.likedByCurrentUser ? 0 : 1 // 0 = unlike, 1 = like
+                    };
+
+                    try {
+                        const response = await fetch('/Post/ReactionPost', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json charset=utf-8'
+                            },
+                            body: JSON.stringify(postData)
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok && data.success) {
+                            post.likedByCurrentUser = !post.likedByCurrentUser; // Toggle the like status
+
+                            // Refresh the reactions after like/unlike
+                            this.loadPosts();
+                        } else {
+                            console.error('Error liking post:', data.message || 'An error occurred');
+                        }
+                    } catch (error) {
+                        console.error('Error sending like request:', error);
+                    }
+                },
+                getRelativeTime(date) {
+                    const now = new Date();
+                    const rtf = new Intl.RelativeTimeFormat('vi', { numeric: 'auto' });
+                    const diffInSeconds = Math.floor((now - date) / 1000);
+                    const diffInMinutes = Math.floor(diffInSeconds / 60);
+                    const diffInHours = Math.floor(diffInMinutes / 60);
+                    const diffInDays = Math.floor(diffInHours / 24);
+                    const diffInMonths = Math.floor(diffInDays / 30);
+
+                    if (diffInSeconds < 60) {
+                        return rtf.format(-diffInSeconds, 'second');
+                    } else if (diffInMinutes < 60) {
+                        return rtf.format(-diffInMinutes, 'minute');
+                    } else if (diffInHours < 24) {
+                        return rtf.format(-diffInHours, 'hour');
+                    } else if (diffInDays < 30) {
+                        return rtf.format(-diffInDays, 'day');
+                    } else {
+                        return date.toLocaleDateString('vi-VN', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                        });
+                    }
+                },
+                loadComments(postId) {
+                    fetch(`/Comment/GetCommentByPostId/${postId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.commentsNotBuild = data.apiData;
+                            this.comments = data.apiData.map(comment => {
+                                const createdDate = new Date(comment.createdDate * 1000);
+                                comment.displayDate = this.getRelativeTime(createdDate);
+
+
+                                this.getCommentReactions(comment);
+                                return comment;
+                                console.log(comment);
+                            });
+                            // Sau khi xử lý thời gian, xây dựng cấu trúc bình luận
+                            this.comments = this.buildCommentThread(this.comments);
+                        })
+                        .catch(error => console.error('Error fetching comments:', error));
+                },
+                async getCommentReactions(comment) {
+                    try {
+                        const response = await fetch(`/Comment/GetReactionByComment?commentid=${comment.id}`);
+                        const data = await response.json();
+                        console.log(data.apiData);
+                        this.$set(this.commentReactions, comment.id, data.apiData);
+
+
+                        if (!comment.hasOwnProperty('likedByCurrentUser')) {
+                            Vue.set(comment, 'likedByCurrentUser', false);
+                        }
+
+                        if (this.commentReactions[comment.id] != null) {
+                            comment.likedByCurrentUser = this.commentReactions[comment.id].some(reaction => reaction.userId === this.userId);
+                        } else {
+                            comment.likedByCurrentUser = false
+                        }
+
+                    } catch (error) {
+                        console.error('Error fetching reactions:', error);
+                    }
+                }
+                ,
+                showComments(post) {
+                    this.selectedPost = post;
+                    this.loadComments(post.id);
+                    $('#commentsModal').modal('show');
+                },
+                buildCommentThread(comments) {
+                    const MAX_DEPTH = 2;
+                    const map = {};
+                    const result = [];
+
+                    comments.forEach(comment => {
+                        comment.childrenArray = [];
+                        comment.depth = 0;
+                        map[comment.id] = comment;
+                        comment.expanded = false;
+                    });
+
+                    comments.forEach(comment => {
+                        if (comment.commentId !== null) {
+                            const parent = map[comment.commentId];
+                            if (parent) {
+                                comment.depth = parent.depth + 1;
+
+                                if (parent.depth < MAX_DEPTH) {
+                                    parent.childrenArray.push(comment);
+                                } else {
+                                    let ancestor = parent;
+                                    while (ancestor.depth >= MAX_DEPTH) {
+                                        ancestor = map[ancestor.commentId];
+                                    }
+                                    comment.depth = MAX_DEPTH;
+                                    ancestor.childrenArray.push(comment);
+                                }
+                            }
+                        } else {
+                            result.push(comment);
+                        }
+                    });
+
+                    return result;
+                },
+
+                async likeComment(commentId) {
+                    const comment = this.commentsNotBuild.find(c => c.id === commentId);
+                    if (!comment) {
+                        console.error('Comment not found!');
+                        return;
+                    }
+
+                    const commentData = {
+                        UserId: this.userId,
+                        CommentId: comment.id,
+                        type: comment.likedByCurrentUser ? 0 : 1, // 0 = unlike, 1 = like
+                    };
+
+                    try {
+                        const response = await fetch('/Comment/ReactionComment', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json charset=utf-8'
+                            },
+                            body: JSON.stringify(commentData)
+                        });
+
+                        const data = await response.json();
+
+                        // Toggle the like state for the comment
+                        comment.likedByCurrentUser = !comment.likedByCurrentUser;
+                        comment.reactCount += comment.likedByCurrentUser ? 1 : -1;
+                    } catch (error) {
+                        console.error('Error sending like request:', error);
+                    }
+                },
+                replyToComment(comment) {
+                    this.replyTarget = comment;  // Set the comment being replied to
+                    this.newComment = '@@' + `${comment.fullName} `;  // Optional: Pre-fill the input with the commenter's name
+                    this.$nextTick(() => {
+                        // Ensure the input field is focused after being rendered
+                        const inputField = document.querySelector('.add-comment input');
+                        if (inputField) inputField.focus();
+                    });
+                },
+                async addComment() {
+                    if (!this.newComment.trim()) {
+                        alert('Please enter a comment.');
+                        return;
+                    }
+                    const createdDate = moment().utcOffset(7).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+
+                    const newCommentData = {
+                        userId: this.userId,
+                        content: this.newComment,
+                        postId: this.selectedPost.id,
+                        commentId: this.replyTarget ? this.replyTarget.id : null,  // Use replyTarget if replying
+                        CreatedDate: createdDate,
+                    };
+
+                    try {
+                        const response = await fetch('/Comment/AddNew', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(newCommentData),
+                        });
+                        const data = await response.json();
+
+                        if (data.success) {
+                            this.loadComments(this.selectedPost.id);
+                            this.newComment = '';  // Clear the comment input
+                            this.replyTarget = null;  // Reset the reply target after submitting
+                            console.log('Comment added successfully');
+                        } else {
+                            console.error('Error adding comment:', data.message || 'Failed to add comment.');
+                        }
+                    } catch (error) {
+                        console.error('Error submitting comment:', error);
+                    }
+                }
+            }
+        });
+    </script>
+}
+<div class="gap2 gray-bg" id="app">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="row merged20" id="page-contents">
                     <div class="col-lg-3">
                         <aside class="sidebar static left">
-                            <div class="widget">
-                                <h4 class="widget-title">Recent Activity</h4>
-                                <ul class="activitiez">
-                                    <li>
-                                        <div class="activity-meta">
-                                            <i>10 hours Ago</i>
-                                            <span><a href="#" title="">Commented on Video posted </a></span>
-                                            <h6>by <a href="time-line.html">black demon.</a></h6>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="activity-meta">
-                                            <i>30 Days Ago</i>
-                                            <span>
-                                                <a href="#" title="">
-                                                    Posted your status. “Hello guys, how
-                                                    are
-                                                    you?”
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="activity-meta">
-                                            <i>2 Years Ago</i>
-                                            <span>
-                                                <a href="#" title="">
-                                                    Share a video on her
-                                                    timeline.
-                                                </a>
-                                            </span>
-                                            <h6>"<a href="#">you are so funny mr.been.</a>"</h6>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div><!-- recent activites -->
-                            <div class="widget stick-widget" style="">
+                            <div class="widget stick-widget">
                                 <h4 class="widget-title">Shortcuts</h4>
                                 <ul class="naves">
                                     <li>
@@ -65,11 +650,11 @@
                                     </li>
                                     <li>
                                         <i class="ti-image"></i>
-                                        <a href="timeline-photos.html" title="">~/images</a>
+                                        <a href="timeline-photos.html" title="">Images</a>
                                     </li>
                                     <li>
                                         <i class="ti-video-camera"></i>
-                                        <a href="timeline-videos.html" title="">videos</a>
+                                        <a href="timeline-videos.html" title="">Videos</a>
                                     </li>
                                     <li>
                                         <i class="ti-comments-smiley"></i>
@@ -84,10 +669,9 @@
                                         <a href="landing.html" title="">Logout</a>
                                     </li>
                                 </ul>
-                            </div><!-- Shortcuts -->
-
+                            </div>
                         </aside>
-                    </div><!-- sidebar -->
+                    </div>
                     <div class="col-lg-8">
                         <div class="central-meta postbox">
                             <span class="create-post">Create post</span>
@@ -96,952 +680,73 @@
                                     <img src="~/images/resources/admin.jpg" alt="">
                                 </figure>
                                 <div class="newpst-input">
-                                    <form method="post">
-                                        <textarea rows="2"
-                                                  placeholder="Share some what you are thinking?"></textarea>
+                                    <form v-on:submit.prevent="postingPost">
+                                        <textarea v-model="newPostContent" rows="2" placeholder="Chia sẻ điều bạn đang nghĩ?"></textarea>
                                     </form>
+                                </div>
+
+                                <!-- Dropdown lựa chọn mức độ hiển thị bài viết -->
+                                <div class="privacy-selection">
+                                    <label for="postFor">Chọn đối tượng xem:</label>
+                                    <select v-model="newPostFor">
+                                        <option v-bind:value="0">Công khai</option>
+                                        <option v-bind:value="1">Bạn bè</option>
+                                        <option v-bind:value="2">Chỉ một mình tôi</option>
+                                    </select>
                                 </div>
                                 <div class="attachments">
                                     <ul>
                                         <li>
                                             <span class="add-loc">
-                                                <svg class="svg-inline--fa fa-location-dot"
-                                                     aria-hidden="true" focusable="false"
-                                                     data-prefix="fa-light" data-icon="location-dot"
-                                                     role="img" xmlns="http://www.w3.org/2000/svg"
-                                                     viewBox="0 0 384 512" data-fa-i2svg="">
-                                                    <path fill="currentColor"
-                                                          d="M192 0C85.97 0 0 85.97 0 192c0 77.41 26.97 99.03 172.3 309.7C177 508.6 184.5 512 192 512s14.95-3.441 19.72-10.32C357 291 384 269.4 384 192C384 85.97 298 0 192 0zM192 473.9C51.93 271.4 32 255.1 32 192c0-88.22 71.78-160 160-160s160 71.78 160 160C352 255.9 332.6 270.7 192 473.9zM192 111.1c-44.18 0-80 35.82-80 80S147.8 271.1 192 271.1c44.18 0 80-35.82 80-80S236.2 111.1 192 111.1zM192 239.1c-26.47 0-48-21.53-48-48S165.5 143.1 192 143.1s48 21.53 48 48S218.5 239.1 192 239.1z">
-                                                    </path>
-                                                </svg><!-- <i class="fa-light fa-location-dot"></i> -->
+                                                <svg class="fa fa-location-dot"></svg>
                                             </span>
                                         </li>
                                         <li>
-                                            <svg class="svg-inline--fa fa-music" aria-hidden="true"
-                                                 focusable="false" data-prefix="fa-light" data-icon="music"
-                                                 role="img" xmlns="http://www.w3.org/2000/svg"
-                                                 viewBox="0 0 512 512" data-fa-i2svg="">
-                                                <path fill="currentColor"
-                                                      d="M481.5 0c-3.25 0-6.375 .5-9.25 1.5l-290.9 96C168.8 101.8 160 114 160 128v244.8C143 360 120.7 352 95.1 352C42.1 352 0 387.8 0 432S42.1 512 95.1 512s95.1-35.7 95.1-79.95L192 256l288-96v148.8C463 296 440.7 288 415.1 288c-53 0-95.1 35.75-95.1 79.1s42.1 79.1 95.1 79.1s95.1-35.75 95.1-80L512 31.99C512 13.74 497.8 0 481.5 0zM96 480c-34.75 0-64-21.1-64-48C32 406 61.25 384 96 384s64 22 64 48C160 458 130.8 480 96 480zM416 416c-34.75 0-64-21.1-64-48c0-25.1 29.25-48 64-48s64 22 64 48C480 394 450.8 416 416 416zM480 126.2l-288 96V128H191.5L480 32.62V126.2z">
-                                                </path>
-                                            </svg><!-- <i class="fa-light fa-music"></i> -->
+                                            <svg class="fa fa-music"></svg>
                                             <label class="fileContainer">
                                                 <input type="file">
                                             </label>
                                         </li>
                                         <li>
-                                            <svg class="svg-inline--fa fa-image" aria-hidden="true"
-                                                 focusable="false" data-prefix="fa-light" data-icon="image"
-                                                 role="img" xmlns="http://www.w3.org/2000/svg"
-                                                 viewBox="0 0 512 512" data-fa-i2svg="">
-                                                <path fill="currentColor"
-                                                      d="M324.9 157.8c-11.38-17.38-39.89-17.31-51.23-.0625L200.5 268.5L184.1 245.9C172.7 229.1 145.9 229.9 134.4 245.9l-64.52 89.16c-6.797 9.406-7.75 21.72-2.547 32C72.53 377.5 83.05 384 94.75 384h322.5c11.41 0 21.8-6.281 27.14-16.38c5.312-10 4.734-22.09-1.516-31.56L324.9 157.8zM95.8 352l62.39-87.38l29.91 41.34C191.2 310.2 196.4 313.2 201.4 312.6c5.25-.125 10.12-2.781 13.02-7.188l83.83-129.9L415 352H95.8zM447.1 32h-384C28.65 32-.0091 60.65-.0091 96v320c0 35.35 28.65 64 63.1 64h384c35.35 0 64-28.65 64-64V96C511.1 60.65 483.3 32 447.1 32zM480 416c0 17.64-14.36 32-32 32H64c-17.64 0-32-14.36-32-32V96c0-17.64 14.36-32 32-32h384c17.64 0 32 14.36 32 32V416zM144 192C170.5 192 192 170.5 192 144S170.5 96 144 96S96 117.5 96 144S117.5 192 144 192zM144 128c8.822 0 15.1 7.178 15.1 16S152.8 160 144 160S128 152.8 128 144S135.2 128 144 128z">
-                                                </path>
-                                            </svg><!-- <i class="fa-light fa-image"></i> -->
+                                            <svg class="fa fa-image"></svg>
                                             <label class="fileContainer">
                                                 <input type="file">
                                             </label>
                                         </li>
                                         <li>
-                                            <svg class="svg-inline--fa fa-camcorder" aria-hidden="true"
-                                                 focusable="false" data-prefix="fa-light"
-                                                 data-icon="camcorder" role="img"
-                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
-                                                 data-fa-i2svg="">
-                                                <path fill="currentColor"
-                                                      d="M304 223.1h-224c-8.844 0-16 7.156-16 16c0 8.842 7.156 15.1 16 15.1h224c8.844 0 16-7.158 16-15.1C320 231.2 312.8 223.1 304 223.1zM558.8 163.7c-10.59-5.484-23.35-4.74-33.13 2.12l-102.8 72.02c-7.25 5.062-9 15.05-3.938 22.28c5.062 7.25 15.02 8.984 22.28 3.938l102.8-71.97v255.9l-102.8-71.97c-7.266-5.047-17.22-3.312-22.28 3.938c-5.062 7.234-3.312 17.22 3.938 22.28l102.8 72C531.1 478.1 537.5 480 543.1 480c5.047 0 10.12-1.203 14.78-3.625c10.64-5.531 17.23-16.41 17.23-28.39V192C576 180.1 569.4 169.2 558.8 163.7zM320 159.1H96V111.1C96 85.53 117.5 63.1 144 63.1h160c8.844 0 16-7.156 16-16C320 39.16 312.8 32 304 32h-160C99.88 32 64 67.89 64 111.1l.0003 48c-35.35 0-64 28.66-64 64l-.0001 191.1c0 35.34 28.65 63.1 64 63.1l256-.0016c35.35 0 64-28.66 64-63.1V223.1C384 188.7 355.3 159.1 320 159.1zM352 415.1c0 17.64-14.36 31.1-32 31.1H64c-17.64 0-32-14.35-32-31.1V223.1c0-17.64 14.36-31.1 32-31.1h256c17.64 0 32 14.36 32 31.1V415.1z">
-                                                </path>
-                                            </svg><!-- <i class="fa-light fa-camcorder"></i> -->
+                                            <svg class="fa fa-camcorder"></svg>
                                             <label class="fileContainer">
                                                 <input type="file">
                                             </label>
                                         </li>
                                         <li>
-                                            <svg class="svg-inline--fa fa-instagram" aria-hidden="true"
-                                                 focusable="false" data-prefix="fa-brands"
-                                                 data-icon="instagram" role="img"
-                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
-                                                 data-fa-i2svg="">
-                                                <path fill="currentColor"
-                                                      d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z">
-                                                </path>
-                                            </svg><!-- <i class="fa-brands fa-instagram"></i> -->
+                                            <svg class="fa fa-instagram"></svg>
                                             <label class="fileContainer">
                                                 <input type="file">
                                             </label>
-                                        </li>
-                                        <li class="preview-btn">
-                                            <button class="post-btn-preview" type="submit"
-                                                    data-ripple="">
-                                                Preview
-                                            </button>
                                         </li>
                                     </ul>
-                                    <button class="post-btn" type="submit" data-ripple="">Post</button>
+                                    <button class="post-btn" v-on:click="postingPost">Đăng bài</button>
                                 </div>
                                 <div class="add-location-post">
                                     <span>Drag map point to selected area</span>
                                     <div class="row">
-
                                         <div class="col-lg-6">
                                             <label class="control-label">Lat :</label>
-                                            <input type="text" class="" id="us3-lat">
+                                            <input type="text" id="us3-lat">
                                         </div>
                                         <div class="col-lg-6">
                                             <label>Long :</label>
-                                            <input type="text" class="" id="us3-lon">
+                                            <input type="text" id="us3-lon">
                                         </div>
                                     </div>
-                                    <!-- map -->
-                                    <div id="us3">
-                                        <div style="height: 100%; width: 100%;">
-                                            <div style="overflow: hidden;"></div>
-                                        </div>
-                                        <div style="background-color: white; font-weight: 500; font-family: Roboto, sans-serif; padding: 15px 25px; box-sizing: border-box; top: 5px; border: 1px solid rgba(0, 0, 0, 0.12); border-radius: 5px; left: 50%; max-width: 375px; position: absolute; transform: translateX(-50%); width: calc(100% - 10px); z-index: 1;">
-                                            <div>
-                                                <img alt=""
-                                                     src="https://maps.gstatic.com/mapfiles/api-3/~/images/google_gray.svg"
-                                                     draggable="false"
-                                                     style="padding: 0px; margin: 0px; border: 0px; height: 17px; vertical-align: middle; width: 52px; user-select: none;">
-                                            </div>
-                                            <div style="line-height: 20px; margin: 15px 0px;">
-                                                <span style="color: rgba(0, 0, 0, 0.87); font-size: 14px;">
-                                                    Trang
-                                                    này
-                                                    không thể tải Google Maps đúng cách.
-                                                </span>
-                                            </div>
-                                            <table style="width: 100%;">
-                                                <tr>
-                                                    <td style="line-height: 16px; vertical-align: middle;">
-                                                        <a href="http://g.co/dev/maps-no-account"
-                                                           target="_blank" rel="noopener"
-                                                           style="color: rgba(0, 0, 0, 0.54); font-size: 12px;">
-                                                            Bạn
-                                                            có sở hữu trang web này không?
-                                                        </a>
-                                                    </td>
-                                                    <td style="text-align: right;">
-                                                        <button class="dismissButton">
-                                                            OK
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
+                                    <div id="us3"></div>
                                 </div>
-                            </div>
-                        </div><!-- add post new box -->
-                        <div class="central-meta">
-                            <span class="create-post">Invites <a href="#" title="">See All</a></span>
-                            <ul class="suggested-frnd-caro invite">
-                                <li>
-                                    <img src="~/images/resources/recent1.jpg" alt="">
-                                    <div class="sugtd-frnd-meta">
-                                        <a href="#" title="">Olivia</a>
-                                        <span>1 mutual friend</span>
-                                        <a href="#" title="" class="send-invitation"
-                                           data-ripple="">Invite</a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <img src="~/images/resources/recent2.jpg" alt="">
-                                    <div class="sugtd-frnd-meta">
-                                        <a href="#" title="">Emma watson</a>
-                                        <span>2 mutual friend</span>
-                                        <a href="#" title="" class="send-invitation"
-                                           data-ripple="">Invite</a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <img src="~/images/resources/recent3.jpg" alt="">
-                                    <div class="sugtd-frnd-meta">
-                                        <a href="#" title="">Isabella</a>
-                                        <span><a href="#" title="">Emmy</a> is mutual friend</span>
-                                        <a href="#" title="" class="send-invitation"
-                                           data-ripple="">Invite</a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <img src="~/images/resources/recent4.jpg" alt="">
-                                    <div class="sugtd-frnd-meta">
-                                        <a href="#" title="">Amelia</a>
-                                        <span>5 mutual friend</span>
-                                        <a href="#" title="" class="send-invitation"
-                                           data-ripple="">Invite</a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <img src="~/images/resources/recent5.jpg" alt="">
-                                    <div class="sugtd-frnd-meta">
-                                        <a href="#" title="">Sophia</a>
-                                        <span>1 mutual friend</span>
-                                        <a href="#" title="" class="send-invitation"
-                                           data-ripple="">Invite</a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <img src="~/images/resources/recent6.jpg" alt="">
-                                    <div class="sugtd-frnd-meta">
-                                        <a href="#" title="">Amelia</a>
-                                        <span>3 mutual friend</span>
-                                        <a href="#" title="" class="send-invitation"
-                                           data-ripple="">Invite</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div><!-- Invite friends -->
-                        <div class="adb" style="display: inline-block;">
-                            <div class="adv-baner">
-                                <span>Advertisment</span>
-                                <img alt="" src="~/images/resources/adv-baner.jpg">
                             </div>
                         </div>
-                        <div class="loadMore">
-                            <div class="central-meta item" style="display: inline-block;">
-                                <div class="user-post">
-                                    <div class="friend-info">
-                                        <figure>
-                                            <img src="~/images/resources/nearly1.jpg" alt="">
-                                        </figure>
-                                        <div class="friend-name">
-                                            <div class="more">
-                                                <div class="more-post-optns">
-                                                    <i class="ti-more-alt"></i>
-                                                    <ul>
-                                                        <li>
-                                                            <i class="fa-sharp fa-regular fa-square-pen"></i>
-                                                            Edit Post
-                                                        </li>
-                                                        <li>
-                                                            <i class="fa-regular fa-trash"></i>
-                                                            Delete Post
-                                                        </li>
-                                                        <li>
-                                                            <svg class="svg-inline--fa fa-bell"
-                                                                 aria-hidden="true" focusable="false"
-                                                                 data-prefix="fa-regular" data-icon="bell"
-                                                                 role="img"
-                                                                 xmlns="http://www.w3.org/2000/svg"
-                                                                 viewBox="0 0 448 512" data-fa-i2svg="">
-                                                                <path fill="currentColor"
-                                                                      d="M256 32V49.88C328.5 61.39 384 124.2 384 200V233.4C384 278.8 399.5 322.9 427.8 358.4L442.7 377C448.5 384.2 449.6 394.1 445.6 402.4C441.6 410.7 433.2 416 424 416H24C14.77 416 6.365 410.7 2.369 402.4C-1.628 394.1-.504 384.2 5.26 377L20.17 358.4C48.54 322.9 64 278.8 64 233.4V200C64 124.2 119.5 61.39 192 49.88V32C192 14.33 206.3 0 224 0C241.7 0 256 14.33 256 32V32zM216 96C158.6 96 112 142.6 112 200V233.4C112 281.3 98.12 328 72.31 368H375.7C349.9 328 336 281.3 336 233.4V200C336 142.6 289.4 96 232 96H216zM288 448C288 464.1 281.3 481.3 269.3 493.3C257.3 505.3 240.1 512 224 512C207 512 190.7 505.3 178.7 493.3C166.7 481.3 160 464.1 160 448H288z">
-                                                                </path>
-                                                            </svg><!-- <i class="fa-sharp fa-regular fa-bell"></i> -->
-                                                            Turn off Notifications
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <ins><a href="time-line.html" title="">Jack Carter</a></ins>
-                                            <span>
-                                                <svg class="svg-inline--fa fa-globe" aria-hidden="true"
-                                                     focusable="false" data-prefix="fas" data-icon="globe"
-                                                     role="img" xmlns="http://www.w3.org/2000/svg"
-                                                     viewBox="0 0 512 512" data-fa-i2svg="">
-                                                    <path fill="currentColor"
-                                                          d="M186.8 26.24C119.1 46.6 64.08 96.01 36.1 160h99.97C145.7 104.1 163.6 57.44 186.8 26.24zM160 256c0 22.55 1.277 43.86 3.623 64h184.8c2.346-20.14 3.623-41.45 3.623-64s-1.277-43.86-3.623-64H163.6C161.3 212.1 160 233.5 160 256zM343.6 160c-16.25-88.04-53.37-144-87.57-144S184.7 71.96 168.4 160H343.6zM475.9 160c-27.98-63.99-83-113.4-150.7-133.8C348.4 57.44 366.3 104.1 375.9 160H475.9zM325.2 485.8C392.9 465.4 447.9 415.1 475.9 352h-99.97C366.3 407.9 348.4 454.6 325.2 485.8zM487.1 192h-106.6c2.248 20.5 3.485 41.84 3.485 64s-1.237 43.5-3.485 64h106.6c5.641-20.4 8.894-41.8 8.894-64S492.7 212.4 487.1 192zM168.4 352c16.25 88.04 53.37 144 87.57 144s71.32-55.96 87.57-144H168.4zM128 256c0-22.16 1.237-43.5 3.485-64H24.89c-5.641 20.4-8.895 41.8-8.895 64s3.254 43.6 8.895 64H131.5C129.2 299.5 128 278.2 128 256zM36.1 352c27.98 63.99 82.1 113.4 150.7 133.8C163.6 454.6 145.7 407.9 136.1 352H36.1z">
-                                                    </path>
-                                                </svg><!-- <i class="fa fa-globe"></i> --> published:
-                                                September,15
-                                                2024 19:PM
-                                            </span>
-                                        </div>
-                                        <div class="description">
-                                            <p class="content">
-                                                Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget
-                                                condimentum rhoncus, sem quam semper libero, sit
-                                                amet adipiscing sem neque sed ipsum. Nam quam nunc. Lorem.
-                                                Fusce nec
-                                                tellus sed augue semper porta. Mauris massa.
-                                            </p>
-                                        </div>
-                                        <div class="post-meta">
-                                            <figure>
-                                                <div class="img-bunch">
-                                                    <div class="row">
-                                                        <div class="col-lg-6 col-md-6 col-sm-6">
-                                                            <figure>
-                                                                <a href="#" title="" data-toggle="modal"
-                                                                   data-target="#img-comt">
-                                                                    <img src="~/images/resources/album1.jpg"
-                                                                         alt="">
-                                                                </a>
-                                                            </figure>
-                                                            <figure>
-                                                                <a href="#" title="" data-toggle="modal"
-                                                                   data-target="#img-comt">
-                                                                    <img src="~/images/resources/album2.jpg"
-                                                                         alt="">
-                                                                </a>
-                                                            </figure>
-                                                        </div>
-                                                        <div class="col-lg-6 col-md-6 col-sm-6">
-                                                            <figure>
-                                                                <a href="#" title="" data-toggle="modal"
-                                                                   data-target="#img-comt">
-                                                                    <img src="~/images/resources/album6.jpg"
-                                                                         alt="">
-                                                                </a>
-                                                            </figure>
-                                                            <figure>
-                                                                <a href="#" title="" data-toggle="modal"
-                                                                   data-target="#img-comt">
-                                                                    <img src="~/images/resources/album5.jpg"
-                                                                         alt="">
-                                                                </a>
-                                                            </figure>
-                                                            <figure>
-                                                                <a href="#" title="" data-toggle="modal"
-                                                                   data-target="#img-comt">
-                                                                    <img src="~/images/resources/album4.jpg"
-                                                                         alt="">
-                                                                </a>
-                                                                <div class="more-photos">
-                                                                    <span>+15</span>
-                                                                </div>
-                                                            </figure>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </figure>
-                                            <div class="we-video-info">
-                                                <div class="interaction-bar">
-                                                    <div class="reaction-summary">
-                                                        <span class="reaction-icons">
-                                                            <!-- <i class="fa fa-heart"></i> -->
-                                                            <i class="fa fa-thumbs-up"></i>
-                                                            <!-- <i class="fa fa-smile"></i> -->
-                                                        </span>
-                                                        <span class="reaction-count">2K</span>
-                                                    </div>
-                                                    <div class="interaction-summary">
-                                                        <span class="comment-count"
-                                                              style="margin-right: 5px;">1 bình luận</span>
-                                                        <span class="share-count"
-                                                              style="margin-right: 5px;">
-                                                            16 lượt chia
-                                                            sẻ
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="action-buttons">
-                                                    <button class="action-btn like-btn">
-                                                        <i class="fa fa-thumbs-up"
-                                                           style="margin-right: 7px;"></i> Thích
-                                                    </button>
-                                                    <button class="action-btn comment-btn">
-                                                        <i class="fa fa-comment"
-                                                           style="margin-right: 7px;"></i> Bình
-                                                        luận
-                                                    </button>
-                                                    <button class="action-btn share-btn">
-                                                        <i class="fa fa-share"
-                                                           style="margin-right: 7px;"></i> Chia sẻ
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="coment-area" style="display: block;">
-                                            <ul class="we-comet">
-                                                <li>
-                                                    <div class="comet-avatar">
-                                                        <img src="~/images/resources/nearly3.jpg" alt="">
-                                                    </div>
-                                                    <div class="we-comment">
-                                                        <h5>
-                                                            <a href="time-line.html" title="">
-                                                                Jason
-                                                                borne
-                                                            </a>
-                                                        </h5>
-                                                        <p>
-                                                            we are working for the dance and sing songs. this
-                                                            video
-                                                            is very awesome for the youngster. please vote
-                                                            this
-                                                            video and like our channel
-                                                        </p>
-                                                        <div class="inline-itms">
-                                                            <span>1 year ago</span>
-                                                            <a class="we-reply" href="#" title="Reply">
-                                                                <svg class="svg-inline--fa fa-reply"
-                                                                     aria-hidden="true" focusable="false"
-                                                                     data-prefix="fas" data-icon="reply"
-                                                                     role="img"
-                                                                     xmlns="http://www.w3.org/2000/svg"
-                                                                     viewBox="0 0 512 512" data-fa-i2svg="">
-                                                                    <path fill="currentColor"
-                                                                          d="M8.31 189.9l176-151.1c15.41-13.3 39.69-2.509 39.69 18.16v80.05C384.6 137.9 512 170.1 512 322.3c0 61.44-39.59 122.3-83.34 154.1c-13.66 9.938-33.09-2.531-28.06-18.62c45.34-145-21.5-183.5-176.6-185.8v87.92c0 20.7-24.31 31.45-39.69 18.16l-176-151.1C-2.753 216.6-2.784 199.4 8.31 189.9z">
-                                                                    </path>
-                                                                </svg><!-- <i class="fa fa-reply"></i> -->
-                                                            </a>
-                                                            <a href="#" title="">
-                                                                <svg class="svg-inline--fa fa-heart"
-                                                                     aria-hidden="true" focusable="false"
-                                                                     data-prefix="fas" data-icon="heart"
-                                                                     role="img"
-                                                                     xmlns="http://www.w3.org/2000/svg"
-                                                                     viewBox="0 0 512 512" data-fa-i2svg="">
-                                                                    <path fill="currentColor"
-                                                                          d="M472.1 270.5l-193.1 199.7c-12.64 13.07-33.27 13.08-45.91 .0107l-193.2-199.7C-16.21 212.5-13.1 116.7 49.04 62.86C103.3 15.88 186.4 24.42 236.3 75.98l19.7 20.27l19.7-20.27c49.95-51.56 132.1-60.1 187.3-13.12C525.1 116.6 528.2 212.5 472.1 270.5z">
-                                                                    </path>
-                                                                </svg><!-- <i class="fa fa-heart"></i> --><span>20</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
 
-                                                </li>
-                                                <li>
-                                                    <div class="comet-avatar">
-                                                        <img src="~/images/resources/comet-4.jpg" alt="">
-                                                    </div>
-                                                    <div class="we-comment">
-                                                        <h5>
-                                                            <a href="time-line.html" title="">Sophia</a>
-                                                        </h5>
-                                                        <p>
-                                                            we are working for the dance and sing songs. this
-                                                            video
-                                                            is very awesome for the youngster.
-                                                            <i class="em em-smiley"></i>
-                                                        </p>
-                                                        <div class="inline-itms">
-                                                            <span>1 year ago</span>
-                                                            <a class="we-reply" href="#" title="Reply">
-                                                                <svg class="svg-inline--fa fa-reply"
-                                                                     aria-hidden="true" focusable="false"
-                                                                     data-prefix="fas" data-icon="reply"
-                                                                     role="img"
-                                                                     xmlns="http://www.w3.org/2000/svg"
-                                                                     viewBox="0 0 512 512" data-fa-i2svg="">
-                                                                    <path fill="currentColor"
-                                                                          d="M8.31 189.9l176-151.1c15.41-13.3 39.69-2.509 39.69 18.16v80.05C384.6 137.9 512 170.1 512 322.3c0 61.44-39.59 122.3-83.34 154.1c-13.66 9.938-33.09-2.531-28.06-18.62c45.34-145-21.5-183.5-176.6-185.8v87.92c0 20.7-24.31 31.45-39.69 18.16l-176-151.1C-2.753 216.6-2.784 199.4 8.31 189.9z">
-                                                                    </path>
-                                                                </svg><!-- <i class="fa fa-reply"></i> -->
-                                                            </a>
-                                                            <a href="#" title="">
-                                                                <svg class="svg-inline--fa fa-heart"
-                                                                     aria-hidden="true" focusable="false"
-                                                                     data-prefix="fas" data-icon="heart"
-                                                                     role="img"
-                                                                     xmlns="http://www.w3.org/2000/svg"
-                                                                     viewBox="0 0 512 512" data-fa-i2svg="">
-                                                                    <path fill="currentColor"
-                                                                          d="M472.1 270.5l-193.1 199.7c-12.64 13.07-33.27 13.08-45.91 .0107l-193.2-199.7C-16.21 212.5-13.1 116.7 49.04 62.86C103.3 15.88 186.4 24.42 236.3 75.98l19.7 20.27l19.7-20.27c49.95-51.56 132.1-60.1 187.3-13.12C525.1 116.6 528.2 212.5 472.1 270.5z">
-                                                                    </path>
-                                                                </svg><!-- <i class="fa fa-heart"></i> --><span>20</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <a href="#" title="" class="showmore underline">
-                                                        more
-                                                        comments+
-                                                    </a>
-                                                </li>
-                                                <li class="post-comment">
-                                                    <div class="comet-avatar">
-                                                        <img src="~/images/resources/nearly1.jpg" alt="">
-                                                    </div>
-                                                    <div class="post-comt-box">
-                                                        <form method="post">
-                                                            <textarea placeholder="Post your comment"></textarea>
-                                                            <div class="add-smiles">
-                                                                <div class="uploadimage">
-                                                                    <svg class="svg-inline--fa fa-image"
-                                                                         aria-hidden="true" focusable="false"
-                                                                         data-prefix="fas" data-icon="image"
-                                                                         role="img"
-                                                                         xmlns="http://www.w3.org/2000/svg"
-                                                                         viewBox="0 0 512 512"
-                                                                         data-fa-i2svg="">
-                                                                        <path fill="currentColor"
-                                                                              d="M447.1 32h-384C28.64 32-.0091 60.65-.0091 96v320c0 35.35 28.65 64 63.1 64h384c35.35 0 64-28.65 64-64V96C511.1 60.65 483.3 32 447.1 32zM111.1 96c26.51 0 48 21.49 48 48S138.5 192 111.1 192s-48-21.49-48-48S85.48 96 111.1 96zM446.1 407.6C443.3 412.8 437.9 416 432 416H82.01c-6.021 0-11.53-3.379-14.26-8.75c-2.73-5.367-2.215-11.81 1.334-16.68l70-96C142.1 290.4 146.9 288 152 288s9.916 2.441 12.93 6.574l32.46 44.51l93.3-139.1C293.7 194.7 298.7 192 304 192s10.35 2.672 13.31 7.125l128 192C448.6 396 448.9 402.3 446.1 407.6z">
-                                                                        </path>
-                                                                    </svg><!-- <i class="fa fa-image"></i> -->
-                                                                    <label class="fileContainer">
-                                                                        <input type="file">
-                                                                    </label>
-                                                                </div>
-                                                                <span class="em em-expressionless"
-                                                                      title="add icon"></span>
-                                                                <div class="smiles-bunch">
-                                                                    <i class="em em---1"></i>
-                                                                    <i class="em em-smiley"></i>
-                                                                    <i class="em em-anguished"></i>
-                                                                    <i class="em em-laughing"></i>
-                                                                    <i class="em em-angry"></i>
-                                                                    <i class="em em-astonished"></i>
-                                                                    <i class="em em-blush"></i>
-                                                                    <i class="em em-disappointed"></i>
-                                                                    <i class="em em-worried"></i>
-                                                                    <i class="em em-kissing_heart"></i>
-                                                                    <i class="em em-rage"></i>
-                                                                    <i class="em em-stuck_out_tongue"></i>
-                                                                </div>
-                                                            </div>
-
-                                                            <button type="submit"></button>
-                                                        </form>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div><!-- album post -->
-                            <div class="central-meta item" style="display: inline-block;">
-                                <div class="user-post">
-                                    <div class="friend-info">
-                                        <figure>
-                                            <img src="~/images/resources/nearly1.jpg" alt="">
-                                        </figure>
-                                        <div class="friend-name">
-                                            <div class="more">
-                                                <div class="more-post-optns">
-                                                    <i class="ti-more-alt"></i>
-                                                    <ul>
-                                                        <li>
-                                                            <i class="fa-sharp fa-regular fa-square-pen"></i>
-                                                            Edit Post
-                                                        </li>
-                                                        <li>
-                                                            <i class="fa-regular fa-trash"></i>
-                                                            Delete Post
-                                                        </li>
-                                                        <li>
-                                                            <i class="fa-sharp fa-regular fa-bell"></i>
-                                                            Turn off This User Notification
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <ins>
-                                                <a href="time-line.html" title="">Jack Carter</a> share <a href="#" title="">link</a>
-                                            </ins>
-                                            <span>
-                                                <!-- <i class="fa fa-globe"></i> --> published:
-                                                january,5 2010
-                                                19:PM
-                                            </span>
-                                        </div>
-                                        <div class="description">
-                                            <p class="content">
-                                                Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget
-                                                condimentum rhoncus, sem quam semper libero, sit
-                                                amet adipiscing sem neque sed ipsum. Nam quam nunc. Lorem
-                                                ipsum dolor sit amet, consectetur adipiscing elit.
-                                                Integer nec odio. Praesent libero. Sed cursus ante dapibus
-                                                diam. Sed nisi. Nulla quis sem at nibh elementum
-                                                imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec
-                                                tellus sed augue semper porta. Mauris massa.
-                                            </p>
-                                        </div>
-                                        <div class="post-meta">
-                                            <figure>
-                                                <a href="https://www.youtube.com/watch?v=fF382gwEnG8"
-                                                   title="" data-strip-group="mygroup"
-                                                   class="strip vdeo-link"
-                                                   data-strip-options="width: 700,height: 450,youtube: { autoplay: 1 }">
-                                                    <img src="~/images/resources/user-post.jpg" alt="">
-                                                    <i>
-                                                        <svg version="1.1" class="play"
-                                                             xmlns="http://www.w3.org/2000/svg"
-                                                             xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                             x="0px" y="0px" height="55px" width="55px"
-                                                             viewBox="0 0 100 100"
-                                                             enable-background="new 0 0 100 100"
-                                                             xml:space="preserve">
-                                                        <path class="stroke-solid" fill="none" stroke=""
-                                                              d="M49.9,2.5C23.6,2.8,2.1,24.4,2.5,50.4C2.9,76.5,24.7,98,50.3,97.5c26.4-0.6,47.4-21.8,47.2-47.7
-                                                        																C97.3,23.7,75.7,2.3,49.9,2.5"></path>
-                                                        <path class="icon" fill=""
-                                                              d="M38,69c-1,0.5-1.8,0-1.8-1.1V32.1c0-1.1,0.8-1.6,1.8-1.1l34,18c1,0.5,1,1.4,0,1.9L38,69z">
-                                                                        </path>
-                                                                    </svg>
-                                                    </i>
-                                                </a>
-                                            </figure>
-                                            <div class="we-video-info">
-                                                <div class="interaction-bar">
-                                                    <div class="reaction-summary">
-                                                        <span class="reaction-icons">
-                                                            <!-- <i class="fa fa-heart"></i> -->
-                                                            <i class="fa fa-thumbs-up"></i>
-                                                            <!-- <i class="fa fa-smile"></i> -->
-                                                        </span>
-                                                        <span class="reaction-count">2K</span>
-                                                    </div>
-                                                    <div class="interaction-summary">
-                                                        <span class="comment-count"
-                                                              style="margin-right: 5px;">1 bình luận</span>
-                                                        <span class="share-count"
-                                                              style="margin-right: 5px;">
-                                                            16 lượt chia
-                                                            sẻ
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="action-buttons">
-                                                    <button class="action-btn like-btn">
-                                                        <i class="fa fa-thumbs-up"
-                                                           style="margin-right: 7px;"></i> Thích
-                                                    </button>
-                                                    <button class="action-btn comment-btn">
-                                                        <i class="fa fa-comment"
-                                                           style="margin-right: 7px;"></i> Bình
-                                                        luận
-                                                    </button>
-                                                    <button class="action-btn share-btn">
-                                                        <i class="fa fa-share"
-                                                           style="margin-right: 7px;"></i> Chia sẻ
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="coment-area">
-                                            <ul class="we-comet">
-                                                <li>
-                                                    <div class="comet-avatar">
-                                                        <img src="~/images/resources/nearly3.jpg" alt="">
-                                                    </div>
-                                                    <div class="we-comment">
-                                                        <h5>
-                                                            <a href="time-line.html" title="">
-                                                                Jason
-                                                                borne
-                                                            </a>
-                                                        </h5>
-                                                        <p>
-                                                            we are working for the dance and sing songs. this
-                                                            video
-                                                            is very awesome for the youngster. please vote
-                                                            this
-                                                            video and like our channel
-                                                        </p>
-                                                        <div class="inline-itms">
-                                                            <span>1 year ago</span>
-                                                            <a class="we-reply" href="#"
-                                                               title="Reply"><!-- <i class="fa fa-heart"></i> --><span>20</span></a>
-                                                        </div>
-                                                    </div>
-
-                                                </li>
-                                                <li>
-                                                    <div class="comet-avatar">
-                                                        <img src="~/images/resources/comet-4.jpg" alt="">
-                                                    </div>
-                                                    <div class="we-comment">
-                                                        <h5>
-                                                            <a href="time-line.html" title="">Sophia</a>
-                                                        </h5>
-                                                        <p>
-                                                            we are working for the dance and sing songs. this
-                                                            video
-                                                            is very awesome for the youngster.
-                                                            <i class="em em-smiley"></i>
-                                                        </p>
-                                                        <div class="inline-itms">
-                                                            <span>1 year ago</span>
-                                                            <a class="we-reply" href="#"
-                                                               title="Reply"><!-- <i class="fa fa-reply"></i> --></a>
-                                                            <a href="#"
-                                                               title=""><!-- <i class="fa fa-heart"></i> --><span>20</span></a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <a href="#" title="" class="showmore underline">
-                                                        more
-                                                        comments+
-                                                    </a>
-                                                </li>
-                                                <li class="post-comment">
-                                                    <div class="comet-avatar">
-                                                        <img src="~/images/resources/nearly1.jpg" alt="">
-                                                    </div>
-                                                    <div class="post-comt-box">
-                                                        <form method="post">
-                                                            <textarea placeholder="Post your comment"></textarea>
-                                                            <div class="add-smiles">
-                                                                <div class="uploadimage">
-                                                                    <!-- <i class="fa fa-image"></i> -->
-                                                                    <label class="fileContainer">
-                                                                        <input type="file">
-                                                                    </label>
-                                                                </div>
-                                                                <span class="em em-expressionless"
-                                                                      title="add icon"></span>
-                                                                <div class="smiles-bunch">
-                                                                    <i class="em em---1"></i>
-                                                                    <i class="em em-smiley"></i>
-                                                                    <i class="em em-anguished"></i>
-                                                                    <i class="em em-laughing"></i>
-                                                                    <i class="em em-angry"></i>
-                                                                    <i class="em em-astonished"></i>
-                                                                    <i class="em em-blush"></i>
-                                                                    <i class="em em-disappointed"></i>
-                                                                    <i class="em em-worried"></i>
-                                                                    <i class="em em-kissing_heart"></i>
-                                                                    <i class="em em-rage"></i>
-                                                                    <i class="em em-stuck_out_tongue"></i>
-                                                                </div>
-                                                            </div>
-                                                            <button type="submit"></button>
-                                                        </form>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- video post -->
+                        <div v-for="post in posts" :key="post.id" class="loadMore">
                             <div class="central-meta item">
-                                <div class="user-post">
-                                    <div class="friend-info">
-                                        <figure>
-                                            <img alt="" src="~/images/resources/friend-avatar10.jpg">
-                                        </figure>
-                                        <div class="friend-name">
-                                            <div class="more">
-                                                <div class="more-post-optns">
-                                                    <i class="ti-more-alt"></i>
-                                                    <ul>
-                                                        <li>
-                                                            <!-- <i class="fa-sharp fa-regular fa-square-pen"></i> -->
-                                                            Edit Post
-                                                        </li>
-                                                        <li>
-                                                            <!-- <i class="fa-regular fa-trash"></i> -->
-                                                            Delete Post
-                                                        </li>
-                                                        <li>
-                                                            <!-- <i class="fa-sharp fa-regular fa-bell"></i> -->
-                                                            Turn off Notifications
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <ins><a title="" href="time-line.html">Janice Griffith</a></ins>
-                                            <span>published: june,2 2010 19:PM</span>
-                                        </div>
-                                        <div class="description">
-                                            <p class="content">
-                                                Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget
-                                                condimentum rhoncus, sem quam semper libero, sit
-                                                amet adipiscing sem neque sed ipsum. Nam quam nunc. Lorem
-                                            </p>
-                                        </div>
-                                        <div class="post-meta">
-                                            <div class="linked-image align-left">
-                                                <a title="" href="#">
-                                                    <img alt=""
-                                                         src="~/images/resources/page1.jpg">
-                                                </a>
-                                            </div>
-                                            <div class="detail">
-                                                <span>Love Maid - HighChill</span>
-                                                <p>
-                                                    Lorem ipsum dolor sit amet, consectetur ipisicing elit,
-                                                    sed do
-                                                    eiusmod tempor incididunt ut labore et dolore magna
-                                                    aliqua...
-                                                </p>
-                                                <a title="" href="#">www.sample.com</a>
-                                            </div>
-
-                                            <div class="we-video-info">
-                                                <div class="interaction-bar">
-                                                    <div class="reaction-summary">
-                                                        <span class="reaction-icons">
-                                                            <!-- <i class="fa fa-heart"></i> -->
-                                                            <i class="fa fa-thumbs-up"></i>
-                                                            <!-- <i class="fa fa-smile"></i> -->
-                                                        </span>
-                                                        <span class="reaction-count">2K</span>
-                                                    </div>
-                                                    <div class="interaction-summary">
-                                                        <span class="comment-count"
-                                                              style="margin-right: 5px;">1 bình luận</span>
-                                                        <span class="share-count"
-                                                              style="margin-right: 5px;">
-                                                            16 lượt chia
-                                                            sẻ
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="action-buttons">
-                                                    <button class="action-btn like-btn">
-                                                        <i class="fa fa-thumbs-up"
-                                                           style="margin-right: 7px;"></i> Thích
-                                                    </button>
-                                                    <button class="action-btn comment-btn">
-                                                        <i class="fa fa-comment"
-                                                           style="margin-right: 7px;"></i> Bình
-                                                        luận
-                                                    </button>
-                                                    <button class="action-btn share-btn">
-                                                        <i class="fa fa-share"
-                                                           style="margin-right: 7px;"></i> Chia sẻ
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="coment-area">
-                                            <ul class="we-comet">
-                                                <li>
-                                                    <div class="comet-avatar">
-                                                        <img src="~/images/resources/nearly3.jpg" alt="">
-                                                    </div>
-                                                    <div class="we-comment">
-                                                        <h5>
-                                                            <a href="time-line.html" title="">
-                                                                Jason
-                                                                borne
-                                                            </a>
-                                                        </h5>
-                                                        <p>
-                                                            we are working for the dance and sing songs. this
-                                                            video
-                                                            is very awesome for the youngster. please vote
-                                                            this
-                                                            video and like our channel
-                                                        </p>
-                                                        <div class="inline-itms">
-                                                            <span>1 year ago</span>
-                                                            <a class="we-reply" href="#" title="Reply">
-                                                                <svg class="svg-inline--fa fa-reply"
-                                                                     aria-hidden="true" focusable="false"
-                                                                     data-prefix="fas" data-icon="reply"
-                                                                     role="img"
-                                                                     xmlns="http://www.w3.org/2000/svg"
-                                                                     viewBox="0 0 512 512" data-fa-i2svg="">
-                                                                    <path fill="currentColor"
-                                                                          d="M8.31 189.9l176-151.1c15.41-13.3 39.69-2.509 39.69 18.16v80.05C384.6 137.9 512 170.1 512 322.3c0 61.44-39.59 122.3-83.34 154.1c-13.66 9.938-33.09-2.531-28.06-18.62c45.34-145-21.5-183.5-176.6-185.8v87.92c0 20.7-24.31 31.45-39.69 18.16l-176-151.1C-2.753 216.6-2.784 199.4 8.31 189.9z">
-                                                                    </path>
-                                                                </svg><!-- <i class="fa fa-reply"></i> -->
-                                                            </a>
-                                                            <a href="#" title="">
-                                                                <svg class="svg-inline--fa fa-heart"
-                                                                     aria-hidden="true" focusable="false"
-                                                                     data-prefix="fas" data-icon="heart"
-                                                                     role="img"
-                                                                     xmlns="http://www.w3.org/2000/svg"
-                                                                     viewBox="0 0 512 512" data-fa-i2svg="">
-                                                                    <path fill="currentColor"
-                                                                          d="M472.1 270.5l-193.1 199.7c-12.64 13.07-33.27 13.08-45.91 .0107l-193.2-199.7C-16.21 212.5-13.1 116.7 49.04 62.86C103.3 15.88 186.4 24.42 236.3 75.98l19.7 20.27l19.7-20.27c49.95-51.56 132.1-60.1 187.3-13.12C525.1 116.6 528.2 212.5 472.1 270.5z">
-                                                                    </path>
-                                                                </svg><!-- <i class="fa fa-heart"></i> --><span>20</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-
-                                                </li>
-                                                <li>
-                                                    <div class="comet-avatar">
-                                                        <img src="~/images/resources/comet-4.jpg" alt="">
-                                                    </div>
-                                                    <div class="we-comment">
-                                                        <h5>
-                                                            <a href="time-line.html" title="">Sophia</a>
-                                                        </h5>
-                                                        <p>
-                                                            we are working for the dance and sing songs. this
-                                                            video
-                                                            is very awesome for the youngster.
-                                                            <i class="em em-smiley"></i>
-                                                        </p>
-                                                        <div class="inline-itms">
-                                                            <span>1 year ago</span>
-                                                            <a class="we-reply" href="#" title="Reply">
-                                                                <svg class="svg-inline--fa fa-reply"
-                                                                     aria-hidden="true" focusable="false"
-                                                                     data-prefix="fas" data-icon="reply"
-                                                                     role="img"
-                                                                     xmlns="http://www.w3.org/2000/svg"
-                                                                     viewBox="0 0 512 512" data-fa-i2svg="">
-                                                                    <path fill="currentColor"
-                                                                          d="M8.31 189.9l176-151.1c15.41-13.3 39.69-2.509 39.69 18.16v80.05C384.6 137.9 512 170.1 512 322.3c0 61.44-39.59 122.3-83.34 154.1c-13.66 9.938-33.09-2.531-28.06-18.62c45.34-145-21.5-183.5-176.6-185.8v87.92c0 20.7-24.31 31.45-39.69 18.16l-176-151.1C-2.753 216.6-2.784 199.4 8.31 189.9z">
-                                                                    </path>
-                                                                </svg><!-- <i class="fa fa-reply"></i> -->
-                                                            </a>
-                                                            <a href="#" title="">
-                                                                <svg class="svg-inline--fa fa-heart"
-                                                                     aria-hidden="true" focusable="false"
-                                                                     data-prefix="fas" data-icon="heart"
-                                                                     role="img"
-                                                                     xmlns="http://www.w3.org/2000/svg"
-                                                                     viewBox="0 0 512 512" data-fa-i2svg="">
-                                                                    <path fill="currentColor"
-                                                                          d="M472.1 270.5l-193.1 199.7c-12.64 13.07-33.27 13.08-45.91 .0107l-193.2-199.7C-16.21 212.5-13.1 116.7 49.04 62.86C103.3 15.88 186.4 24.42 236.3 75.98l19.7 20.27l19.7-20.27c49.95-51.56 132.1-60.1 187.3-13.12C525.1 116.6 528.2 212.5 472.1 270.5z">
-                                                                    </path>
-                                                                </svg><!-- <i class="fa fa-heart"></i> --><span>20</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <a href="#" title="" class="showmore underline">
-                                                        more
-                                                        comments+
-                                                    </a>
-                                                </li>
-                                                <li class="post-comment">
-                                                    <div class="comet-avatar">
-                                                        <img src="~/images/resources/nearly1.jpg" alt="">
-                                                    </div>
-                                                    <div class="post-comt-box">
-                                                        <form method="post">
-                                                            <textarea placeholder="Post your comment"></textarea>
-                                                            <div class="add-smiles">
-                                                                <div class="uploadimage">
-                                                                    <svg class="svg-inline--fa fa-image"
-                                                                         aria-hidden="true" focusable="false"
-                                                                         data-prefix="fas" data-icon="image"
-                                                                         role="img"
-                                                                         xmlns="http://www.w3.org/2000/svg"
-                                                                         viewBox="0 0 512 512"
-                                                                         data-fa-i2svg="">
-                                                                        <path fill="currentColor"
-                                                                              d="M447.1 32h-384C28.64 32-.0091 60.65-.0091 96v320c0 35.35 28.65 64 63.1 64h384c35.35 0 64-28.65 64-64V96C511.1 60.65 483.3 32 447.1 32zM111.1 96c26.51 0 48 21.49 48 48S138.5 192 111.1 192s-48-21.49-48-48S85.48 96 111.1 96zM446.1 407.6C443.3 412.8 437.9 416 432 416H82.01c-6.021 0-11.53-3.379-14.26-8.75c-2.73-5.367-2.215-11.81 1.334-16.68l70-96C142.1 290.4 146.9 288 152 288s9.916 2.441 12.93 6.574l32.46 44.51l93.3-139.1C293.7 194.7 298.7 192 304 192s10.35 2.672 13.31 7.125l128 192C448.6 396 448.9 402.3 446.1 407.6z">
-                                                                        </path>
-                                                                    </svg><!-- <i class="fa fa-image"></i> -->
-                                                                    <label class="fileContainer">
-                                                                        <input type="file">
-                                                                    </label>
-                                                                </div>
-                                                                <span class="em em-expressionless"
-                                                                      title="add icon"></span>
-                                                                <div class="smiles-bunch">
-                                                                    <i class="em em---1"></i>
-                                                                    <i class="em em-smiley"></i>
-                                                                    <i class="em em-anguished"></i>
-                                                                    <i class="em em-laughing"></i>
-                                                                    <i class="em em-angry"></i>
-                                                                    <i class="em em-astonished"></i>
-                                                                    <i class="em em-blush"></i>
-                                                                    <i class="em em-disappointed"></i>
-                                                                    <i class="em em-worried"></i>
-                                                                    <i class="em em-kissing_heart"></i>
-                                                                    <i class="em em-rage"></i>
-                                                                    <i class="em em-stuck_out_tongue"></i>
-                                                                </div>
-                                                            </div>
-
-                                                            <button type="submit"></button>
-                                                        </form>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><!-- love post -->
-                            <div class="central-meta item" style>
                                 <div class="user-post">
                                     <div class="friend-info">
                                         <figure>
@@ -1052,232 +757,236 @@
                                                 <div class="more-post-optns">
                                                     <i class="ti-more-alt"></i>
                                                     <ul>
-                                                        <li>
-                                                            <!-- <i class="fa-sharp fa-regular fa-square-pen"></i> -->
-                                                            Edit Post
-                                                        </li>
-                                                        <li>
-                                                            <!-- <i class="fa-regular fa-trash"></i> -->
-                                                            Delete Post
-                                                        </li>
-                                                        <li>
-                                                            <!-- <i class="fa-sharp fa-regular fa-bell"></i> -->
-                                                            Turn off Notifications
-                                                        </li>
+                                                        <li v-on:click="editPost(post)"><i class="fa-sharp fa-regular fa-square-pen"></i> Edit Post</li>
+                                                        <li v-on:click="deletePost(post)"><i class="fa-regular fa-trash"></i> Delete Post</li>
+                                                        <li v-on:click="toggleNotifications(post)"><i class="fa-sharp fa-regular fa-bell"></i> Turn off Notifications</li>
                                                     </ul>
                                                 </div>
                                             </div>
                                             <ins>
-                                                <a href="time-line.html" title="">
-                                                    Mathilda
-                                                    Brinker
-                                                </a>
+                                                <a href="time-line.html" title="">{{ post.fullName }}</a>
                                             </ins>
-                                            <span>published: june,2 2024 19:PM</span>
+                                            <span>published: {{ post.displayDate }}</span>
                                         </div>
                                         <div class="post-meta">
+                                            <!-- If it's not a shared post, just display the current post content -->
                                             <div class="description">
-                                                <p class="content">
-                                                    Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus
-                                                    eget
-                                                    condimentum rhoncus, sem quam semper libero, sits. Fusce
-                                                    nec
-                                                    tellus sed augue semper porta. Mauris massa.
-                                                </p>
+                                                <p class="content">{{ post.postContent }}</p>
                                             </div>
+
                                             <div class="we-video-info">
                                                 <div class="interaction-bar">
                                                     <div class="reaction-summary">
                                                         <span class="reaction-icons">
-                                                            <!-- <i class="fa fa-heart"></i> -->
                                                             <i class="fa fa-thumbs-up"></i>
-                                                            <!-- <i class="fa fa-smile"></i> -->
                                                         </span>
-                                                        <span class="reaction-count">2K</span>
+                                                        <span class="reaction-count">{{ post.reactCount }}</span>
                                                     </div>
                                                     <div class="interaction-summary">
-                                                        <span class="comment-count"
-                                                              style="margin-right: 5px;">1 bình luận</span>
-                                                        <span class="share-count"
-                                                              style="margin-right: 5px;">
-                                                            16 lượt chia
-                                                            sẻ
-                                                        </span>
+                                                        <span class="comment-count" style="margin-right: 5px;" v-on:click="showComments(post)">{{ post.commentCount }} comments</span>
+                                                        <span class="share-count" style="margin-right: 5px;">{{ post.shareCount }} shares</span>
                                                     </div>
                                                 </div>
                                                 <div class="action-buttons">
-                                                    <button class="action-btn like-btn">
-                                                        <i class="fa fa-thumbs-up"
-                                                           style="margin-right: 7px;"></i> Thích
+                                                    <button class="action-btn like-btn"
+                                                            v-on:click="likePost(post)"
+                                                            v-bind:class="{ active: post.likedByCurrentUser }">
+                                                        <i class="fa fa-thumbs-up" style="margin-right: 7px;"></i> Like
                                                     </button>
-                                                    <button class="action-btn comment-btn">
-                                                        <i class="fa fa-comment"
-                                                           style="margin-right: 7px;"></i> Bình
-                                                        luận
+
+
+                                                    <button class="action-btn comment-btn" v-on:click="showComments(post)">
+                                                        <i class="fa fa-comment" style="margin-right: 7px;"></i> Comment
                                                     </button>
-                                                    <button class="action-btn share-btn">
-                                                        <i class="fa fa-share"
-                                                           style="margin-right: 7px;"></i> Chia sẻ
+                                                    <button class="action-btn share-btn" v-on:click="sharePost(post)">
+                                                        <i class="fa fa-share" style="margin-right: 7px;"></i> Share
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="coment-area">
-                                            <ul class="we-comet">
-                                                <li>
-                                                    <div class="comet-avatar">
-                                                        <img src="~/images/resources/nearly3.jpg" alt="">
-                                                    </div>
-                                                    <div class="we-comment">
-                                                        <h5>
-                                                            <a href="time-line.html" title="">
-                                                                Jason
-                                                                borne
-                                                            </a>
-                                                        </h5>
-                                                        <p>
-                                                            we are working for the dance and sing songs. this
-                                                            video
-                                                            is very awesome for the youngster. please vote
-                                                            this
-                                                            video and like our channel
-                                                        </p>
-                                                        <div class="inline-itms">
-                                                            <span>1 year ago</span>
-                                                            <a class="we-reply" href="#" title="Reply">
-                                                                <svg class="svg-inline--fa fa-reply"
-                                                                     aria-hidden="true" focusable="false"
-                                                                     data-prefix="fas" data-icon="reply"
-                                                                     role="img"
-                                                                     xmlns="http://www.w3.org/2000/svg"
-                                                                     viewBox="0 0 512 512" data-fa-i2svg="">
-                                                                    <path fill="currentColor"
-                                                                          d="M8.31 189.9l176-151.1c15.41-13.3 39.69-2.509 39.69 18.16v80.05C384.6 137.9 512 170.1 512 322.3c0 61.44-39.59 122.3-83.34 154.1c-13.66 9.938-33.09-2.531-28.06-18.62c45.34-145-21.5-183.5-176.6-185.8v87.92c0 20.7-24.31 31.45-39.69 18.16l-176-151.1C-2.753 216.6-2.784 199.4 8.31 189.9z">
-                                                                    </path>
-                                                                </svg><!-- <i class="fa fa-reply"></i> -->
-                                                            </a>
-                                                            <a href="#" title="">
-                                                                <svg class="svg-inline--fa fa-heart"
-                                                                     aria-hidden="true" focusable="false"
-                                                                     data-prefix="fas" data-icon="heart"
-                                                                     role="img"
-                                                                     xmlns="http://www.w3.org/2000/svg"
-                                                                     viewBox="0 0 512 512" data-fa-i2svg="">
-                                                                    <path fill="currentColor"
-                                                                          d="M472.1 270.5l-193.1 199.7c-12.64 13.07-33.27 13.08-45.91 .0107l-193.2-199.7C-16.21 212.5-13.1 116.7 49.04 62.86C103.3 15.88 186.4 24.42 236.3 75.98l19.7 20.27l19.7-20.27c49.95-51.56 132.1-60.1 187.3-13.12C525.1 116.6 528.2 212.5 472.1 270.5z">
-                                                                    </path>
-                                                                </svg><!-- <i class="fa fa-heart"></i> --><span>20</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-
-                                                </li>
-                                                <li>
-                                                    <div class="comet-avatar">
-                                                        <img src="~/images/resources/comet-4.jpg" alt="">
-                                                    </div>
-                                                    <div class="we-comment">
-                                                        <h5>
-                                                            <a href="time-line.html" title="">Sophia</a>
-                                                        </h5>
-                                                        <p>
-                                                            we are working for the dance and sing songs. this
-                                                            video
-                                                            is very awesome for the youngster.
-                                                            <i class="em em-smiley"></i>
-                                                        </p>
-                                                        <div class="inline-itms">
-                                                            <span>1 year ago</span>
-                                                            <a class="we-reply" href="#" title="Reply">
-                                                                <svg class="svg-inline--fa fa-reply"
-                                                                     aria-hidden="true" focusable="false"
-                                                                     data-prefix="fas" data-icon="reply"
-                                                                     role="img"
-                                                                     xmlns="http://www.w3.org/2000/svg"
-                                                                     viewBox="0 0 512 512" data-fa-i2svg="">
-                                                                    <path fill="currentColor"
-                                                                          d="M8.31 189.9l176-151.1c15.41-13.3 39.69-2.509 39.69 18.16v80.05C384.6 137.9 512 170.1 512 322.3c0 61.44-39.59 122.3-83.34 154.1c-13.66 9.938-33.09-2.531-28.06-18.62c45.34-145-21.5-183.5-176.6-185.8v87.92c0 20.7-24.31 31.45-39.69 18.16l-176-151.1C-2.753 216.6-2.784 199.4 8.31 189.9z">
-                                                                    </path>
-                                                                </svg><!-- <i class="fa fa-reply"></i> -->
-                                                            </a>
-                                                            <a href="#" title="">
-                                                                <svg class="svg-inline--fa fa-heart"
-                                                                     aria-hidden="true" focusable="false"
-                                                                     data-prefix="fas" data-icon="heart"
-                                                                     role="img"
-                                                                     xmlns="http://www.w3.org/2000/svg"
-                                                                     viewBox="0 0 512 512" data-fa-i2svg="">
-                                                                    <path fill="currentColor"
-                                                                          d="M472.1 270.5l-193.1 199.7c-12.64 13.07-33.27 13.08-45.91 .0107l-193.2-199.7C-16.21 212.5-13.1 116.7 49.04 62.86C103.3 15.88 186.4 24.42 236.3 75.98l19.7 20.27l19.7-20.27c49.95-51.56 132.1-60.1 187.3-13.12C525.1 116.6 528.2 212.5 472.1 270.5z">
-                                                                    </path>
-                                                                </svg><!-- <i class="fa fa-heart"></i> --><span>20</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <a href="#" title="" class="showmore underline">
-                                                        more
-                                                        comments+
-                                                    </a>
-                                                </li>
-                                                <li class="post-comment">
-                                                    <div class="comet-avatar">
-                                                        <img src="~/images/resources/nearly1.jpg" alt="">
-                                                    </div>
-                                                    <div class="post-comt-box">
-                                                        <form method="post">
-                                                            <textarea placeholder="Post your comment"></textarea>
-                                                            <div class="add-smiles">
-                                                                <div class="uploadimage">
-                                                                    <svg class="svg-inline--fa fa-image"
-                                                                         aria-hidden="true" focusable="false"
-                                                                         data-prefix="fas" data-icon="image"
-                                                                         role="img"
-                                                                         xmlns="http://www.w3.org/2000/svg"
-                                                                         viewBox="0 0 512 512"
-                                                                         data-fa-i2svg="">
-                                                                        <path fill="currentColor"
-                                                                              d="M447.1 32h-384C28.64 32-.0091 60.65-.0091 96v320c0 35.35 28.65 64 63.1 64h384c35.35 0 64-28.65 64-64V96C511.1 60.65 483.3 32 447.1 32zM111.1 96c26.51 0 48 21.49 48 48S138.5 192 111.1 192s-48-21.49-48-48S85.48 96 111.1 96zM446.1 407.6C443.3 412.8 437.9 416 432 416H82.01c-6.021 0-11.53-3.379-14.26-8.75c-2.73-5.367-2.215-11.81 1.334-16.68l70-96C142.1 290.4 146.9 288 152 288s9.916 2.441 12.93 6.574l32.46 44.51l93.3-139.1C293.7 194.7 298.7 192 304 192s10.35 2.672 13.31 7.125l128 192C448.6 396 448.9 402.3 446.1 407.6z">
-                                                                        </path>
-                                                                    </svg><!-- <i class="fa fa-image"></i> -->
-                                                                    <label class="fileContainer">
-                                                                        <input type="file">
-                                                                    </label>
-                                                                </div>
-                                                                <span class="em em-expressionless"
-                                                                      title="add icon"></span>
-                                                                <div class="smiles-bunch">
-                                                                    <i class="em em---1"></i>
-                                                                    <i class="em em-smiley"></i>
-                                                                    <i class="em em-anguished"></i>
-                                                                    <i class="em em-laughing"></i>
-                                                                    <i class="em em-angry"></i>
-                                                                    <i class="em em-astonished"></i>
-                                                                    <i class="em em-blush"></i>
-                                                                    <i class="em em-disappointed"></i>
-                                                                    <i class="em em-worried"></i>
-                                                                    <i class="em em-kissing_heart"></i>
-                                                                    <i class="em em-rage"></i>
-                                                                    <i class="em em-stuck_out_tongue"></i>
-                                                                </div>
-                                                            </div>
-
-                                                            <button type="submit"></button>
-                                                        </form>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
                                     </div>
                                 </div>
-                            </div><!-- without image -->
+                            </div>
                         </div>
-                        <span class="loader"></span>
+                        <!-- Modal for Comments -->
+                        <div class="modal fade" id="commentsModal" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <!-- Modal header -->
+                                    <div class="modal-header d-flex align-items-center">
+                                        <h5 class="modal-title mx-auto" id="commentsModalLabel">{{ selectedPost.fullName }}'s Post</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <!-- Modal body for comments -->
+                                    <div class="modal-body">
+                                        <!-- Post information -->
+                                        <div class="user-post">
+                                            <div class="friend-info">
+                                                <figure>
+                                                    <img src="~/images/resources/friend-avatar10.jpg" alt="">
+                                                </figure>
+                                                <div class="friend-name">
+                                                    <ins><a href="time-line.html" title="">{{ selectedPost.fullName }}</a></ins>
+                                                    <span>published: {{ selectedPost.displayDate }}</span>
+                                                </div>
+                                                <div class="post-meta">
+                                                    <p class="content">{{ selectedPost.postContent }}</p>
+                                                </div>
+                                                <div class="interaction-bar">
+                                                    <div class="reaction-summary">
+                                                        <span class="reaction-icons">
+                                                            <i class="fa fa-thumbs-up"></i>
+                                                        </span>
+                                                        <span class="reaction-count">{{ selectedPost.reactCount }}</span>
+                                                    </div>
+                                                    <div class="interaction-summary">
+                                                        <span class="comment-count" style="margin-right: 5px;">{{ selectedPost.commentCount }} comments</span>
+                                                        <span class="share-count" style="margin-right: 5px;">{{ selectedPost.shareCount }} shares</span>
+                                                    </div>
+                                                </div>
+                                                <div class="action-buttons">
+                                                    <button class="action-btn like-btn" v-bind:class="{ active: selectedPost.likedByCurrentUser }" v-on:click="likePost(selectedPost)">
+                                                        <i class="fa fa-thumbs-up" style="margin-right: 7px;"></i> Like
+                                                    </button>
+                                                    <button class="action-btn comment-btn">
+                                                        <i class="fa fa-comment" style="margin-right: 7px;"></i> Comment
+                                                    </button>
+                                                    <button class="action-btn share-btn">
+                                                        <i class="fa fa-share" style="margin-right: 7px;" v-on:click="sharePost(selectedPost)"></i> Share
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Render top-level comments -->
+                                        <div class="comments-section mt-3">
+                                            <comment-item v-for="comment in comments"
+                                                          :key="comment.id"
+                                                          :comment="comment"
+                                                          v-on:reply="replyToComment"
+                                                          v-on:like="likeComment"></comment-item>
+                                        </div>
+
+                                        <!-- Add new comment -->
+                                        <div class="add-comment d-flex align-items-center mt-3 p-3 rounded bg-light">
+                                            <figure class="mr-2">
+                                                <img src="~/images/resources/admin.jpg" alt="Your Avatar" class="avatar rounded-circle">
+                                            </figure>
+                                            <div class="box-input position-relative w-100">
+                                                <input type="text" v-model="newComment" placeholder="Viết câu trả lời..." class="form-control custom-input rounded-pill px-4">
+                                                <!-- Icons inside the input box -->
+                                                <div class="input-icons d-flex align-items-center position-absolute">
+                                                    <i class="far fa-smile"></i>
+                                                    <i class="fas fa-camera"></i>
+                                                    <i class="fas fa-gif"></i>
+                                                    <i class="fas fa-sticky-note"></i>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-light ml-2"
+                                                    v-on:click="addComment"
+                                                    v-on:keyup.enter="addComment"
+                                                    v-bind:disabled="!newComment.trim()">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- centerl meta -->
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+Vue.component('comment-item', {
+    props: ['comment'],
+    data() {
+        return {
+            expanded: this.comment.expanded || false,
+        };
+    },
+    methods: {
+        // This method emits the 'like' event specific to this comment, not the parent
+        handleLike() {
+            this.$emit('like', this.comment.id);  // Emit the 'like' event with the current comment as payload
+        },
+        toggleComments() {
+            this.expanded = !this.expanded;  // Toggle the visibility of child comments
+        }
+    },
+    template: `
+    <div class="comment-item" :class="{ 'depth-0': comment.depth === 0 }">
+        <div class="comment-container">
+            <div v-if="comment.depth > 0" class="comment-border"></div>
+            <div class="comment-body" :style="{ paddingLeft: comment.depth === 0 ? '0px' : (40 * comment.depth + 'px') }">
+                <figure class="mr-2">
+                    <img src="/images/resources/admin.jpg" alt="User Avatar" class="avatar rounded-circle">
+                </figure>
+                <div>
+                    <div class="comment-content">
+                        <strong>{{ comment.fullName }}</strong>
+                        <p class="mb-1">{{ comment.content }}</p>
+                    </div>
+                    <div class="comment-actions">
+                        <span v-on:click="handleLike">
+                          <!-- Use the active class to visually show if the comment is liked by the current user -->
+                          <span class="like-comment" :class="{ 'active': comment.likedByCurrentUser }">
+                             Thích
+                          </span>
+                        </span>
+                        <span v-on:click="$emit('reply', comment)">Phản hồi</span>
+                        <span class="timestamp">{{ comment.displayDate }}</span>
+                        <span class="react-comment-count" style="margin-right: 5px;">{{ comment.reactCount }} thích</span>
+                    </div>
+
+                    <!-- Show reply input if this comment is the reply target -->
+                    <div v-if="comment.id === $parent.replyTarget?.id" class="add-comment d-flex align-items-center mt-3 p-3 rounded bg-light">
+                        <figure class="mr-2">
+                            <img src="/images/resources/admin.jpg" alt="Your Avatar" class="avatar rounded-circle">
+                        </figure>
+                        <div class="box-input position-relative w-100">
+                            <input type="text" v-model="$parent.newComment" placeholder="Viết câu trả lời..." class="form-control custom-input rounded-pill px-4">
+                            <div class="input-icons d-flex align-items-center position-absolute">
+                                <i class="far fa-smile"></i>
+                                <i class="fas fa-camera"></i>
+                                <i class="fas fa-gif"></i>
+                                <i class="fas fa-sticky-note"></i>
+                            </div>
+                        </div>
+                        <button class="btn btn-light ml-2" v-on:click="$parent.addComment" v-on:keyup.enter="$parent.addComment" v-bind:disabled="!$parent.newComment.trim()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Show replies only if expanded -->
+        <div v-if="comment.childrenArray && comment.childrenArray.length > 0">
+            <div v-if="expanded" class="comment-replies">
+                <comment-item v-for="child in comment.childrenArray"
+                              :key="child.id"
+                              :comment="child"
+                              v-on:reply="$emit('reply', child)"
+                              v-on:like="$emit('like', child.id)">
+                </comment-item>
+            </div>
+
+            <div class="see-more-comments-container">
+                <div v-if="comment.depth < 2" class="comment-border" :class="{ 'depth-0': comment.depth === 0, 'depth-1': comment.depth === 1 }"></div>
+                <button v-if="!expanded" v-on:click="toggleComments" class="see-more-comments" :class="{ 'depth-0': comment.depth === 0, 'depth-1': comment.depth === 1 }">See More Comments</button>
+                <button v-if="expanded" v-on:click="toggleComments" class="see-more-comments" :class="{ 'depth-0': comment.depth === 0, 'depth-1': comment.depth === 1 }">Hide Comments</button>
+            </div>
+        </div>
+    </div>
+    `,
+});
+</script>
+

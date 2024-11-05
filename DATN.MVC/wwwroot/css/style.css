@@ -1810,11 +1810,11 @@ form button {
 }
 
 .user-post {
-    border-bottom: 1px dashed #ccc;
+    border-bottom: 1px solid #ccc;
     display: inline-block;
     margin-bottom: 20px;
-    padding-bottom: 20px;
-    width: 100%;
+/*    padding-bottom: 20px;
+*/    width: 100%;
 }
 
 .central-meta .user-post:last-child {
@@ -2091,8 +2091,8 @@ a.learnmore:hover {
 /*-- sharing post area ----*/
 
 .we-video-info {
-    border-top: 1px solid #ede9e9;
-    float: left;
+/*    border-top: 1px solid #ede9e9;
+*/    float: left;
     /* padding: 8px 0 0; */
     position: relative;
     width: 100%;

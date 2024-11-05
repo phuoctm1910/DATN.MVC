@@ -1,3 +1,5 @@
+﻿using Microsoft.AspNetCore.Http.Features;
+
 namespace DATN.MVC
 {
     public class Program
@@ -8,6 +10,20 @@ namespace DATN.MVC
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddControllers()
+                .AddNewtonsoftJson();
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(3);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            builder.Services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 104857600; // Hạn chế dung lượng file upload (100MB)
+            });
 
             var app = builder.Build();
 
