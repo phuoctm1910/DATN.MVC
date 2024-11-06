@@ -1,4 +1,7 @@
-﻿using DATN.MVC.Models;
+﻿using DATN.MVC.Helpers;
+using DATN.MVC.Models;
+using DATN.MVC.Models.Request;
+using DATN.MVC.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DATN.MVC.Controllers
@@ -27,6 +30,30 @@ namespace DATN.MVC.Controllers
             };
             ViewBag.ViewSettings = viewSettings;
             return View();
+        }
+
+        [HttpPost]
+        public JsonResult LoginAccount([FromBody] LoginRequest loginRequest)
+        {
+            // Gọi API đăng nhập qua ApiHelpers và nhận về đối tượng LoginRes
+            var result = ApiHelpers.PostMethodAsync<LoginResponse, LoginRequest>("https://localhost:7296/api/Auth/login", loginRequest);
+
+            if (result != null)
+            {
+                // Lưu token vào session nếu đăng nhập thành công
+                HttpContext.Session.SetInt32("UserID", result.ID);
+                HttpContext.Session.SetString("UserName", result.UserName);
+                HttpContext.Session.SetString("RoleName", result.RoleName);
+                HttpContext.Session.SetString("Token", result.Token);
+
+
+
+                return Json(new { success = true, message = "Login successful." });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Login failed." });
+            }
         }
     }
 }
