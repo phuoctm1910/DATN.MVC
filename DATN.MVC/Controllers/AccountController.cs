@@ -1,5 +1,8 @@
-﻿using DATN.MVC.Models;
+﻿using DATN.MVC.Helpers;
+using DATN.MVC.Models;
+using DATN.MVC.Request.Registration;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Plugins;
 
 namespace DATN.MVC.Controllers
 {
@@ -27,6 +30,23 @@ namespace DATN.MVC.Controllers
             };
             ViewBag.ViewSettings = viewSettings;
             return View();
+        }
+
+        [HttpPost]
+        public JsonResult RegistrationAccount([FromBody] RegistrationRequest RegistrationRequest)
+        {
+            // Gọi API đăng ký qua ApiHelpers và nhận về đối tượng LoginRes
+            var result = ApiHelpers.PostMethodAsync<bool,RegistrationRequest>("https://localhost:7296/api/Registration/create", RegistrationRequest);
+
+            if (result)
+            {
+              
+                return Json(new { success = true, message = "Registration successful." });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Registration failed." });
+            }
         }
     }
 }

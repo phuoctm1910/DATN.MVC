@@ -78,6 +78,60 @@
                 }
     </style>
 }
+@section Scripts {
+    <script>
+        // Handle the form submission
+        $('#registrationForm').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Get current time in UTC
+            const currentTimeUTC = Date.now();
+
+            // Convert to Vietnam timezone (UTC+7)
+            const vietnamTime = new Date(currentTimeUTC).toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' });
+
+            // Convert to a Date object
+            const dateInVietnam = new Date(vietnamTime);
+
+            // Get Unix Timestamp (seconds)
+            const unixTimestamp = Math.floor(dateInVietnam.getTime() / 1000);
+
+            console.log(unixTimestamp);
+
+            var registrationRequest = {
+                userName: $('#username').val(),
+                passwordHash: $('#password').val(),
+                fullName: $('#fullName').val(),
+                birth: $('#birth').val(), // Date format yyyy-MM-dd
+                gender: $('#gender').val() === 'true', // Convert to boolean
+                phoneNumber: $('#phoneNumber').val(),
+                email: $('#email').val(),
+                createdDateUnix: unixTimestamp
+            };
+
+            // Send registration data to the server
+            $.ajax({
+                type: "POST",
+                url: "/Account/RegistrationAccount",
+                data: JSON.stringify(registrationRequest),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        window.location.href = '/Home';
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while processing your request.");
+                }
+            });
+        });
+    </script>
+}
+
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="row">
         <div class="col-md-6 offset-md-3">
@@ -85,17 +139,27 @@
                 <h4><i class="fa-solid fa-user-plus"></i> Register</h4>
                 <p>Vui lòng điền thông tin dưới đây để tạo tài khoản mới</p>
 
-                <form class="form-registration">
-                    <input type="text" placeholder="Tên người dùng" required>
-                    <input type="email" placeholder="Email" required>
-                    <input type="text" placeholder="Số điện thoại" required>
-                    <input type="password" placeholder="Mật khẩu" required>
-                    <input type="text" placeholder="Nhập OTP" required>
-                    <button type="submit">SignUp</button>
+                <form id="registrationForm" class="form-registration">
+                    <input type="text" id="username" placeholder="Tên người dùng" required>
+                    <input type="password" id="password" placeholder="Mật khẩu" required>
+                    <input type="text" pattern="^[A-Za-zÀ-ỹ][A-Za-zÀ-ỹ\s]*[A-Za-zÀ-ỹ]$" id="fullName" placeholder="Họ và Tên" required>
+                    <input type="date" id="birth" placeholder="Ngày sinh" required>
+
+                    <select id="gender" required>
+                        <option value="">Giới tính</option>
+                        <option value="true">Nam</option>
+                        <option value="false">Nữ</option>
+                    </select>
+
+                    <input type="text" pattern="^(03|05|07|08|09)[0-9]{8}$" id="phoneNumber" placeholder="Số điện thoại" required>
+                    <input type="email" id="email" placeholder="Email" required>
+                    <button type="submit">Sign Up</button>
                 </form>
-                <p class="login-info">Đã có tài khoản? <a style="color: blue; text-decoration: underline;" href="login.html">Đăng nhập</a></p>
+
+                <p class="login-info">
+                    Đã có tài khoản? <a style="color: blue; text-decoration: underline;" href="login.html">Đăng nhập</a>
+                </p>
             </div>
         </div>
     </div>
 </div>
-
