@@ -23,6 +23,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
         }
 
         p {
@@ -106,19 +107,28 @@
                 transform: scale(1.05); /* Slightly enlarge the button */
             }
 
-        .register {
-            background-color: #fa6342;
-            color: white;
-            border-radius: 30px;
-            padding: 10px 30px;
-            border: none;
-            text-decoration: none;
-            transition: background-color 0.3s; /* Transition for hover effect */
+        .register-info {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 15px;
         }
 
-            .register:hover {
-                background-color: #ff7f5c; /* Change background color on hover */
+            .register-info a {
+                color: blue;
+                text-decoration: underline;
             }
+    </style>
+}
+@section Scripts {
+    <script>
+        // Xử lý sự kiện submit của form đăng nhập
+        $('#loginForm').submit(function (e) {
+            e.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+            var loginRequest = {
+                userName: $('#username').val(),
+                passwordHash: $('#password').val()
+            };
 
         .login-info {
             font-size: 12px;
