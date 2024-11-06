@@ -3,37 +3,24 @@
 }
 @section Styles {
     <style>
-        /* Căn giữa toàn bộ nội dung */
+        body {
+            background-color: #e9eef4;
+            margin-top: 150px;
+            color: #474962;
+            font-size: 14px;
+            letter-spacing: 0.2px;
+            padding-top: 160px; /* Tạo đủ khoảng trống cho cả menu và header */
+        }
+
         .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            margin-top: 40px;
         }
 
-        /* Căn giữa recent-login và login-box */
-        .login-page {
-            display: flex;
-            flex-direction: row;
-            max-width: 800px;
-            width: 100%;
-            margin: 0 auto;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .col-md-6 {
-            padding: 20px;
-        }
-
-        /* Recent Login Section */
         .recent-login {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
         }
 
             .recent-login h4 {
@@ -72,83 +59,112 @@
                 justify-content: center;
             }
 
-        /* Login Form Section */
-        .login-box {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background-color: #f9f9f9;
-            padding: 30px;
+        .login-box .form-login {
+            margin-top: 20px;
         }
 
-            .login-box h4 {
-                text-align: center;
-                margin-bottom: 20px;
-                font-size: 24px;
+        .form-login input {
+            background: #fff;
+            border-radius: 35px;
+            border: 1px solid grey;
+            color: #535165;
+            font-size: 14px;
+            padding: 14px 20px;
+            width: 100%;
+            margin-bottom: 15px;
+            outline: none; /* Remove the default focus outline */
+            transition: border-color 0.3s, box-shadow 0.3s; /* Transition for smooth effects */
+        }
+
+            .form-login input:hover {
+                border-color: #fa6342; /* Change border color on hover */
+                box-shadow: 0 2px 5px rgba(250, 99, 66, 0.5); /* Add shadow on hover */
+            }
+
+            .form-login input:focus {
+                border-color: rgb(182, 182, 182); /* Keep the border color consistent when focused */
+                box-shadow: none; /* Remove any shadow on focus */
+            }
+
+        .form-login button {
+            background-color: #fa6342;
+            color: white;
+            border-radius: 30px;
+            padding: 10px 30px;
+            border: none;
+            transition: background-color 0.3s, transform 0.3s; /* Transition for button effects */
+        }
+
+            .form-login button:hover {
+                background-color: #ff7f5c; /* Change button color on hover */
+                transform: scale(1.05); /* Slightly enlarge the button */
+            }
+
+        .register {
+            background-color: #fa6342;
+            color: white;
+            border-radius: 30px;
+            padding: 10px 30px;
+            border: none;
+            text-decoration: none;
+            transition: background-color 0.3s; /* Transition for hover effect */
+        }
+
+            .register:hover {
+                background-color: #ff7f5c; /* Change background color on hover */
             }
 
         .login-info {
-            text-align: center;
             font-size: 12px;
             color: #727895;
             margin-top: 10px;
         }
 
-        .form-login2 {
-            width: 100%;
-            max-width: 350px;
-            margin: 0 auto;
-        }
-
-            .form-login2 input {
-                background: #fff;
-                border-radius: 35px;
-                border: 1px solid grey;
-                color: #535165;
-                font-size: 14px;
-                padding: 14px 20px;
-                width: 100%;
-                margin-bottom: 15px;
-                outline: none;
-                transition: border-color 0.3s, box-shadow 0.3s;
+            .login-info a {
+                color: #fa6342;
+                text-decoration: none;
             }
 
-                .form-login2 input:hover {
-                    border-color: #fa6342;
-                    box-shadow: 0 2px 5px rgba(250, 99, 66, 0.5);
-                }
-
-                .form-login2 input:focus {
-                    border-color: rgb(182, 182, 182);
-                    box-shadow: none;
-                }
-
-            .form-login2 button {
-                background-color: #fa6342;
-                color: white;
-                border-radius: 30px;
-                padding: 10px 30px;
-                border: none;
-                transition: background-color 0.3s, transform 0.3s;
-                width: 100%;
-            }
-
-                .form-login2 button:hover {
-                    background-color: #ff7f5c;
-                    transform: scale(1.05);
-                }
-
-        .register-info {
+        .total {
             text-align: center;
-            font-size: 12px;
-            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-            .register-info a {
-                color: blue;
-                text-decoration: underline;
+            .total img {
+                width: 100px;
+                margin-bottom: 10px;
             }
+
+            .total span {
+                font-size: 18px;
+                color: #333;
+                margin-top: 10px;
+            }
+
+            .total em {
+                font-size: 24px;
+                color: #fa6342;
+                margin-top: 5px;
+                font-style: normal;
+            }
+
+        .page-header {
+            background: #484874;
+            color: #fff;
+            padding: 20px 15px;
+            height: 250px;
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10; /* Để header hiển thị phía trên các thành phần khác */
+            margin-top: 60px; /* Điều chỉnh giá trị này để tạo không gian cho menu */
+        }
+
     </style>
 }
 @section Scripts {
@@ -185,8 +201,17 @@
     </script>
 }
 
+<div class="page-header">
+    <h1 style="font-weight: 400;">AFA Media Platforms</h1>
+    <p style="font-size: 14px;">Kết nối với mọi người mọi nơi</p>
+    <img src="Screenshot 2024-11-07 001003.png" alt="" style="margin-top: 60px;">
+</div>
+
+
+
 <div class="container">
-    <div class="login-page">
+
+    <div class="row">
         <!-- Recent Login Section -->
         <div class="col-md-6">
             <div class="recent-login">
@@ -194,11 +219,11 @@
                 <p>Next time you log in, click your picture. To remove an account from this page, click cross.</p>
                 <div class="d-flex">
                     <div class="user-card">
-                        <img src="images/resources/author.jpg" alt="User 1">
+                        <img src="https://scontent.fsgn6-2.fna.fbcdn.net/v/t39.30808-1/426490643_1073956787159143_2038369220108098535_n.jpg?stp=dst-jpg_s200x200&_nc_cat=100&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=GdNSHuW2n1YQ7kNvgE3eJaW&_nc_zt=24&_nc_ht=scontent.fsgn6-2.fna&_nc_gid=AWSCRlHIwyGDa-51_8VcLV-&oh=00_AYB-4sCSuy_DogjLYulTXBP0B6kkgaTtvWCObbms2L_8Lw&oe=671EFEF7" alt="User 1">
                         <p>Duy</p>
                     </div>
                     <div class="user-card">
-                        <img src="images/resources/author.jpg" alt="User 2">
+                        <img src="https://scontent.fsgn6-2.fna.fbcdn.net/v/t39.30808-1/426490643_1073956787159143_2038369220108098535_n.jpg?stp=dst-jpg_s200x200&_nc_cat=100&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=GdNSHuW2n1YQ7kNvgE3eJaW&_nc_zt=24&_nc_ht=scontent.fsgn6-2.fna&_nc_gid=AWSCRlHIwyGDa-51_8VcLV-&oh=00_AYB-4sCSuy_DogjLYulTXBP0B6kkgaTtvWCObbms2L_8Lw&oe=671EFEF7" alt="User 2">
                         <p>Duy</p>
                     </div>
                     <div class="user-card">
@@ -215,13 +240,39 @@
                 <h4><i class="fa-solid fa-right-to-bracket"></i> Login</h4>
                 <p class="login-info">Login again, you have recently signed out from here</p>
 
-                <form class="form-login2" id="loginForm">
-                    <input type="text" id="username" placeholder="User Name">
-                    <input type="password" id="password" placeholder="Password">
+                <form class="form-login " id="loginForm">
+                    <input type="text" id="username" placeholder="User Name" value="Adam James">
+                    <input type="password" id="password" placeholder="Password" value="12345678">
                     <button name="login" type="submit">Login</button>
-                    <p class="register-info">Bạn chưa có tài khoản? <a href="register.html">Đăng ký</a></p>
+                    <a class="register" href="register.html">Register</a>
                 </form>
             </div>
         </div>
     </div>
+
+
+    <div class="row" style="font-weight: bold; margin-top: 60px;">
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <div class="total">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Eo_circle_green_checkmark.svg/1200px-Eo_circle_green_checkmark.svg.png" alt="">
+                <span>Registered Users</span>
+                <em>1,01,242</em>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <div class="total">
+                <img src="https://cdn-icons-png.flaticon.com/512/10272/10272633.png" alt="">
+                <span>Posts published</span>
+                <em>21,01,242</em>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <div class="total">
+                <img src="https://cdn-icons-png.flaticon.com/256/6556/6556391.png" alt="">
+                <span>People online</span>
+                <em>41,242</em>
+            </div>
+        </div>
+    </div>
+
 </div>
