@@ -1,15 +1,39 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Login";
 }
-@section Styles{ 
+@section Styles {
     <style>
+        /* Căn giữa toàn bộ nội dung */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
+        /* Căn giữa recent-login và login-box */
+        .login-page {
+            display: flex;
+            flex-direction: row;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .col-md-6 {
+            padding: 20px;
+        }
+
+        /* Recent Login Section */
         .recent-login {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
         }
 
             .recent-login h4 {
@@ -48,109 +72,156 @@
                 justify-content: center;
             }
 
-        .login-box .form-login2 {
-            margin-top: 20px;
-        }
-
-        .form-login2 input {
-            background: #fff;
-            border-radius: 35px;
-            border: 1px solid grey;
-            color: #535165;
-            font-size: 14px;
-            padding: 14px 20px;
+        /* Login Form Section */
+        .login-box {
             width: 100%;
-            margin-bottom: 15px;
-            outline: none; /* Remove the default focus outline */
-            transition: border-color 0.3s, box-shadow 0.3s; /* Transition for smooth effects */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #f9f9f9;
+            padding: 30px;
         }
 
-            .form-login2 input:hover {
-                border-color: #fa6342; /* Change border color on hover */
-                box-shadow: 0 2px 5px rgba(250, 99, 66, 0.5); /* Add shadow on hover */
-            }
-
-            .form-login2 input:focus {
-                border-color: rgb(182, 182, 182); /* Keep the border color consistent when focused */
-                box-shadow: none; /* Remove any shadow on focus */
-            }
-
-        .form-login2 button {
-            background-color: #fa6342;
-            color: white;
-            border-radius: 30px;
-            padding: 10px 30px;
-            border: none;
-            transition: background-color 0.3s, transform 0.3s; /* Transition for button effects */
-        }
-
-            .form-login2 button:hover {
-                background-color: #ff7f5c; /* Change button color on hover */
-                transform: scale(1.05); /* Slightly enlarge the button */
-            }
-
-        .register {
-            background-color: #fa6342;
-            color: white;
-            border-radius: 30px;
-            padding: 10px 30px;
-            border: none;
-            text-decoration: none;
-            transition: background-color 0.3s; /* Transition for hover effect */
-        }
-
-            .register:hover {
-                background-color: #ff7f5c; /* Change background color on hover */
+            .login-box h4 {
+                text-align: center;
+                margin-bottom: 20px;
+                font-size: 24px;
             }
 
         .login-info {
+            text-align: center;
             font-size: 12px;
             color: #727895;
             margin-top: 10px;
         }
 
-            .login-info a {
-                color: #fa6342;
-                text-decoration: none;
+        .form-login2 {
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+
+            .form-login2 input {
+                background: #fff;
+                border-radius: 35px;
+                border: 1px solid grey;
+                color: #535165;
+                font-size: 14px;
+                padding: 14px 20px;
+                width: 100%;
+                margin-bottom: 15px;
+                outline: none;
+                transition: border-color 0.3s, box-shadow 0.3s;
+            }
+
+                .form-login2 input:hover {
+                    border-color: #fa6342;
+                    box-shadow: 0 2px 5px rgba(250, 99, 66, 0.5);
+                }
+
+                .form-login2 input:focus {
+                    border-color: rgb(182, 182, 182);
+                    box-shadow: none;
+                }
+
+            .form-login2 button {
+                background-color: #fa6342;
+                color: white;
+                border-radius: 30px;
+                padding: 10px 30px;
+                border: none;
+                transition: background-color 0.3s, transform 0.3s;
+                width: 100%;
+            }
+
+                .form-login2 button:hover {
+                    background-color: #ff7f5c;
+                    transform: scale(1.05);
+                }
+
+        .register-info {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 15px;
+        }
+
+            .register-info a {
+                color: blue;
+                text-decoration: underline;
             }
     </style>
 }
-<div class="row">
-    <!-- Recent Login Section -->
-    <div class="col-md-6">
-        <div class="recent-login">
-            <h4>Recent Login</h4>
-            <p>Next time you log in, click your picture. To remove an account from this page, click cross.</p>
-            <div class="d-flex">
-                <div class="user-card">
-                    <img src="images/resources/author.jpg" alt="User 1">
-                    <p>Duy</p>
-                </div>
-                <div class="user-card">
-                    <img src="images/resources/author.jpg" alt="User 2">
-                    <p>Duy</p>
-                </div>
-                <div class="user-card">
-                    <button type="button">+</button>
-                    <p>Add Account</p>
+@section Scripts {
+    <script>
+        // Xử lý sự kiện submit của form đăng nhập
+        $('#loginForm').submit(function (e) {
+            e.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+            var loginRequest = {
+                userName: $('#username').val(),
+                passwordHash: $('#password').val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Account/LoginAccount",
+                data: JSON.stringify(loginRequest),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        // Đăng nhập thành công, chuyển hướng đến trang chính
+                        window.location.href = '/Home';
+                    } else {
+                        // Hiển thị thông báo lỗi nếu đăng nhập thất bại
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while processing your request.");
+                }
+            });
+        });
+    </script>
+}
+
+<div class="container">
+    <div class="login-page">
+        <!-- Recent Login Section -->
+        <div class="col-md-6">
+            <div class="recent-login">
+                <h4>Recent Login</h4>
+                <p>Next time you log in, click your picture. To remove an account from this page, click cross.</p>
+                <div class="d-flex">
+                    <div class="user-card">
+                        <img src="images/resources/author.jpg" alt="User 1">
+                        <p>Duy</p>
+                    </div>
+                    <div class="user-card">
+                        <img src="images/resources/author.jpg" alt="User 2">
+                        <p>Duy</p>
+                    </div>
+                    <div class="user-card">
+                        <button type="button">+</button>
+                        <p>Add Account</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Login Form Section -->
-    <div class="col-md-6">
-        <div class="login-box">
-            <h4><i class="fa-solid fa-right-to-bracket"></i> Login</h4>
-            <p class="login-info">Login again, you have recently signed out from here</p>
+        <!-- Login Form Section -->
+        <div class="col-md-6">
+            <div class="login-box">
+                <h4><i class="fa-solid fa-right-to-bracket"></i> Login</h4>
+                <p class="login-info">Login again, you have recently signed out from here</p>
 
-            <form class="form-login2">
-                <input type="text" placeholder="User Name" value="Adam James">
-                <input type="password" placeholder="Password" value="12345678">
-                <button name="login" type="submit">Login</button>
-                <p class="register-info">Bạn chưa có tài khoản? <a style="color: blue; text-decoration: underline;" href="register.html">Đăng ký</a></p>
-            </form>
+                <form class="form-login2" id="loginForm">
+                    <input type="text" id="username" placeholder="User Name">
+                    <input type="password" id="password" placeholder="Password">
+                    <button name="login" type="submit">Login</button>
+                    <p class="register-info">Bạn chưa có tài khoản? <a href="register.html">Đăng ký</a></p>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-
