@@ -1,0 +1,97 @@
+﻿@model DATN.MVC.Respone.User.User_GetUserInfoRes
+
+<div class="profile-container">
+    <div class="profile-form-wrapper">
+        <div class="central-meta">
+            <form asp-action="UpdateInformation" method="post" enctype="multipart/form-data" class="c-form">
+                <div class="about">
+                    <div class="set-title">
+                        <h5>Cập nhật thông tin</h5>
+                        <span>Mọi người trên AFA sẽ biết đến bạn nhờ thông tin bên dưới</span>
+                    </div>
+                    <div class="setting-meta">
+                        <div class="change-photo">
+                            <figure><img src="@(string.IsNullOrEmpty(Model.Image) ? "images/default-avatar.png" : Model.Image)" alt="Ảnh đại diện"></figure>
+                            <div class="edit-img">
+                                <label class="fileContainer">
+                                    <i class="fa-brands fa-instagram"></i> Cập nhật hình ảnh
+                                    <input type="file" name="ImageFile" />
+                                    <input type="hidden" name="Image" value="@Model.Image"
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stg-form-area">
+                        <input type="number" name="UserId" value="@Model.Id" hidden placeholder="Nhập User ID" readonly>
+
+                        <input type="text" name="UserName" value="@Model.UserName" hidden placeholder="Nhập tên đăng nhập">
+                        
+
+
+                        <input type="password" name="Password" hidden placeholder="Nhập mật khẩu mới">
+
+                        <div>
+                            <label>Họ Và Tên</label>
+                            <input type="text" name="FullName" value="@Model.FullName" placeholder="Nhập họ và tên">
+                        </div>
+                        <div>
+                            <label>Ngày Sinh</label>
+                            <input type="date" name="Birth" value="@Model.Birth.ToString("yyyy-MM-dd")">
+                        </div>
+                        <div>
+                            <label>Giới Tính</label>
+                            <select id="Gender" name="Gender">
+                                <option value="true" selected>Nam</option>
+                                <option value="false">Nữ</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Địa Chỉ</label>
+                            <input type="text" name="Address" value="@Model.Address" placeholder="Nhập địa chỉ">
+                        </div>
+                        <div>
+                            <label>Số Điện Thoại</label>
+                            <input type="text" name="PhoneNumber" value="@Model.PhoneNumber" placeholder="Nhập số điện thoại">
+                        </div>
+                        <div>
+                            <label>Email</label>
+                            <input type="email" name="Email" value="@Model.Email" placeholder="abc@gmail.com">
+                        </div>
+
+
+                        <input type="text" name="BackgroundImage" value="@Model.BackgroundImage" hidden placeholder="Nhập đường dẫn hình nền">
+
+
+
+                        <input type="number" name="RoleId" value="@Model.RoleId" hidden placeholder="Nhập Role ID">
+
+
+                        <input type="number" name="Status" value="@Model.Status" hidden placeholder="Nhập trạng thái">
+
+
+
+                        <input type="number" name="Balance" value="@Model.Balance" hidden step="0.01" placeholder="Nhập số dư">
+
+                        <div style="display: none;">
+                            <select id="IsActived" name="IsActived">
+                                <option value="true">Đã kích hoạt</option>
+                                <option value="false">Chưa kích hoạt</option>
+                            </select>
+                        </div>
+
+
+
+
+                        <input type="number" name="UpdatedDate" value="@Model.UpdatedDate" hidden placeholder="Nhập ngày cập nhật">
+
+                        <div>
+                            <button type="button" data-ripple="">Thoát</button>
+                            <button type="submit" data-ripple="">Lưu</button>
+                        </div>
+                    </div>
+                </div> <!-- about -->
+
+            </form>
+        </div> <!-- central meta -->
+    </div> <!-- profile-form-wrapper -->
+</div>

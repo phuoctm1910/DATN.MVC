@@ -24217,3 +24217,43 @@ h5.filter-title {
     transform: translate(-50%, -50%);
     width: 60px;
 }
+
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Replaces height to allow for flexible vertical spacing */
+    padding-top: 50px; /* Add padding if needed */
+    padding-bottom: 50px; /* Optional: Adjusts spacing at the bottom */
+}
+
+.profile-form-wrapper {
+    width: 50%; /* Adjust this width as needed */
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.change-photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .change-photo figure {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+    }
+
+        .change-photo figure img {
+            width: 120px; /* Điều chỉnh kích thước ảnh theo nhu cầu */
+            height: 120px; /* Giữ kích thước vuông để ảnh tròn hoàn toàn */
+            border-radius: 50%; /* Làm tròn ảnh */
+            object-fit: cover; /* Giúp ảnh vừa khít khung mà không bị méo */
+            border: 2px solid #ddd; /* Đường viền tinh tế xung quanh ảnh */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
+        }
