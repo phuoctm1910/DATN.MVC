@@ -1,6 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Login";
 }
+
+
 @section Styles {
     <style>
         body {
@@ -23,41 +25,45 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-            .recent-login h4 {
-                font-weight: bold;
-                color: #535165;
-            }
+        p {
+            color: white;
+        }
 
-            .recent-login p {
-                color: #727895;
-                font-size: 12px;
-                margin-bottom: 25px;
-            }
+        .recent-login h4 {
+            font-weight: bold;
+            color: #535165;
+        }
 
-            .recent-login .user-card {
-                text-align: center;
-                margin-right: 20px;
-            }
+        .recent-login p {
+            color: #727895;
+            font-size: 12px;
+            margin-bottom: 25px;
+        }
 
-            .recent-login img {
-                border-radius: 50%;
-                width: 90px;
-                height: 90px;
-                object-fit: cover;
-            }
+        .recent-login .user-card {
+            text-align: center;
+            margin-right: 20px;
+        }
 
-            .recent-login button {
-                border: 1px dashed #727895;
-                background: none;
-                border-radius: 50%;
-                width: 90px;
-                height: 90px;
-                font-size: 24px;
-                color: #727895;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
+        .recent-login img {
+            border-radius: 50%;
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+        }
+
+        .recent-login button {
+            border: 1px dashed #727895;
+            background: none;
+            border-radius: 50%;
+            width: 90px;
+            height: 90px;
+            font-size: 24px;
+            color: #727895;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         .login-box .form-login {
             margin-top: 20px;
@@ -162,22 +168,62 @@
             top: 0;
             left: 0;
             z-index: 10; /* Để header hiển thị phía trên các thành phần khác */
-            margin-top: 60px; /* Điều chỉnh giá trị này để tạo không gian cho menu */
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none; /* Mặc định ẩn thông báo lỗi */
         }
 
     </style>
 }
 @section Scripts {
     <script>
-        // Xử lý sự kiện submit của form đăng nhập
         $('#loginForm').submit(function (e) {
             e.preventDefault(); // Ngăn chặn hành động mặc định của form
 
+            // Lấy giá trị từ các input
+            var username = $('#username').val();
+            var password = $('#password').val();
+
+            // Kiểm tra nếu trường nào để trống
+            if (!username || !password) {
+                $('#errorMessage').text("Vui lòng nhập đầy đủ thông tin").show();
+                return;
+            }
+
+            // Kiểm tra độ dài mật khẩu
+            if (password.length < 6) {
+                $('#errorMessage').text("Mật khẩu phải có ít nhất 6 ký tự").show();
+                return;
+            }
+
+            // Kiểm tra độ dài tài khoản
+            if (username.length < 6) {
+                $('#errorMessage').text("Tài khoản phải có ít nhất 6 ký tự").show();
+                return;
+            }
+
+            // Kiểm tra ký tự đặc biệt trong username và password
+            if (hasSpecialCharacters(username)) {
+                $('#errorMessage').text("Tên tài khoản không được chứa ký tự đặc biệt").show();
+                return;
+            }
+
+            if (hasSpecialCharacters(password)) {
+                $('#errorMessage').text("Mật khẩu không được chứa ký tự đặc biệt").show();
+                return;
+            }
+
+            // Tạo đối tượng yêu cầu đăng nhập
             var loginRequest = {
-                userName: $('#username').val(),
-                passwordHash: $('#password').val()
+                userName: username,
+                passwordHash: password
             };
 
+            // Gửi AJAX request
             $.ajax({
                 type: "POST",
                 url: "/Account/LoginAccount",
@@ -189,22 +235,31 @@
                         // Đăng nhập thành công, chuyển hướng đến trang chính
                         window.location.href = '/Home';
                     } else {
-                        // Hiển thị thông báo lỗi nếu đăng nhập thất bại
-                        alert(response.message);
+                        // Hiển thị thông báo lỗi nếu tài khoản/mật khẩu không chính xác
+                        $('#errorMessage').text(response.message).show(); // Hiển thị thông báo lỗi dưới form
                     }
                 },
                 error: function () {
-                    alert("An error occurred while processing your request.");
+                    // Hiển thị thông báo lỗi nếu có lỗi hệ thống
+                    $('#errorMessage').text("Có lỗi xảy ra, vui lòng thử lại.").show();
                 }
             });
         });
+
+        // Hàm kiểm tra ký tự đặc biệt
+        function hasSpecialCharacters(input) {
+            var regex = /[^a-zA-Z0-9]/; // Kiểm tra ký tự ngoài chữ cái và số
+            return regex.test(input);
+        }
+
     </script>
+
 }
 
 <div class="page-header">
     <h1 style="font-weight: 400;">AFA Media Platforms</h1>
     <p style="font-size: 14px;">Kết nối với mọi người mọi nơi</p>
-    <img src="Screenshot 2024-11-07 001003.png" alt="" style="margin-top: 60px;">
+    <img src="~/images/LoginBanner.png" alt="" style="margin-top: 55px; color: white;">
 </div>
 
 
@@ -242,9 +297,17 @@
 
                 <form class="form-login " id="loginForm">
                     <input type="text" id="username" placeholder="User Name" value="Adam James">
+                    <span class="error-message" id="username-error"></span> <!-- Thông báo lỗi cho username -->
+
+
                     <input type="password" id="password" placeholder="Password" value="12345678">
+                    <span class="error-message" id="password-error"></span> <!-- Thông báo lỗi cho password -->
+
+
                     <button name="login" type="submit">Login</button>
                     <a class="register" href="register.html">Register</a>
+                    <div id="errorMessage" style="color: red; margin-top: 10px; display: none;">Please fill out all fields.</div>
+
                 </form>
             </div>
         </div>
