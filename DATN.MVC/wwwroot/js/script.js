@@ -176,10 +176,11 @@ $(document).ready(function ($) {
     $('.user-img').on('click', function () {
         $('.user-setting').toggleClass("active");
     });
-    $('.friendz-list > li, .chat-users > li, .drops-menu > li > a.show-mesg').on('click', function () {
+    $('.friendz-list > li, div > .chat-users > li, .drops-menu > li > a.show-mesg').on('click', function () {
         $('.chat-box').addClass("show");
         return false;
     });
+
     $('.close-mesage').on('click', function () {
         $('.chat-box').removeClass("show");
         return false;

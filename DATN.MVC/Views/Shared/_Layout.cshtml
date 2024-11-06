@@ -19,6 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
     <script>
         moment.locale('vi');
+        
     </script>
     @await RenderSectionAsync("Styles", required: false)
 
@@ -87,8 +88,13 @@
             }
         }
 
+        <script>
+            var userLogged = @ViewBag.UserId;
+            console.log(userLogged);
+        </script>
+
         <!--Middle-->
-        <section>
+        <section id="home-app">
             @RenderBody()
 
         </section>
@@ -449,16 +455,18 @@
         </div>
     </div>
     @*<footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - DATN.MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>*@
+            <div class="container">
+                &copy; 2024 - DATN.MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @*<script src="~/lib/vue/vue.global.js"></script>*@
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/main.min.js" asp-append-version="true"></script>
     <script src="~/js/script.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

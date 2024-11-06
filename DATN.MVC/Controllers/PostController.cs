@@ -30,7 +30,6 @@ namespace DATN.MVC.Controllers
             });
         }
 
-
         [HttpPost]
         public JsonResult ShareAndAddNew([FromBody] Post_CreateReq newPost)
         {

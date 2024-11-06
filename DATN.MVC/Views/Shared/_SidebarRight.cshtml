@@ -1,173 +1,89 @@
 ﻿        <!--Friend & Chat Box-->
-<div class="fixed-sidebar right">
+<div class="fixed-sidebar right" id="sidebar-app" style="width:200px;">
     <div class="chat-friendz">
-
-        <ul class="chat-users ps-container ps-theme-default ps-active-y"
-            data-ps-id="79dee936-8369-c066-7547-d3b46ed009a5">
-            <li>
-                <div class="author-thmb">
-                    <img src="~/images/resources/avatar.jpg" style="height: 40px; width: 40px;" alt="">
-                    <span class="status f-online"></span>
-                </div>
-            </li>
-            <li>
-                <div class="author-thmb">
-                    <img src="~/images/resources/avatar.jpg" style="height: 40px; width: 40px;" alt="">
-                    <span class="status f-away"></span>
-                </div>
-            </li>
-            <li>
-                <div class="author-thmb">
-                    <img src="~/images/resources/avatar.jpg" style="height: 40px; width: 40px;" alt="">
-                    <span class="status f-online"></span>
-                </div>
-            </li>
-            <li>
-                <div class="author-thmb">
-                    <img src="~/images/resources/avatar.jpg" style="height: 40px; width: 40px;" alt="">
-                    <span class="status f-offline"></span>
-                </div>
-            </li>
-            <li>
-                <div class="author-thmb">
-                    <img src="~/images/resources/avatar.jpg" style="height: 40px; width: 40px;" alt="">
-                    <span class="status f-online"></span>
-                </div>
-            </li>
-            <li>
-                <div class="author-thmb">
-                    <img src="~/images/resources/avatar.jpg" style="height: 40px; width: 40px;" alt="">
-                    <span class="status f-online"></span>
-                </div>
-            </li>
-            <li>
-                <div class="author-thmb">
-                    <img src="~/images/resources/avatar.jpg" style="height: 40px; width: 40px;" alt="">
-                    <span class="status f-offline"></span>
-                </div>
-            </li>
-            <li>
-                <div class="author-thmb">
-                    <img src="~/images/resources/avatar.jpg" style="height: 40px; width: 40px;" alt="">
-                    <span class="status f-online"></span>
-                </div>
-            </li>
-            <li>
-                <div class="author-thmb">
-                    <img src="~/images/resources/avatar.jpg" style="height: 40px; width: 40px;" alt="">
-                    <span class="status f-away"></span>
-                </div>
-            </li>
-            <li>
-                <div class="author-thmb">
-                    <img src="~/images/resources/avatar.jpg" style="height: 40px; width: 40px;" alt="">
-                    <span class="status f-away"></span>
-                </div>
-            </li>
-            <li>
-                <div class="author-thmb">
-                    <img src="~/images/resources/avatar.jpg" style="height: 40px; width: 40px;" alt="">
-                    <span class="status f-online"></span>
-                </div>
-            </li>
+        <div>
+            <ul class="chat-users ps-container ps-theme-default ps-active-y" data-ps-id="79dee936-8369-c066-7547-d3b46ed009a5">
+                <li v-for="friend in friends" :key="friend.friendUserId">
+                    <div class="author-thmb" id="selectFriend" v-on:click="openChatBox(friend)">
+                        <div style="position: relative;">
+                            <img src="~/images/resources/avatar.jpg" style="height: 40px; width: 40px;" alt="">
+                            <span :class="{'status': true, 'f-online': friend.isFriendOnline, 'f-offline': !friend.isFriendOnline}"></span>
+                        </div>
+                        <div style="white-space: nowrap; position: relative;">
+                            <span class="friend-name">{{ friend.friendFullName }}</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
             <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
                 <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
             </div>
             <div class="ps-scrollbar-y-rail" style="top: 0px; height: 586px; right: 0px;">
                 <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 578px;"></div>
             </div>
-        </ul>
+        </div>
 
-        <div class="chat-box">
-            <div class="chat-head">
-                <img src="~/images/resources/avatar.jpg" style="height: 40px; width: 40px;" alt="">
-                <span class="status f-online"></span>
-                <h6>Bucky Barnes</h6>
-                <div class="more">
-                    <div class="more-optns">
-                        <i class="ti-more-alt"></i>
-                        <ul>
-                            <li>block chat</li>
-                            <li>unblock chat</li>
-                            <li>conversation</li>
-                        </ul>
-                    </div>
-                    <span class="close-mesage"><i class="ti-close"></i></span>
-                </div>
-            </div>
-            <div class="chat-list">
-                <ul class="ps-container ps-theme-default ps-active-y"
-                    data-ps-id="0dce8670-38b1-7295-e0ed-3214ef577d86">
-                    <li class="me">
-                        <div class="chat-thumb"><img src="~/images/resources/chatlist1.jpg" alt=""></div>
-                        <div class="notification-event">
-                            <span class="chat-message-item">
-                                HI, Jack i have faced a problem with your software. are you available now, when
-                                i
-                                install this i have to received an error.
-                            </span>
-                            <span class="notification-date">
-                                <time datetime="2004-07-24T18:18"
-                                      class="entry-date updated">Today at 2:12pm</time>
-                            </span>
-                        </div>
-                    </li>
-                    <li class="you">
-                        <div class="chat-thumb"><img src="~/images/resources/chatlist2.jpg" alt=""></div>
-                        <div class="notification-event">
-                            <span class="chat-message-item">
-                                Hi tina, Please let me know your purchase code, and show me the screnshot of
-                                error.
-                            </span>
-                            <span class="notification-date">
-                                <time datetime="2004-07-24T18:18"
-                                      class="entry-date updated">Today at 2:14pm</time>
-                            </span>
-                        </div>
-                    </li>
-                    <li class="me">
-                        <div class="chat-thumb"><img src="~/images/resources/chatlist1.jpg" alt=""></div>
-                        <div class="notification-event">
-                            <span class="chat-message-item">
-                                Yes, sure please wait a while, i ll show you the complete error list. Thank you.
-                            </span>
-                            <span class="notification-date">
-                                <time datetime="2004-07-24T18:18"
-                                      class="entry-date updated">Today at 2:15pm</time>
-                            </span>
-                        </div>
-                    </li>
-                    <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
-                        <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
-                    </div>
-                    <div class="ps-scrollbar-y-rail" style="top: 0px; height: 290px; right: 0px;">
-                        <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 212px;"></div>
-                    </div>
-                </ul>
-                <form class="text-box">
-                    <textarea placeholder="Post enter to post..."></textarea>
-                    <div class="add-smiles">
-                        <span title="add icon" class="em em-expressionless"></span>
-                        <div class="smiles-bunch">
-                            <i class="em em---1"></i>
-                            <i class="em em-smiley"></i>
-                            <i class="em em-anguished"></i>
-                            <i class="em em-laughing"></i>
-                            <i class="em em-angry"></i>
-                            <i class="em em-astonished"></i>
-                            <i class="em em-blush"></i>
-                            <i class="em em-disappointed"></i>
-                            <i class="em em-worried"></i>
-                            <i class="em em-kissing_heart"></i>
-                            <i class="em em-rage"></i>
-                            <i class="em em-stuck_out_tongue"></i>
-                        </div>
-                    </div>
-
-                    <button type="submit"></button>
-                </form>
+    </div>
+    <div class="chat-box">
+        <div class="chat-head">
+            <img src="~/images/resources/avatar.jpg" style="height: 40px; width: 40px;" alt="">
+            <span :class="{'status': true, 'f-online': selectedFriend.isFriendOnline, 'f-offline': !selectedFriend.isFriendOnline}"></span>
+            <h6>{{ selectedFriend.friendFullName }}</h6>
+            <div class="more">
+                @*<div class="more-optns">
+                    <i class="ti-more-alt"></i>
+                    <ul>
+                        <li>block chat</li>
+                        <li>unblock chat</li>
+                        <li>conversation</li>
+                    </ul>
+                </div>*@
+                <span class="close-mesage"><i class="ti-close"></i></span>
             </div>
         </div>
+        <div class="chat-list">
+            <ul class="ps-container ps-theme-default ps-active-y"
+                data-ps-id="0dce8670-38b1-7295-e0ed-3214ef577d86">
+                <li class="me">
+                    <div class="chat-thumb"><img src="images/resources/chatlist1.jpg" alt=""></div>
+                    <div class="notification-event">
+                        <span class="chat-message-item">
+                        </span>
+                        <span class="notification-date">
+                            <time datetime="2004-07-24T18:18"
+                                  class="entry-date updated"></time>
+                        </span>
+                    </div>
+                </li>
+                <li class="you">
+                    <div class="chat-thumb"><img src="images/resources/chatlist2.jpg" alt=""></div>
+                    <div class="notification-event">
+                        <span class="chat-message-item">
+                        </span>
+                        <span class="notification-date">
+                            <time datetime="2004-07-24T18:18"
+                                  class="entry-date updated"></time>
+                        </span>
+                    </div>
+                </li>
+                <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
+                    <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                </div>
+                <div class="ps-scrollbar-y-rail" style="top: 0px; height: 290px; right: 0px;">
+                    <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 212px;"></div>
+                </div>
+            </ul>
+        </div>
+        <div class="chat-input" style="display: flex; border-top:1px solid; padding: 15px 5px; justify-content:space-evenly; align-items:center; height:70px; max-height:90px; ">
+            <div>
+                <textarea placeholder="Post enter to post..." style="height: 45px;line-height: 22px; vertical-align:middle;border-radius:20px;border-color: black"></textarea>
+            </div>
+            <div>
+                <button class="btn" v-on:click="sendMessage"><i class="fas fa-paper-plane"></i></button>
+            </div>
+
+        </div>
     </div>
+
 </div>
 <!--Friend & Chat Box-->

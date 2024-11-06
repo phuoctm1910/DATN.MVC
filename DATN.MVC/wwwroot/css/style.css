@@ -2774,12 +2774,12 @@ li.post-comment .comet-avatar {
 span.status {
     background: #bebebe none repeat scroll 0 0;
     border-radius: 50%;
-    bottom: 0;
+    bottom: 10px;
     display: inline-block;
     height: 10px;
-    padding: 2px;
+    padding: 5px;
     position: absolute;
-    right: 0;
+    right: 35px;
     width: 10px;
 }
 
@@ -5113,6 +5113,7 @@ canvas {
     bottom: -2px;
     position: absolute;
     right: 100%;
+    bottom:40px;
     width: 300px;
     z-index: 9999999;
     transform: translate(40px) scale(0);
@@ -5430,7 +5431,7 @@ canvas {
 
 .chat-friendz {
     display: inline-block;
-    text-align: center;
+    text-align: right;
     width: 100%;
     position: relative;
 }
@@ -5446,16 +5447,20 @@ canvas {
 }
 
 .chat-users>li {
-    display: inline-block;
-    margin-bottom: 20px;
+    display: block;
+    margin-bottom: 10px;
     position: relative;
     cursor: pointer;
 }
 
 .author-thmb {
-    display: inline-block;
+    display: flex;
     position: relative;
     width: 100%;
+    flex-direction: row-reverse;
+    align-items: baseline;
+    padding: 5px 10px;
+    justify-content: space-around;
 }
 
 .chat-users>li .author-thmb img {
@@ -5473,10 +5478,6 @@ canvas {
 
 .fixed-sidebar .ps-container>.ps-scrollbar-y-rail>.ps-scrollbar-y {
     background-color: transparent !important;
-}
-
-.chat-friendz .chat-box {
-    bottom: -43px;
 }
 
 .menu-left {
