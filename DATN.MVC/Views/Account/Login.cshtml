@@ -2,7 +2,6 @@
     ViewData["Title"] = "Login";
 }
 
-
 @section Styles {
     <style>
         body {
@@ -23,7 +22,6 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
         }
 
         p {
@@ -107,28 +105,19 @@
                 transform: scale(1.05); /* Slightly enlarge the button */
             }
 
-        .register-info {
-            text-align: center;
-            font-size: 12px;
-            margin-top: 15px;
+        .register {
+            background-color: #fa6342;
+            color: white;
+            border-radius: 30px;
+            padding: 10px 30px;
+            border: none;
+            text-decoration: none;
+            transition: background-color 0.3s; /* Transition for hover effect */
         }
 
-            .register-info a {
-                color: blue;
-                text-decoration: underline;
+            .register:hover {
+                background-color: #ff7f5c; /* Change background color on hover */
             }
-    </style>
-}
-@section Scripts {
-    <script>
-        // Xử lý sự kiện submit của form đăng nhập
-        $('#loginForm').submit(function (e) {
-            e.preventDefault(); // Ngăn chặn hành động mặc định của form
-
-            var loginRequest = {
-                userName: $('#username').val(),
-                passwordHash: $('#password').val()
-            };
 
         .login-info {
             font-size: 12px;
@@ -186,7 +175,6 @@
             margin-top: 5px;
             display: none; /* Mặc định ẩn thông báo lỗi */
         }
-
     </style>
 }
 @section Scripts {
@@ -243,7 +231,7 @@
                 success: function (response) {
                     if (response.success) {
                         // Đăng nhập thành công, chuyển hướng đến trang chính
-                        window.location.href = '/Home';
+                        window.location.href = '/Home/Index';
                     } else {
                         // Hiển thị thông báo lỗi nếu tài khoản/mật khẩu không chính xác
                         $('#errorMessage').text(response.message).show(); // Hiển thị thông báo lỗi dưới form
@@ -284,27 +272,26 @@
                 <p>Next time you log in, click your picture. To remove an account from this page, click cross.</p>
                 <div class="d-flex">
                     <div class="user-card">
-                        <img src="https://scontent.fsgn6-2.fna.fbcdn.net/v/t39.30808-1/426490643_1073956787159143_2038369220108098535_n.jpg?stp=dst-jpg_s200x200&_nc_cat=100&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=GdNSHuW2n1YQ7kNvgE3eJaW&_nc_zt=24&_nc_ht=scontent.fsgn6-2.fna&_nc_gid=AWSCRlHIwyGDa-51_8VcLV-&oh=00_AYB-4sCSuy_DogjLYulTXBP0B6kkgaTtvWCObbms2L_8Lw&oe=671EFEF7" alt="User 1">
+                        <img src="/images/resources/Duymai2.jpg" alt="User 1">
                         <p>Duy</p>
                     </div>
                     <div class="user-card">
-                        <img src="https://scontent.fsgn6-2.fna.fbcdn.net/v/t39.30808-1/426490643_1073956787159143_2038369220108098535_n.jpg?stp=dst-jpg_s200x200&_nc_cat=100&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=GdNSHuW2n1YQ7kNvgE3eJaW&_nc_zt=24&_nc_ht=scontent.fsgn6-2.fna&_nc_gid=AWSCRlHIwyGDa-51_8VcLV-&oh=00_AYB-4sCSuy_DogjLYulTXBP0B6kkgaTtvWCObbms2L_8Lw&oe=671EFEF7" alt="User 2">
+                        <img src="/images/resources/Duymai2.jpg" alt="User 2">
                         <p>Duy</p>
                     </div>
                     <div class="user-card">
                         <button type="button">+</button>
-                        <p>Add Account</p>
+                        <p>Thêm tài khoản</p>
                     </div>
                 </div>
             </div>
         </div>
 
-    <!-- Login Form Section -->
-    <!-- Form đăng nhập -->
-    <div class="col-md-6">
-        <div class="login-box">
-            <h4><i class="fa-solid fa-right-to-bracket"></i> Login</h4>
-            <p class="login-info">Login again, you have recently signed out from here</p>
+        <!-- Login Form Section -->
+        <div class="col-md-6">
+            <div class="login-box">
+                <h4><i class="fa-solid fa-right-to-bracket"></i> Login</h4>
+                <p class="login-info">Login again, you have recently signed out from here</p>
 
                 <form class="form-login " id="loginForm">
                     <input type="text" id="username" placeholder="User Name" value="Adam James">
@@ -315,9 +302,9 @@
                     <span class="error-message" id="password-error"></span> <!-- Thông báo lỗi cho password -->
 
 
-                    <button name="login" type="submit">Login</button>
-                    <a class="register" href="register.html">Register</a>
-                    <div id="errorMessage" style="color: red; margin-top: 10px; display: none;">Please fill out all fields.</div>
+                    <button name="login" type="submit">Đăng nhập</button>
+                    <a class="register" href="register">Đăng ký</a>
+                    <div id="errorMessage" style="color: red; margin-top: 10px; display: none;">Vui lòng nhập tất cả ô trống.</div>
 
                 </form>
             </div>

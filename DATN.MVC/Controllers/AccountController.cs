@@ -84,8 +84,6 @@ namespace DATN.MVC.Controllers
                 HttpContext.Session.SetString("RoleName", result.RoleName);
                 HttpContext.Session.SetString("Token", result.Token);
 
-
-
                 return Json(new { success = true, message = "Login successful." });
             }
             else

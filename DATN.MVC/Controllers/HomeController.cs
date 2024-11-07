@@ -22,8 +22,8 @@ namespace DATN.MVC.Controllers
                 ShowFriendList = true // Tắt danh sách bạn bè
             };
             ViewBag.ViewSettings = viewSettings;
-            var userId = HttpContext.Session.GetInt32("UserId");
-            var fullName = HttpContext.Session.GetString("FullName");
+            var userId = HttpContext.Session.GetInt32("UserID");
+            var fullName = HttpContext.Session.GetString("UserName");
             if (userId == null )
             {
                 return RedirectToAction("Login", "Account");
