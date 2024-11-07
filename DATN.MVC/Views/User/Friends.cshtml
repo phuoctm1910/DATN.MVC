@@ -1,189 +1,169 @@
-﻿
-@{
-    ViewData["Title"] = "Friends";
-}
-@section Styles{
+﻿@model List<DATN.MVC.Respone.User.FriendRequestResponse>
+
+@section Styles {
     <style>
         .sidebar {
             background-color: #f0f2f5;
             padding: 20px;
             max-height: 100%;
-            width: 500px;
+            width: 300px;
+            border-right: 1px solid #ddd;
         }
 
             .sidebar .menu-item {
                 display: flex;
                 align-items: center;
-                padding: 20px;
-                font-size: 20px;
-                border: none;
+                padding: 15px;
+                font-size: 18px;
+                color: #333;
+                border-radius: 8px;
+                transition: background-color 0.2s ease;
+                text-decoration: none;
             }
+
+                .sidebar .menu-item:hover {
+                    background-color: #e0e0e0;
+                    color: #007bff;
+                }
 
                 .sidebar .menu-item img {
                     width: 24px;
                     height: 24px;
+                    margin-right: 10px;
                 }
-
-        .menu-item:hover {
-            color: grey;
-        }
 
         .friend-requests {
             padding: 30px;
+            width: 100%;
         }
+
+            .friend-requests h5 {
+                font-weight: bold;
+                color: #333;
+            }
 
         .friend-card {
             border: 1px solid #ddd;
             border-radius: 8px;
             text-align: center;
-            padding: 10px;
+            padding: 15px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
         }
 
+            .friend-card:hover {
+                transform: scale(1.03);
+            }
+
             .friend-card img {
-                border-radius: 8px;
-                width: 100%;
-                height: 280px; /* Thiết lập chiều cao cố định */
-                object-fit: cover; /* Cắt ảnh để vừa chiều cao và chiều rộng */
+                border-radius: 50%;
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+                margin-bottom: 10px;
+            }
+
+            .friend-card h6 {
+                font-size: 18px;
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 8px;
             }
 
             .friend-card .btn-group {
-                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
                 gap: 10px;
             }
-    </style>
 
+            .friend-card .btn {
+                font-size: 14px;
+                font-weight: bold;
+                padding: 8px 20px;
+                border-radius: 6px;
+                width: 100%;
+                text-align: center;
+                transition: background-color 0.2s ease;
+            }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+            color: #fff;
+        }
+
+            .btn-danger:hover {
+                background-color: #c82333;
+            }
+    </style>
 }
+
 <div class="d-flex">
     <!-- Sidebar -->
     <div class="sidebar">
         <h5 class="fw-bold">Bạn bè</h5>
-        <button class="menu-item">
-            <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Trang chủ" class="imgpadding">
+        <a href="/" class="menu-item">
+            <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Trang chủ">
             <span>Trang chủ</span>
-        </button>
-
-        <button class="menu-item">
-            <a href="addfriends.html" title="" data-toggle="tooltip" data-placement="right"
-               data-original-title="Friends">
-                <img src="https://img.icons8.com/ios-filled/50/000000/user-male.png" alt="Lời mời kết bạn" class="imgpadding">
-
-                <span>Lời mời kết bạn  </span>
-        </button>
-        <button class="menu-item">
-            <a href="GoiYFirends.html" title="" data-toggle="tooltip" data-placement="right"
-               data-original-title="Friends">
-                <img src="https://img.icons8.com/ios-filled/50/000000/add-user-male.png" alt="Gợi ý" class="imgpadding">
-                <span>Gợi ý</span>
-        </button>
-        <button class="menu-item">
-            <a href="allfriends.html" title="" data-toggle="tooltip" data-placement="right"
-               data-original-title="Friends">
-                <img src="https://img.icons8.com/ios-filled/50/000000/user-group-man-man.png" alt="Tất cả bạn bè" class="imgpadding">
-                <span>Tất cả bạn bè</span>
-        </button>
-
+        </a>
+        <a href="/User/Friends" class="menu-item">
+            <img src="https://img.icons8.com/ios-filled/50/000000/user-male.png" alt="Lời mời kết bạn">
+            <span>Lời mời kết bạn</span>
+        </a>
+        <a href="/user/SendRequestFriend" class="menu-item">
+            <img src="https://img.icons8.com/ios-filled/50/000000/add-user-male.png" alt="Gợi ý">
+            <span>Gợi ý</span>
+        </a>
+        <a href="/user/AllFriends" class="menu-item">
+            <img src="https://img.icons8.com/ios-filled/50/000000/user-group-man-man.png" alt="Tất cả bạn bè">
+            <span>Tất cả bạn bè</span>
+        </a>
     </div>
 
     <!-- Friend Requests -->
-
     <div class="friend-requests flex-grow-1">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="fw-bold">Lời mời kết bạn</h5>
+            <h5 class="fw-bold">lời mời kết bạn</h5>
             <a href="#" class="text-primary">Xem tất cả</a>
         </div>
-
-
         <div class="row row-cols-1 row-cols-md-4 g-4">
-            <div class="col">
-                <div class="friend-card">
-                    <img src="~/images/resources/Hau.jpg" alt="Friend">
-                    <h6 class="mt-2">Hậu Dương</h6>
-                    <div class="btn-group">
-                        <button class="btn btn-primary w-100">Xác nhận</button>
-                        <button class="btn btn-danger w-100">Xóa</button>
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="friend-card">
+                        <img src="@item.Image" alt="Friend">
+                        <h6 class="mt-2">@item.FullName</h6>
+                        <div class="btn-group">
+                            <form asp-action="HandleFriend" method="post">
+                                <input type="hidden" name="Id" value="@item.Id" />
+                                <input type="hidden" name="User1Id" value="@item.User1Id" />
+                                <input type="hidden" name="User2Id" value="@item.User2Id" />
+                                <input type="hidden" name="Status" value="1" />
+                                <button type="submit" class="btn btn-primary">Xác nhận</button>
+                            </form>
+                            <form asp-action="HandleFriend" method="post">
+                                <input type="hidden" name="Id" value="@item.Id" />
+                                <input type="hidden" name="User1Id" value="@item.User1Id" />
+                                <input type="hidden" name="User2Id" value="@item.User2Id" />
+                                <input type="hidden" name="Status" value="3" />
+                                <button type="submit" class="btn btn-danger">Hủy</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="friend-card">
-                    <img src="~/images/resources/Phuoc2.jpg" alt="Friend">
-                    <h6 class="mt-2">Phước Tạ</h6>
-                    <small class="text-muted">13 bạn chung</small>
-                    <div class="btn-group">
-                        <button class="btn btn-primary w-100">Xác nhận</button>
-                        <button class="btn btn-danger w-100">Xóa</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="friend-card">
-                    <img src="~/images/resources/Duymai2.jpg" alt="Friend">
-                    <h6 class="mt-2">Mai Huỳnh Anh Duy</h6>
-                    <small class="text-muted">2 bạn chung</small>
-                    <div class="btn-group">
-                        <button class="btn btn-primary w-100">Xác nhận</button>
-                        <button class="btn btn-danger w-100">Xóa</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="friend-card">
-                    <img src="~/images/resources/kha.jpg" alt="Friend">
-                    <h6 class="mt-2">Nhị Thiếu Gia</h6>
-                    <small class="text-muted">6 bạn chung</small>
-                    <div class="btn-group">
-                        <button class="btn btn-primary w-100">Xác nhận</button>
-                        <button class="btn btn-danger w-100">Xóa</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="friend-card">
-                    <img src="~/images/resources/kha.jpg" alt="Friend">
-                    <h6 class="mt-2">Nhị Thiếu Gia</h6>
-                    <small class="text-muted">6 bạn chung</small>
-                    <div class="btn-group">
-                        <button class="btn btn-primary w-100">Xác nhận</button>
-                        <button class="btn btn-danger w-100">Xóa</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="friend-card">
-                    <img src="~/images/resources/kha.jpg" alt="Friend">
-                    <h6 class="mt-2">Nhị Thiếu Gia</h6>
-                    <small class="text-muted">6 bạn chung</small>
-                    <div class="btn-group">
-                        <button class="btn btn-primary w-100">Xác nhận</button>
-                        <button class="btn btn-danger w-100">Xóa</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="friend-card">
-                    <img src="~/images/resources/kha.jpg" alt="Friend">
-                    <h6 class="mt-2">Nhị Thiếu Gia</h6>
-                    <small class="text-muted">6 bạn chung</small>
-                    <div class="btn-group">
-                        <button class="btn btn-primary w-100">Xác nhận</button>
-                        <button class="btn btn-danger w-100">Xóa</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="friend-card">
-                    <img src="~/images/resources/kha.jpg" alt="Friend">
-                    <h6 class="mt-2">Nhị Thiếu Gia</h6>
-                    <small class="text-muted">6 bạn chung</small>
-                    <div class="btn-group">
-                        <button class="btn btn-primary w-100">Xác nhận</button>
-                        <button class="btn btn-danger w-100">Xóa</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Add more friend requests here if needed -->
+            }
         </div>
     </div>
 </div>
-
-
