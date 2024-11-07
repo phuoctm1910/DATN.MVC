@@ -2,7 +2,6 @@
     ViewData["Title"] = "Login";
 }
 
-
 @section Styles {
     <style>
         body {
@@ -23,7 +22,6 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
         }
 
         p {
@@ -107,28 +105,19 @@
                 transform: scale(1.05); /* Slightly enlarge the button */
             }
 
-        .register-info {
-            text-align: center;
-            font-size: 12px;
-            margin-top: 15px;
+        .register {
+            background-color: #fa6342;
+            color: white;
+            border-radius: 30px;
+            padding: 10px 30px;
+            border: none;
+            text-decoration: none;
+            transition: background-color 0.3s; /* Transition for hover effect */
         }
 
-            .register-info a {
-                color: blue;
-                text-decoration: underline;
+            .register:hover {
+                background-color: #ff7f5c; /* Change background color on hover */
             }
-    </style>
-}
-@section Scripts {
-    <script>
-        // Xử lý sự kiện submit của form đăng nhập
-        $('#loginForm').submit(function (e) {
-            e.preventDefault(); // Ngăn chặn hành động mặc định của form
-
-            var loginRequest = {
-                userName: $('#username').val(),
-                passwordHash: $('#password').val()
-            };
 
         .login-info {
             font-size: 12px;
@@ -242,7 +231,7 @@
                 success: function (response) {
                     if (response.success) {
                         // Đăng nhập thành công, chuyển hướng đến trang chính
-                        window.location.href = '/Home';
+                        window.location.href = '/Home/Index';
                     } else {
                         // Hiển thị thông báo lỗi nếu tài khoản/mật khẩu không chính xác
                         $('#errorMessage').text(response.message).show(); // Hiển thị thông báo lỗi dưới form
@@ -280,11 +269,11 @@
                 <p>Lần sau khi đăng nhập, hãy nhấp vào ảnh của bạn. Để xóa một tài khoản khỏi trang này, hãy nhấp vào dấu chéo.</p>
                 <div class="d-flex">
                     <div class="user-card">
-                        <img src="~/images/resources/Duymai2.jpg" />
+                        <img src="/images/resources/Duymai2.jpg" alt="User 1">
                         <p>Duy</p>
                     </div>
                     <div class="user-card">
-                        <img src="~/images/resources/Duymai2.jpg" />
+                        <img src="/images/resources/Duymai2.jpg" alt="User 2">
                         <p>Duy</p>
                     </div>
                     <div class="user-card">
@@ -305,8 +294,9 @@
                     <input type="text" id="username" placeholder="Tên Người Dùng" value="Adam James">
                     <span class="error-message" id="username-error"></span>
 
-                    <input type="password" id="password" placeholder="Mật Khẩu" value="12345678">
-                    <span class="error-message" id="password-error"></span>
+                    <button name="login" type="submit">Đăng nhập</button>
+                    <a class="register" href="register">Đăng ký</a>
+                    <div id="errorMessage" style="color: red; margin-top: 10px; display: none;">Vui lòng nhập tất cả ô trống.</div>
 
                     <button name="login" type="submit">Đăng Nhập</button>
                     <a class="register" href="register.html">Đăng Ký</a>

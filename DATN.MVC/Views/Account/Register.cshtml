@@ -1,101 +1,213 @@
-﻿
-@{
-    ViewData["Title"] = "Register";
-}
-@section Styles{
+﻿@section Styles{
     <style>
-        body {
-            background-color: #e9eef4;
+        body{
+            overflow-y:hidden;
         }
+        .div2 {
+            background-color: #e9eef4 !important;
+            background-image: url(https://i.pinimg.com/originals/2e/48/6e/2e486ec4a56cf9c12fc6ac67ff55e94a.jpg) !important;
+            background-repeat: no-repeat !important;
+            background-size: cover !important; /* Đảm bảo hình nền phủ toàn màn hình */
+            width: 100%;
+        }
+
 
         .container {
             height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .registration-box {
             background-color: white;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
         }
 
             .registration-box h4 {
                 font-weight: bold;
                 color: #535165;
+                margin-bottom: 15px;
+                text-align: center;
             }
 
             .registration-box p {
                 color: #727895;
-                font-size: 12px;
+                font-size: 14px;
                 margin-bottom: 25px;
+                text-align: center;
             }
 
-        .form-registration {
-            margin-top: 20px;
+        .form-registration input,
+        .form-registration select,
+        .form-registration button {
+            background: #fff;
+            border-radius: 30px;
+            border: 1px solid rgb(182, 182, 182);
+            color: #535165;
+            font-size: 14px;
+            padding: 14px 20px;
+            width: 100%;
+            margin-bottom: 15px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            outline: none;
         }
 
-            .form-registration input {
-                background: #fff;
-                border-radius: 35px;
-                border: 1px solid rgb(182, 182, 182);
-                color: #535165;
-                font-size: 14px;
-                padding: 14px 20px;
-                width: 100%;
-                margin-bottom: 15px;
-                transition: border-color 0.3s, box-shadow 0.3s; /* Transition for smooth effects */
-                outline: none; /* Remove the default focus outline */
+            .form-registration input:focus,
+            .form-registration select:focus {
+                border-color: #fa6342;
+                box-shadow: 0 2px 5px rgba(250, 99, 66, 0.5);
             }
 
-                .form-registration input:hover {
-                    border-color: #fa6342; /* Change border color on hover */
-                    box-shadow: 0 2px 5px rgba(250, 99, 66, 0.5); /* Add shadow on hover */
-                }
-
-            .form-registration button {
-                background-color: #fa6342;
-                color: white;
-                border-radius: 30px;
-                padding: 10px 30px;
-                border: none;
-                transition: background-color 0.3s, transform 0.3s; /* Transition for button effects */
+            .form-registration input:hover,
+            .form-registration select:hover {
+                border-color: #fa6342;
+                box-shadow: 0 2px 5px rgba(250, 99, 66, 0.5);
             }
 
-                .form-registration button:hover {
-                    background-color: #ff7f5c; /* Change button color on hover */
-                    transform: scale(1.05); /* Slightly enlarge the button */
-                }
 
-            .form-registration .login-info {
-                font-size: 12px;
-                color: #727895;
-                margin-top: 10px;
+        .form-registration button {
+            background-color: #fa6342;
+            color: white;
+            border-radius: 30px;
+            padding: 12px 30px;
+            border: none;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+            .form-registration button:hover {
+                background-color: #ff7f5c;
+                transform: scale(1.05);
             }
 
-                .form-registration .login-info a {
-                    color: #fa6342;
-                    text-decoration: none;
-                }
+        .login-info {
+            font-size: 14px;
+            color: #727895;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+            .login-info a {
+                color: #fa6342;
+                text-decoration: none;
+            }
+
+        /* Style for the select field */
+        select {
+            padding: 14px 20px;
+            background-color: #fff;
+            border: 1px solid rgb(182, 182, 182);
+        }
+
+        select {
+            padding: 14px 20px 14px 20px; /* Đảm bảo padding đều 4 hướng */
+            background-color: #fff;
+            border: 1px solid rgb(182, 182, 182);
+            appearance: none; /* Loại bỏ mũi tên mặc định của trình duyệt */
+            -webkit-appearance: none; /* Đối với trình duyệt Safari */
+            -moz-appearance: none; /* Đối với trình duyệt Firefox */
+            width: 100%;
+            position: relative;
+        }
+
+
+            select::after {
+                content: '▼';
+                position: absolute;
+                right: 20px; /* Xích mũi tên ra ngoài */
+                top: 50%;
+                transform: translateY(-50%); /* Canh chỉnh mũi tên ở giữa */
+                font-size: 16px;
+                color: #fa6342;
+                pointer-events: none;
+            }
     </style>
 }
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="registration-box">
-                <h4><i class="fa-solid fa-user-plus"></i> Register</h4>
-                <p>Vui lòng điền thông tin dưới đây để tạo tài khoản mới</p>
+@section Scripts {
+    <script>
+        // Handle the form submission
+        $('#registrationForm').submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
 
-                <form class="form-registration">
-                    <input type="text" placeholder="Tên người dùng" required>
-                    <input type="email" placeholder="Email" required>
-                    <input type="text" placeholder="Số điện thoại" required>
-                    <input type="password" placeholder="Mật khẩu" required>
-                    <input type="text" placeholder="Nhập OTP" required>
-                    <button type="submit">Đăng Ký</button>
-                </form>
-                <p class="login-info">Đã có tài khoản? <a style="color: blue; text-decoration: underline;" href="login.html">Đăng nhập</a></p>
-            </div>
+            // Get current time in UTC
+            const currentTimeUTC = Date.now();
+
+            // Convert to Vietnam timezone (UTC+7)
+            const vietnamTime = new Date(currentTimeUTC).toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' });
+
+            // Convert to a Date object
+            const dateInVietnam = new Date(vietnamTime);
+
+            // Get Unix Timestamp (seconds)
+            const unixTimestamp = Math.floor(dateInVietnam.getTime() / 1000);
+
+            console.log(unixTimestamp);
+
+            var registrationRequest = {
+                userName: $('#username').val(),
+                passwordHash: $('#password').val(),
+                fullName: $('#fullName').val(),
+                birth: $('#birth').val(), // Date format yyyy-MM-dd
+                gender: $('#gender').val() === 'true', // Convert to boolean
+                phoneNumber: $('#phoneNumber').val(),
+                email: $('#email').val(),
+                createdDateUnix: unixTimestamp
+            };
+
+            // Send registration data to the server
+            $.ajax({
+                type: "POST",
+                url: "/Account/RegistrationAccount",
+                data: JSON.stringify(registrationRequest),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        window.location.href = '/Home';
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while processing your request.");
+                }
+            });
+        });
+    </script>
+}
+<div class="div2">
+    <div class="container" style="margin-right: 20px;">
+        <div class="registration-box">
+            <h4><i class="fa-solid fa-user-plus"></i> Đăng Ký</h4>
+            <p>Vui lòng điền thông tin dưới đây để tạo tài khoản mới</p>
+
+            <form id="registrationForm" class="form-registration">
+                <input type="text" id="username" placeholder="Tên người dùng" required>
+                <input type="password" id="password" placeholder="Mật khẩu" required>
+                <input type="text" pattern="^[A-Za-zÀ-ỹ][A-Za-zÀ-ỹ\s]*[A-Za-zÀ-ỹ]$" id="fullName" placeholder="Họ và Tên" required>
+                <input type="date" id="birth" placeholder="Ngày sinh" required>
+
+                <select id="gender" required>
+                    <option value="">Giới tính</option>
+                    <option value="true">Nam</option>
+                    <option value="false">Nữ</option>
+
+                </select>
+
+                <input type="text" pattern="^(03|05|07|08|09)[0-9]{8}$" id="phoneNumber" placeholder="Số điện thoại" required>
+                <input type="email" id="email" placeholder="Email" required>
+
+                <button type="submit">Đăng Ký</button>
+            </form>
+
+            <p class="login-info">
+                Đã có tài khoản? <a href="login.html">Đăng nhập</a>
+            </p>
         </div>
     </div>
 </div>
-
