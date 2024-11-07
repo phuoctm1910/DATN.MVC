@@ -18,5 +18,6 @@
         public bool IsActived { get; set; }
         public int CreatedDate { get; set; }
         public int UpdatedDate { get; set; }
+        public int MutualFriendsCount { get; set; }
     }
 }

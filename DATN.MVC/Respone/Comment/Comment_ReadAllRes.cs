@@ -1,4 +1,4 @@
-﻿namespace DATN.API.Models.Response
+﻿namespace DATN.MVC.Models.Response
 {
     public class Comment_ReadAllRes
     {
