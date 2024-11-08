@@ -1,3 +1,6 @@
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace DATN.MVC
 {
     public class Program
@@ -9,22 +12,34 @@ namespace DATN.MVC
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            // Thêm dịch vụ Session
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian chờ của session
+                options.Cookie.HttpOnly = true; // Giúp bảo mật cookie
+                options.Cookie.IsEssential = true; // Cookie cần thiết cho ứng dụng
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSession();
             app.UseRouting();
 
+            app.UseSession(); // Sử dụng session
+
             app.UseAuthorization();
+
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=HomeAdmin}/{action=Index}/{id?}");
 
             app.MapControllerRoute(
                 name: "default",
