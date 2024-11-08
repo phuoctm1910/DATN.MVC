@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Request\Post\" />
+    <Folder Include="Respone\Post\" />
     <Folder Include="wwwroot\images\New folder\" />
   </ItemGroup>
 
