@@ -1,0 +1,142 @@
+﻿@{
+    ViewData["Title"] = "Create Parent Category";
+}
+
+<h2 style="text-align:center;">Thêm Danh Mục Lớn</h2>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#createCategoryForm').submit(function (e) {
+                e.preventDefault();
+
+                // Reset error messages
+                $('.error-message').text(''); // Clears all previous errors
+
+                var name = $('#Name').val();
+                var isValid = true;
+
+                // Updated regex to allow Vietnamese characters, letters, and spaces only
+                var nameRegex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯẠ-ỹ\s]+$/u;
+                if (!nameRegex.test(name)) {
+                    $('#NameError').text('Tên danh mục chỉ được chứa chữ cái và khoảng trắng (có thể nhập tiếng Việt).');
+                    isValid = false;
+                }
+
+                // Ensure Name field is populated
+                if (!name.trim()) {  // Check if Name is empty (trim to avoid spaces)
+                    $('#NameError').text('Category Name is required');
+                    isValid = false;
+                }
+
+                if (!isValid) return; // Stop form submission if validation fails
+
+                // Prepare data to be sent to the API
+                var categoryData = {
+                    Name: name,
+                    IsActived: $('#IsActived').val() === 'true' // Convert to boolean
+                };
+
+                // Send data via Ajax
+                $.ajax({
+                    url: 'https://localhost:7296/api/ParentCategories/create-parent-category',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(categoryData),
+                    success: function (response) {
+                        alert('Thêm danh mục lớn thành công');
+                        window.location.href = '@Url.Action("Index", "AdminCategory")'; // Redirect after success
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error Details:', {
+                            xhr: xhr,
+                            status: status,
+                            error: error,
+                            responseText: xhr.responseText
+                        });
+                        alert('Error: ' + (xhr.responseText || 'Unable to create category. Please try again.'));
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<form id="createCategoryForm" method="post" class="form-container">
+    <div class="form-group">
+        <label for="Name">Tên Danh Mục:</label>
+        <input type="text" id="Name" name="Name" class="form-control" required />
+        <span id="NameError" class="error-message"></span>
+    </div>
+    <div class="form-group">
+        <label for="IsActived">Trạng Thái Danh Mục:</label>
+        <select id="IsActived" name="IsActived" class="form-control" required>
+            <option value="true">Sử dụng</option>
+            <option value="false">Không sử dụng</option>
+        </select>
+        <span id="IsActivedError" class="error-message"></span>
+    </div>
+    <button type="submit" class="btn2 btn-primary">Create</button>
+</form>
+
+
+<style>
+    /* Form Container Styling */
+.form-container {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Group Styling */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.form-group .form-control {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Button Styling */
+.btn2 {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Error Message Styling */
+.error-message {
+    font-size: 12px;
+    color: red;
+    margin-top: 5px;
+    display: block;
+}
+
+</style>
