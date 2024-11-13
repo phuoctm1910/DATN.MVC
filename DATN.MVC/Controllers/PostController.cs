@@ -31,29 +31,37 @@ namespace DATN.MVC.Controllers
         }
 
         [HttpPost]
-        public JsonResult ShareAndAddNew([FromBody] Post_CreateReq newPost)
+        public JsonResult ShareAndAddNew([FromForm] Post_CreateReq newPost)
         {
             try
             {
-                // Call to the Web API via ApiHelpers.
-                var result = ApiHelpers.PostMethodAsync<bool, Post_CreateReq>("https://localhost:7296/api/post/create", newPost);
-
-                // Return success or failure response
-                if (result)
+                // Kiểm tra nếu có file ảnh để upload
+                if (newPost.ImageFile != null)
                 {
-                    return Json(new { success = true, message = "Post created successfully." });
+                    // Gọi API backend để lưu trữ thông tin bài đăng (bao gồm cả file ảnh)
+                    var result = ApiHelpers.PostMethodWithFileAsync<bool, Post_CreateReq>("https://localhost:7296/api/post/create", newPost, newPost.ImageFile, fileKeyName: "ImageFile");
+
+                    if (result)
+                    {
+                        return Json(new { success = true, message = "Post created successfully." });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Failed to create post." });
+                    }
                 }
                 else
                 {
-                    return Json(new { success = false, message = "Failed to create post." });
+                    return Json(new { success = false, message = "No image file provided." });
                 }
             }
             catch (Exception ex)
             {
-                // Handle the exception and return an error response.
+                // Xử lý lỗi và trả về phản hồi lỗi
                 return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
             }
         }
+
 
         [HttpPost]
         public JsonResult ReactionPost([FromBody] Post_ReactReq newPost)

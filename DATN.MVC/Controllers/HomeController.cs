@@ -15,27 +15,27 @@ namespace DATN.MVC.Controllers
 
         public IActionResult Index()
         {
-            var viewSettings = new ViewSettings
-            {
-                ShowSidebar = true, // Tắt sidebar
-                ShowHeader = true,   // Bật header
-                ShowFriendList = true // Tắt danh sách bạn bè
-            };
-            ViewBag.ViewSettings = viewSettings;
             var userId = HttpContext.Session.GetInt32("UserID");
-            var fullName = HttpContext.Session.GetString("UserName");
-            if (userId == null )
-            {
-                return RedirectToAction("Login", "Account");
-
-            }
-            else
+            if (userId != null)
             {
                 ViewBag.UserId = userId;
-                ViewBag.FullName = fullName;
-                return View();
+                ViewBag.FullName = HttpContext.Session.GetString("FullName");
+                ViewBag.Token = HttpContext.Session.GetString("Token");
+                ViewBag.UserImage = HttpContext.Session.GetString("UserImage");
+                var viewSettings = new ViewSettings
+                {
+                    ShowSidebar = true, // Tắt sidebar
+                    ShowHeader = true,   // Bật header
+                    ShowFriendList = true // Tắt danh sách bạn bè
+                };
+                ViewBag.ViewSettings = viewSettings;
 
+                return View();
+            }else
+            {
+                return RedirectToAction("Login", "Account");
             }
+
         }
     
         public IActionResult Privacy()

@@ -3,16 +3,207 @@
 }
 @section Styles {
     <style>
+
+        /* Single Image */
+        .post-image-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .single-image {
+            max-width: 50%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Four images layout */
+        .image-grid-four {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+        }
+
+            .image-grid-four .image-item {
+                width: 100%;
+                height: 100%;
+                object-fit: contain; /* Hiển thị toàn bộ nội dung ảnh */
+                border-radius: 4px;
+                max-height: 250px;
+                margin: auto; /* Đảm bảo ảnh được căn giữa */
+            }
+
+        /* Three images layout */
+        .image-grid-three {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4px;
+            justify-items: center;
+        }
+
+            .image-grid-three .image-item:nth-child(1) {
+                grid-row: span 2;
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                border-radius: 4px;
+                margin: auto;
+            }
+
+            .image-grid-three .image-item {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                border-radius: 4px;
+                max-height: 250px;
+                margin: auto;
+            }
+
+        /* Two images layout */
+        .image-grid-two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+            justify-items: center;
+        }
+
+            .image-grid-two .image-item {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                border-radius: 4px;
+                max-height: 300px;
+                margin: auto;
+            }
+
+        /* Common image styling for all layouts */
+        .image-item {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-grid-more {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+            justify-items: center;
+        }
+
+            .image-grid-more .image-item {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                border-radius: 4px;
+                max-height: 250px;
+                margin: auto;
+            }
+
+        /* Overlay for the last image when there are more than 4 images */
+        .overlay-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .overlay-image {
+            width: fit-content;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 4px;
+            max-height: 250px;
+        }
+
+        .overlay-text {
+            position: absolute;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            width: 140px;
+            max-width: 140px;
+            height: 100%;
+            text-align: center;
+            padding: 100px 0;
+        }
+
         .avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
         }
 
+        .newpst-input {
+            max-height: 400px; /* Giới hạn chiều cao của phần nhập */
+            overflow-y: auto; /* Tạo thanh cuộn khi nội dung quá dài */
+        }
+
+        .image-upload-modal {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 10px;
+            width: 100%;
+            height: 250px;
+        }
+
+        .image-upload-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #666;
+            cursor: pointer;
+            padding: 20px;
+            border: 1px dashed #aaa;
+            border-radius: 8px;
+            width: 100%;
+            height: 220px; /* Hoặc bất kỳ chiều cao nào bạn muốn */
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+
+
+        .image-preview {
+            position: relative;
+            width: 100%;
+            max-height: 100%;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .image-preview-img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+            object-fit: cover; /* Đảm bảo ảnh hiện lên đẹp nhất */
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 0px;
+            background-color: transparent !important;
+            right: 3px;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            color: black
+        }
+
+        .post-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .privacy-selection {
             margin-top: 10px;
             margin-bottom: 10px;
-            display: flex;
             align-items: center;
         }
 
@@ -249,57 +440,571 @@
         .content {
             font-size: 14px;
         }
+
+        .import-list {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 15px;
+            border: 1px solid #333;
+            border-radius: 5px;
+        }
+
+        .attachments {
+            cursor: pointer;
+        }
+
+            .attachments p, .attachments i {
+                display: inline-block;
+                vertical-align: middle;
+                margin: 0;
+            }
+
+            .attachments p {
+                margin-right: 5px; /* Điều chỉnh khoảng cách giữa văn bản và biểu tượng */
+            }
+
+            .attachments i {
+                font-size: 18px; /* Điều chỉnh kích thước biểu tượng nếu cần */
+            }
+        .slideshow-modal {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .slideshow-content {
+            position: relative;
+            width: 80%; /* Adjust the width based on screen size */
+            max-width: 600px; /* Maximum width */
+            height: 80vh; /* Adjust the height based on screen size */
+            max-height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slideshow-image {
+            width: 100%; /* Scale to fit container width */
+            height: 100%; /* Scale to fit container height */
+            object-fit: contain; /* Maintain aspect ratio, adding space if needed */
+            border-radius: 10px;
+            background-color: #fff; /* Background for better padding around image */
+        }
+
+        .close-slideshow {
+            position: absolute;
+            top: -5px;
+            right: -30px;
+            font-size: 24px;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .prev-slide, .next-slide {
+            position: absolute;
+            top: 50%;
+            font-size: 24px;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transform: translateY(-50%);
+            padding: 10px;
+        }
+
+        .prev-slide {
+            left: -50px;
+        }
+
+        .next-slide {
+            right: -50px;
+        }
+
+        .slide-indicator {
+            position: absolute;
+            bottom: -50px;
+            color: white;
+            font-size: 16px;
+        }
+
     </style>
 }
 @section Scripts{
-    <script src="~/js/home.js"></script>
-    <script src="~/js/sidebarRight.js" ></script>
-}
-<div class="gap2 gray-bg">
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                EventBus: new Vue(),
+                showImageUpload: false,
+                posts: [],
+                postReactions: [],
+                commentReactions: [],
+                selectedPost: {},
+                comments: [],
+                commentsNotBuild: [],
+                files: [],
+                newComment: '',
+                replyTarget: null,
+                newPostContent: '',
+                userId: 2, // thay đổi thành session
+                newPostFor: 0,
+                showSlideshow: false,
+                slideshowImages: [],
+                currentSlideIndex: 0,
+                selectedImages: []
+            },
+            created() {
+                this.loadPosts();
+                // Lắng nghe sự kiện 'like-comment' từ EventBus
+                this.EventBus.$on('like-comment', this.likeComment);
+                this.EventBus.$on('reply-comment', this.replyToComment);
+
+            },
+            methods: {
+                toggleImageUpload() {
+                    this.showImageUpload = true;
+                },
+                triggerFileInput() {
+                    this.$refs.fileInput.click();
+                },
+                handleFileUpload(event) {
+                    const files = event.target.files;
+                    if (files.length) {
+                        this.files = Array.from(files); // Lưu trữ tất cả file vào mảng files
+
+                        // Tạo URL xem trước cho tất cả các ảnh đã chọn
+                        this.selectedImages = this.files.map(file => URL.createObjectURL(file));
+                    }
+                },
+                openSlideshow(images, startIndex = 0) {
+                    this.slideshowImages = images;
+                    this.currentSlideIndex = startIndex;
+                    this.showSlideshow = true;
+                },
+                closeSlideshow() {
+                    this.showSlideshow = false;
+                },
+                nextSlide() {
+                    this.currentSlideIndex = (this.currentSlideIndex + 1) % this.slideshowImages.length;
+                },
+                prevSlide() {
+                    this.currentSlideIndex = (this.currentSlideIndex - 1 + this.slideshowImages.length) % this.slideshowImages.length;
+                },
+                removeImage() {
+                    this.selectedImages = [];
+                    this.files = []; // Xóa tất cả các file đã chọn
+                    this.showImageUpload = false;
+                },
+                async postingPost() {
+                    const createdDate = moment().utcOffset(7).format('YYYY-MM-DDTHH:mm:ss.SSSZ'); // ISO-like format with milliseconds and UTC+7
+                    const formData = new FormData();
+                    formData.append('UserId', this.userId);
+                    formData.append('Content', this.newPostContent);
+                    formData.append('CreatedDate', createdDate);
+                    formData.append('PostFor', parseInt(this.newPostFor));
+
+                    if (this.files && this.files.length > 0) {
+                        this.files.forEach((file) => {
+                            formData.append('ImageFile', file); // Không cần chỉ mục, chỉ dùng 'ImageFile'
+                        });
+                    }
+
+                    try {
+                        // Gửi yêu cầu POST tới controller trong backend
+                        const response = await fetch('/Post/ShareAndAddNew', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        // Kiểm tra phản hồi từ server
+                        const data = await response.json();
+
+                        if (response.ok && data.success) {
+                            // Nếu thành công, tải lại danh sách bài viết
+                            this.loadPosts();
+
+                            // Đặt lại trạng thái các biến sau khi đăng thành công
+                            this.newPostContent = '';
+                            this.newPostFor = 0;
+                            this.files = []; // Xóa các file đã chọn
+                            this.selectedImage = null; // Xóa hình ảnh xem trước
+                            this.showImageUpload = false; // Đóng giao diện tải ảnh
+                        } else {
+                            // Xử lý lỗi nếu bài viết không được đăng thành công
+                            console.error('Lỗi khi đăng bài:', data.message || 'Có lỗi xảy ra');
+                        }
+                    } catch (error) {
+                        // Xử lý lỗi nếu có vấn đề trong quá trình gửi yêu cầu
+                        console.error('Lỗi khi gửi yêu cầu:', error);
+                    }
+                },
+                async sharePost(post) {
+                    // Use Moment.js to get the current time in VN timezone (UTC+7) with milliseconds
+                    const createdDate = moment().utcOffset(7).format('YYYY-MM-DDTHH:mm:ss.SSSZ'); // ISO-like format with milliseconds and UTC+7
+
+                    const postData = {
+                        UserId: this.userId, // ID người dùng
+                        PostId: post.id, // Nếu muốn cập nhật bài viết hiện có, có thể thay đổi
+                        CreatedDate: createdDate, // Use moment.js to format the current time
+                    };
+
+                    try {
+                        console.log(postData);
+                        const response = await fetch('/Post/ShareAndAddNew', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json charset=utf-8' // Define the content type
+                            },
+                            body: JSON.stringify(postData) // Send the postData as JSON
+                        });
+
+                        // Kiểm tra phản hồi từ server
+                        const data = await response.json();
+
+                        if (response.ok && data.success) {
+                            // Nếu thành công, tải lại danh sách bài viết
+                            this.loadPosts();
+
+                            // Đặt lại trạng thái các biến sau khi đăng thành công
+                            this.newPostContent = '';
+                            this.newPostFor = '0'; // Đặt lại mức độ hiển thị về mặc định là công khai
+                        } else {
+                            // Xử lý lỗi nếu bài viết không được đăng thành công
+                            console.error('Lỗi khi đăng bài:', data.message || 'Có lỗi xảy ra');
+                        }
+                    } catch (error) {
+                        // Xử lý lỗi nếu có vấn đề trong quá trình gửi yêu cầu
+                        console.error('Lỗi khi gửi yêu cầu:', error);
+                    }
+                },
+                async loadPosts() {
+                    try {
+                        const response = await fetch('/Post/GetAll');
+                        const data = await response.json();
+
+                        this.posts = data.apiData.map(post => {
+                            // Convert Unix timestamps to JS Date objects for display
+                            const createdDate = new Date(post.createdDate * 1000);
+                            post.displayDate = this.getRelativeTime(createdDate);
+
+                            // Fetch reactions for the post and store them in postReactions
+                            this.getPostReactions(post);
+
+                            return post;
+
+                        });
+                    } catch (error) {
+                        console.error('Error fetching posts:', error);
+                    }
+                },
+                async getPostReactions(post) {
+                    try {
+                        const response = await fetch(`/Post/GetReactionByPost?postid=${post.id}`);
+                        const data = await response.json();
+
+                        // Add reactions to the postReactions array for this specific post
+                        this.$set(this.postReactions, post.id, data.apiData);
+
+                        if (!post.hasOwnProperty('likedByCurrentUser')) {
+                            Vue.set(post, 'likedByCurrentUser', false); // Default to false if not set
+                        }
+
+                        // Check if the current user has reacted to this post within postReactions[post.id]
+                        if (this.postReactions[post.id] != null) {
+                            post.likedByCurrentUser = this.postReactions[post.id].some(reaction => reaction.userId === this.userId);
+                        } else {
+                            post.likedByCurrentUser = false
+                        }
+
+                    } catch (error) {
+                        console.error('Error fetching reactions:', error);
+                    }
+                },
+                async likePost(post) {
+                    const postData = {
+                        UserId: this.userId,
+                        PostId: post.id,
+                        type: post.likedByCurrentUser ? 0 : 1 // 0 = unlike, 1 = like
+                    };
+
+                    try {
+                        const response = await fetch('/Post/ReactionPost', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json charset=utf-8'
+                            },
+                            body: JSON.stringify(postData)
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok && data.success) {
+                            post.likedByCurrentUser = !post.likedByCurrentUser; // Toggle the like status
+
+                            // Refresh the reactions after like/unlike
+                            this.loadPosts();
+                        } else {
+                            console.error('Error liking post:', data.message || 'An error occurred');
+                        }
+                    } catch (error) {
+                        console.error('Error sending like request:', error);
+                    }
+                },
+                getRelativeTime(date) {
+                    const now = new Date();
+                    const rtf = new Intl.RelativeTimeFormat('vi', { numeric: 'auto' });
+                    const diffInSeconds = Math.floor((now - date) / 1000);
+                    const diffInMinutes = Math.floor(diffInSeconds / 60);
+                    const diffInHours = Math.floor(diffInMinutes / 60);
+                    const diffInDays = Math.floor(diffInHours / 24);
+                    const diffInMonths = Math.floor(diffInDays / 30);
+
+                    if (diffInSeconds < 60) {
+                        return rtf.format(-diffInSeconds, 'second');
+                    } else if (diffInMinutes < 60) {
+                        return rtf.format(-diffInMinutes, 'minute');
+                    } else if (diffInHours < 24) {
+                        return rtf.format(-diffInHours, 'hour');
+                    } else if (diffInDays < 30) {
+                        return rtf.format(-diffInDays, 'day');
+                    } else {
+                        return date.toLocaleDateString('vi-VN', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                        });
+                    }
+                },
+                loadComments(postId) {
+                    fetch(`/Comment/GetCommentByPostId/${postId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.commentsNotBuild = data.apiData;
+                            this.comments = data.apiData.map(comment => {
+                                const createdDate = new Date(comment.createdDate * 1000);
+                                comment.displayDate = this.getRelativeTime(createdDate);
+
+
+                                this.getCommentReactions(comment);
+                                return comment;
+                                console.log(comment);
+                            });
+                            // Sau khi xử lý thời gian, xây dựng cấu trúc bình luận
+                            this.comments = this.buildCommentThread(this.comments);
+                        })
+                        .catch(error => console.error('Error fetching comments:', error));
+                },
+                async getCommentReactions(comment) {
+                    try {
+                        const response = await fetch(`/Comment/GetReactionByComment?commentid=${comment.id}`);
+                        const data = await response.json();
+                        console.log(data.apiData);
+                        this.$set(this.commentReactions, comment.id, data.apiData);
+
+
+                        if (!comment.hasOwnProperty('likedByCurrentUser')) {
+                            Vue.set(comment, 'likedByCurrentUser', false);
+                        }
+
+                        if (this.commentReactions[comment.id] != null) {
+                            comment.likedByCurrentUser = this.commentReactions[comment.id].some(reaction => reaction.userId === this.userId);
+                        } else {
+                            comment.likedByCurrentUser = false
+                        }
+
+                    } catch (error) {
+                        console.error('Error fetching reactions:', error);
+                    }
+                },
+                showComments(post) {
+                    this.selectedPost = post;
+                    this.loadComments(post.id);
+                    $('#commentsModal').modal('show');
+                },
+                buildCommentThread(comments) {
+                    const MAX_DEPTH = 2;
+                    const map = {};
+                    const result = [];
+
+                    comments.forEach(comment => {
+                        comment.childrenArray = [];
+                        comment.depth = 0;
+                        map[comment.id] = comment;
+                        comment.expanded = false;
+                    });
+
+                    comments.forEach(comment => {
+                        if (comment.commentId !== null) {
+                            const parent = map[comment.commentId];
+                            if (parent) {
+                                comment.depth = parent.depth + 1;
+
+                                if (parent.depth < MAX_DEPTH) {
+                                    parent.childrenArray.push(comment);
+                                } else {
+                                    let ancestor = parent;
+                                    while (ancestor.depth >= MAX_DEPTH) {
+                                        ancestor = map[ancestor.commentId];
+                                    }
+                                    comment.depth = MAX_DEPTH;
+                                    ancestor.childrenArray.push(comment);
+                                }
+                            }
+                        } else {
+                            result.push(comment);
+                        }
+                    });
+
+                    return result;
+                },
+                async likeComment(commentId) {
+                    console.log("Comment ID (parent):", commentId);
+                    const comment = this.commentsNotBuild.find(c => c.id === commentId);
+                    if (!comment) {
+                        console.error('Comment not found!');
+                        return;
+                    }
+
+                    const commentData = {
+                        UserId: this.userId,
+                        CommentId: comment.id,
+                        type: comment.likedByCurrentUser ? 0 : 1, // 0 = unlike, 1 = like
+                    };
+
+                    try {
+                        const response = await fetch('/Comment/ReactionComment', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json; charset=utf-8'
+                            },
+                            body: JSON.stringify(commentData)
+                        });
+
+                        const data = await response.json();
+
+                        if (data.success) {
+                            comment.likedByCurrentUser = !comment.likedByCurrentUser;
+                            comment.reactCount += comment.likedByCurrentUser ? 1 : -1;
+                        } else {
+                            console.error('Failed to like/unlike comment on the server');
+                        }
+                    } catch (error) {
+                        console.error('Error sending like request:', error);
+                    }
+                },
+                replyToComment(comment) {
+                    console.log(comment);
+                    this.replyTarget = comment;
+                    this.newComment = '@@' + `${comment.fullName} `;
+                    this.$nextTick(() => {
+                        // Ensure the input field is focused after being rendered
+                        const inputField = document.querySelector('.add-comment input');
+                        if (inputField) inputField.focus();
+                    });
+                },
+                async addComment() {
+                    if (!this.newComment.trim()) {
+                        alert('Please enter a comment.');
+                        return;
+                    }
+                    const createdDate = moment().utcOffset(7).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+
+                    const newCommentData = {
+                        userId: this.userId,
+                        content: this.newComment,
+                        postId: this.selectedPost.id,
+                        commentId: this.replyTarget ? this.replyTarget.id : null,  // Use replyTarget if replying
+                        CreatedDate: createdDate,
+                    };
+
+                    try {
+                        const response = await fetch('/Comment/AddNew', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(newCommentData),
+                        });
+                        const data = await response.json();
+
+                        if (data.success) {
+                            this.loadComments(this.selectedPost.id);
+                            this.newComment = '';  // Clear the comment input
+                            this.replyTarget = null;  // Reset the reply target after submitting
+                            console.log('Comment added successfully');
+                        } else {
+                            console.error('Error adding comment:', data.message || 'Failed to add comment.');
+                        }
+                    } catch (error) {
+                        console.error('Error submitting comment:', error);
+                    }
+                }
+            },
+            beforeDestroy() {
+                // Loại bỏ lắng nghe sự kiện để tránh memory leaks khi component bị hủy
+                this.EventBus.$off('like-comment', this.likeComment);
+            }
+        });
+    </script>
+    }
+<div class="gap2 gray-bg" id="app">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="row merged20" id="page-contents">
-                    <div class="col-lg-3">
+                    <div class="col-lg-3" style="height:fit-content;">
                         <aside class="sidebar static left">
                             <div class="widget stick-widget">
-                                <h4 class="widget-title">Shortcuts</h4>
+                                <h4 class="widget-title">Lối tắt</h4>
                                 <ul class="naves">
                                     <li>
                                         <i class="ti-clipboard"></i>
-                                        <a href="newsfeed.html" title="">News feed</a>
+                                        <a href="newsfeed.html" title="">Bảng tin</a>
                                     </li>
                                     <li>
                                         <i class="ti-mouse-alt"></i>
-                                        <a href="inbox.html" title="">Inbox</a>
+                                        <a href="inbox.html" title="">Hộp thư</a>
                                     </li>
                                     <li>
                                         <i class="ti-files"></i>
-                                        <a href="fav-page.html" title="">My pages</a>
+                                        <a href="fav-page.html" title="">Trang của tôi</a>
                                     </li>
                                     <li>
                                         <i class="ti-user"></i>
-                                        <a href="timeline-friends.html" title="">friends</a>
+                                        <a href="timeline-friends.html" title="">Bạn bè</a>
                                     </li>
                                     <li>
                                         <i class="ti-image"></i>
-                                        <a href="timeline-photos.html" title="">Images</a>
+                                        <a href="timeline-photos.html" title="">Hình ảnh</a>
                                     </li>
                                     <li>
                                         <i class="ti-video-camera"></i>
-                                        <a href="timeline-videos.html" title="">Videos</a>
+                                        <a href="timeline-videos.html" title="">Video</a>
                                     </li>
                                     <li>
                                         <i class="ti-comments-smiley"></i>
-                                        <a href="messages.html" title="">Messages</a>
+                                        <a href="messages.html" title="">Tin nhắn</a>
                                     </li>
                                     <li>
                                         <i class="ti-bell"></i>
-                                        <a href="notifications.html" title="">Notifications</a>
+                                        <a href="notifications.html" title="">Thông báo</a>
                                     </li>
                                     <li>
                                         <i class="ti-power-off"></i>
-                                        <a href="landing.html" title="">Logout</a>
+                                        <a href="landing.html" title="">Đăng xuất</a>
                                     </li>
                                 </ul>
                             </div>
@@ -307,77 +1012,67 @@
                     </div>
                     <div class="col-lg-8">
                         <div class="central-meta postbox">
-                            <span class="create-post">Create post</span>
+                            <span class="create-post">Tạo bài viết</span>
                             <div class="new-postbox">
-                                <figure>
-                                    <img src="~/images/resources/admin.jpg" alt="">
-                                </figure>
-                                <div class="newpst-input">
-                                    <form v-on:submit.prevent="postingPost">
-                                        <textarea v-model="newPostContent" rows="2" placeholder="Chia sẻ điều bạn đang nghĩ?"></textarea>
-                                    </form>
-                                </div>
-
-                                <!-- Dropdown lựa chọn mức độ hiển thị bài viết -->
-                                <div class="privacy-selection">
-                                    <label for="postFor">Chọn đối tượng xem:</label>
-                                    <select v-model="newPostFor">
-                                        <option v-bind:value="0">Công khai</option>
-                                        <option v-bind:value="1">Bạn bè</option>
-                                        <option v-bind:value="2">Chỉ một mình tôi</option>
-                                    </select>
-                                </div>
-                                <div class="attachments">
-                                    <ul>
-                                        <li>
-                                            <span class="add-loc">
-                                                <svg class="fa fa-location-dot"></svg>
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <svg class="fa fa-music"></svg>
-                                            <label class="fileContainer">
-                                                <input type="file">
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <svg class="fa fa-image"></svg>
-                                            <label class="fileContainer">
-                                                <input type="file">
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <svg class="fa fa-camcorder"></svg>
-                                            <label class="fileContainer">
-                                                <input type="file">
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <svg class="fa fa-instagram"></svg>
-                                            <label class="fileContainer">
-                                                <input type="file">
-                                            </label>
-                                        </li>
-                                    </ul>
-                                    <button class="post-btn" v-on:click="postingPost">Đăng bài</button>
-                                </div>
-                                <div class="add-location-post">
-                                    <span>Drag map point to selected area</span>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <label class="control-label">Lat :</label>
-                                            <input type="text" id="us3-lat">
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <label>Long :</label>
-                                            <input type="text" id="us3-lon">
+                                <div class="d-flex">
+                                    <div style="margin-right:10px">
+                                        <img src="~/images/resources/admin.jpg" alt="">
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <div class="d-flex">Minh Phước</div>
+                                        <div>
+                                            <select v-model="newPostFor">
+                                                <option v-bind:value="0" selected>Công khai</option>
+                                                <option v-bind:value="1">Bạn bè</option>
+                                                <option v-bind:value="2">Chỉ một mình tôi</option>
+                                            </select>
                                         </div>
                                     </div>
-                                    <div id="us3"></div>
                                 </div>
+                                <div class="newpst-input">
+                                    <form v-on:submit.prevent="postingPost" enctype="multipart/form-data" class="post-form">
+                                        <textarea v-model="newPostContent"
+                                                  rows="2"
+                                                  placeholder="Chia sẻ điều bạn đang nghĩ?"
+                                                  class="post-textarea">
+                </textarea>
+
+                                        <!-- Giao diện tải lên ảnh/video, ẩn theo mặc định -->
+                                        <div v-if="showImageUpload" class="image-upload-modal" style="position:relative">
+
+                                            <div v-if="!selectedImages || selectedImages.length === 0" v-on:click="triggerFileInput" class="image-upload-placeholder">
+                                                <span>
+                                                    Thêm ảnh/video hoặc kéo và thả
+                                                </span>
+                                            </div>
+
+                                            <div v-else class="image-preview" v-for="(image, index) in selectedImages" :key="index">
+                                                <img :src="image" alt="Selected Image" class="image-preview-img">
+                                            </div>
+
+                                            <input type="file" ref="fileInput" v-on:change="handleFileUpload" style="display: none;" multiple>
+                                            <button class="remove-image" v-on:click="removeImage">
+                                                <i class="fa-solid fa-x"></i>
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                    <div class="import-list">
+                                        <div class="attachments" v-on:click="toggleImageUpload">
+                                            <p>Thêm thứ gì đó vào bài viết của bạn:</p>
+                                            <i class="fa fa-image"></i>
+                                        </div>
+                                    </div>
+                                    <button class="post-btn"
+                                            type="submit"
+                                            v-on:click="postingPost"
+                                            :disabled="!newPostContent && selectedImages != null">
+                                        Đăng bài
+                                    </button>
+                                </div>
+
                             </div>
                         </div>
-
                         <div v-for="post in posts" :key="post.id" class="loadMore">
                             <div class="central-meta item">
                                 <div class="user-post">
@@ -390,150 +1085,262 @@
                                                 <div class="more-post-optns">
                                                     <i class="ti-more-alt"></i>
                                                     <ul>
-                                                        <li v-on:click="editPost(post)"><i class="fa-sharp fa-regular fa-square-pen"></i> Edit Post</li>
-                                                        <li v-on:click="deletePost(post)"><i class="fa-regular fa-trash"></i> Delete Post</li>
-                                                        <li v-on:click="toggleNotifications(post)"><i class="fa-sharp fa-regular fa-bell"></i> Turn off Notifications</li>
+                                                        <li v-on:click="editPost(post)"><i class="fa-sharp fa-regular fa-square-pen"></i> Chỉnh sửa bài viết</li>
+                                                        <li v-on:click="deletePost(post)"><i class="fa-regular fa-trash"></i> Xóa bài viết</li>
+                                                        <li v-on:click="toggleNotifications(post)"><i class="fa-sharp fa-regular fa-bell"></i> Tắt thông báo</li>
                                                     </ul>
                                                 </div>
                                             </div>
                                             <ins>
                                                 <a href="time-line.html" title="">{{ post.fullName }}</a>
                                             </ins>
-                                            <span>published: {{ post.displayDate }}</span>
+                                            <span>đã đăng: {{ post.displayDate }}</span>
                                         </div>
                                         <div class="post-meta">
-                                            <!-- If it's not a shared post, just display the current post content -->
                                             <div class="description">
                                                 <p class="content">{{ post.postContent }}</p>
-                                            </div>
-
-                                            <div class="we-video-info">
-                                                <div class="interaction-bar">
-                                                    <div class="reaction-summary">
-                                                        <span class="reaction-icons">
-                                                            <i class="fa fa-thumbs-up"></i>
-                                                        </span>
-                                                        <span class="reaction-count">{{ post.reactCount }}</span>
+                                                <div v-if="post.imageUrls && post.imageUrls.length > 0">
+                                                    <div v-if="post.imageUrls.length === 4" class="image-grid-four">
+                                                        <img v-for="url in post.imageUrls" :key="url" :src="url" alt="Post Image" class="image-item">
                                                     </div>
-                                                    <div class="interaction-summary">
-                                                        <span class="comment-count" style="margin-right: 5px;" v-on:click="showComments(post)">{{ post.commentCount }} comments</span>
-                                                        <span class="share-count" style="margin-right: 5px;">{{ post.shareCount }} shares</span>
+
+                                                    <div v-else-if="post.imageUrls.length === 3" class="image-grid-three">
+                                                        <img v-for="url in post.imageUrls" :key="url" :src="url" alt="Post Image" class="image-item">
                                                     </div>
-                                                </div>
-                                                <div class="action-buttons">
-                                                    <button class="action-btn like-btn"
-                                                            v-on:click="likePost(post)"
-                                                            v-bind:class="{ active: post.likedByCurrentUser }">
-                                                        <i class="fa fa-thumbs-up" style="margin-right: 7px;"></i> Like
-                                                    </button>
 
+                                                    <div v-else-if="post.imageUrls.length === 2" class="image-grid-two">
+                                                        <img v-for="url in post.imageUrls" :key="url" :src="url" alt="Post Image" class="image-item">
+                                                    </div>
 
-                                                    <button class="action-btn comment-btn" v-on:click="showComments(post)">
-                                                        <i class="fa fa-comment" style="margin-right: 7px;"></i> Comment
-                                                    </button>
-                                                    <button class="action-btn share-btn" v-on:click="sharePost(post)">
-                                                        <i class="fa fa-share" style="margin-right: 7px;"></i> Share
-                                                    </button>
+                                                    <div v-else-if="post.imageUrls.length > 4" class="image-grid-more">
+                                                        <img v-for="(url, index) in post.imageUrls.slice(0, 3)" :key="url" :src="url" alt="Post Image" class="image-item">
+                                                        <div class="image-item overlay-container" v-on:click="openSlideshow(post.imageUrls, 3)">
+                                                            <img :src="post.imageUrls[3]" alt="Post Image" class="overlay-image">
+                                                            <div class="overlay-text">
+                                                                +{{ post.imageUrls.length - 4 }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else class="post-image-container">
+                                                        <img :src="post.imageUrls[0]" alt="Post Image" class="single-image">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Modal for Comments -->
-                        <div class="modal fade" id="commentsModal" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <!-- Modal header -->
-                                    <div class="modal-header d-flex align-items-center">
-                                        <h5 class="modal-title mx-auto" id="commentsModalLabel">{{ selectedPost.fullName }}'s Post</h5>
-                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
 
-                                    <!-- Modal body for comments -->
-                                    <div class="modal-body">
-                                        <!-- Post information -->
-                                        <div class="user-post">
-                                            <div class="friend-info">
-                                                <figure>
-                                                    <img src="~/images/resources/friend-avatar10.jpg" alt="">
-                                                </figure>
-                                                <div class="friend-name">
-                                                    <ins><a href="time-line.html" title="">{{ selectedPost.fullName }}</a></ins>
-                                                    <span>published: {{ selectedPost.displayDate }}</span>
-                                                </div>
-                                                <div class="post-meta">
-                                                    <p class="content">{{ selectedPost.postContent }}</p>
-                                                </div>
-                                                <div class="interaction-bar">
-                                                    <div class="reaction-summary">
-                                                        <span class="reaction-icons">
-                                                            <i class="fa fa-thumbs-up"></i>
-                                                        </span>
-                                                        <span class="reaction-count">{{ selectedPost.reactCount }}</span>
-                                                    </div>
-                                                    <div class="interaction-summary">
-                                                        <span class="comment-count" style="margin-right: 5px;">{{ selectedPost.commentCount }} comments</span>
-                                                        <span class="share-count" style="margin-right: 5px;">{{ selectedPost.shareCount }} shares</span>
-                                                    </div>
-                                                </div>
-                                                <div class="action-buttons">
-                                                    <button class="action-btn like-btn" v-bind:class="{ active: selectedPost.likedByCurrentUser }" v-on:click="likePost(selectedPost)">
-                                                        <i class="fa fa-thumbs-up" style="margin-right: 7px;"></i> Like
-                                                    </button>
-                                                    <button class="action-btn comment-btn">
-                                                        <i class="fa fa-comment" style="margin-right: 7px;"></i> Comment
-                                                    </button>
-                                                    <button class="action-btn share-btn">
-                                                        <i class="fa fa-share" style="margin-right: 7px;" v-on:click="sharePost(selectedPost)"></i> Share
-                                                    </button>
-                                                </div>
+                                    <div class="we-video-info">
+                                        <div class="interaction-bar">
+                                            <div class="reaction-summary">
+                                                <span class="reaction-icons">
+                                                    <i class="fa fa-thumbs-up"></i>
+                                                </span>
+                                                <span class="reaction-count">{{ post.reactCount }}</span>
+                                            </div>
+                                            <div class="interaction-summary">
+                                                <span class="comment-count" style="margin-right: 5px;" v-on:click="showComments(post)">{{ post.commentCount }} bình luận</span>
+                                                <span class="share-count" style="margin-right: 5px;">{{ post.shareCount }} chia sẻ</span>
                                             </div>
                                         </div>
+                                        <div class="action-buttons">
+                                            <button class="action-btn like-btn"
+                                                    v-on:click="likePost(post)"
+                                                    v-bind:class="{ active: post.likedByCurrentUser }">
+                                                <i class="fa fa-thumbs-up" style="margin-right: 7px;"></i> Thích
+                                            </button>
 
-                                        <!-- Render top-level comments -->
-                                        <div class="comments-section mt-3">
-                                            <comment-item v-for="comment in comments"
-                                                          :key="comment.id"
-                                                          :comment="comment"
-                                                          v-on:reply="replyToComment"
-                                                          v-on:like="likeComment"></comment-item>
-                                        </div>
 
-                                        <!-- Add new comment -->
-                                        <div class="add-comment d-flex align-items-center mt-3 p-3 rounded bg-light">
-                                            <figure class="mr-2">
-                                                <img src="~/images/resources/admin.jpg" alt="Your Avatar" class="avatar rounded-circle">
-                                            </figure>
-                                            <div class="box-input position-relative w-100">
-                                                <input type="text" v-model="newComment" placeholder="Viết câu trả lời..." class="form-control custom-input rounded-pill px-4">
-                                                <!-- Icons inside the input box -->
-                                                <div class="input-icons d-flex align-items-center position-absolute">
-                                                    <i class="far fa-smile"></i>
-                                                    <i class="fas fa-camera"></i>
-                                                    <i class="fas fa-gif"></i>
-                                                    <i class="fas fa-sticky-note"></i>
-                                                </div>
-                                            </div>
-                                            <button class="btn btn-light ml-2"
-                                                    v-on:click="addComment"
-                                                    v-on:keyup.enter="addComment"
-                                                    v-bind:disabled="!newComment.trim()">
-                                                <i class="fas fa-paper-plane"></i>
+                                            <button class="action-btn comment-btn" v-on:click="showComments(post)">
+                                                <i class="fa fa-comment" style="margin-right: 7px;"></i> Bình luận
+                                            </button>
+                                            <button class="action-btn share-btn" v-on:click="sharePost(post)">
+                                                <i class="fa fa-share" style="margin-right: 7px;"></i> Chia sẻ
                                             </button>
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- Modal for Comments -->
+                <div class="modal fade" id="commentsModal" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <!-- Modal header -->
+                            <div class="modal-header d-flex align-items-center">
+                                <h5 class="modal-title mx-auto" id="commentsModalLabel">Bài viết của {{ selectedPost.fullName }}</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <!-- Modal body for comments -->
+                            <div class="modal-body">
+                                <!-- Post information -->
+                                <div class="user-post">
+                                    <div class="friend-info">
+                                        <figure>
+                                            <img src="~/images/resources/friend-avatar10.jpg" alt="">
+                                        </figure>
+                                        <div class="friend-name">
+                                            <ins><a href="time-line.html" title="">{{ selectedPost.fullName }}</a></ins>
+                                            <span>đã đăng: {{ selectedPost.displayDate }}</span>
+                                        </div>
+                                        <div class="post-meta">
+                                            <p class="content">{{ selectedPost.postContent }}</p>
+                                        </div>
+                                        <div class="interaction-bar">
+                                            <div class="reaction-summary">
+                                                <span class="reaction-icons">
+                                                    <i class="fa fa-thumbs-up"></i>
+                                                </span>
+                                                <span class="reaction-count">{{ selectedPost.reactCount }}</span>
+                                            </div>
+                                            <div class="interaction-summary">
+                                                <span class="comment-count" style="margin-right: 5px;">{{ selectedPost.commentCount }} bình luận</span>
+                                                <span class="share-count" style="margin-right: 5px;">{{ selectedPost.shareCount }} chia sẻ</span>
+                                            </div>
+                                        </div>
+                                        <div class="action-buttons">
+                                            <button class="action-btn like-btn" v-bind:class="{ active: selectedPost.likedByCurrentUser }" v-on:click="likePost(selectedPost)">
+                                                <i class="fa fa-thumbs-up" style="margin-right: 7px;"></i> Thích
+                                            </button>
+                                            <button class="action-btn comment-btn">
+                                                <i class="fa fa-comment" style="margin-right: 7px;"></i> Bình luận
+                                            </button>
+                                            <button class="action-btn share-btn">
+                                                <i class="fa fa-share" style="margin-right: 7px;" v-on:click="sharePost(selectedPost)"></i> Chia sẻ
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Render top-level comments -->
+                                <div class="comments-section mt-3">
+                                    <comment-item v-for="comment in comments"
+                                                  :key="comment.id"
+                                                  :comment="comment"
+                                                  v-on:reply="replyToComment"
+                                                  v-on:like="likeComment"></comment-item>
+                                </div>
+
+                                <!-- Add new comment -->
+                                <div class="add-comment d-flex align-items-center mt-3 p-3 rounded bg-light">
+                                    <figure class="mr-2">
+                                        <img src="~/images/resources/admin.jpg" alt="Your Avatar" class="avatar rounded-circle">
+                                    </figure>
+                                    <div class="box-input position-relative w-100">
+                                        <input type="text" v-model="newComment" placeholder="Viết câu trả lời..." class="form-control custom-input rounded-pill px-4">
+                                        <!-- Icons inside the input box -->
+                                        <div class="input-icons d-flex align-items-center position-absolute">
+                                            <i class="far fa-smile"></i>
+                                            <i class="fas fa-camera"></i>
+                                            <i class="fas fa-gif"></i>
+                                            <i class="fas fa-sticky-note"></i>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-light ml-2"
+                                            v-on:click="addComment"
+                                            v-on:keyup.enter="addComment"
+                                            v-bind:disabled="!newComment.trim()">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="showSlideshow" class="slideshow-modal">
+                    <div class="slideshow-content">
+                        <button class="close-slideshow" v-on:click="closeSlideshow">&times;</button>
+                        <img :src="slideshowImages[currentSlideIndex]" class="slideshow-image" alt="Slide Image">
+
+                        <!-- Navigation buttons -->
+                        <button class="prev-slide" v-on:click="prevSlide">&#10094;</button>
+                        <button class="next-slide" v-on:click="nextSlide">&#10095;</button>
+
+                        <!-- Indicator to show current slide number -->
+                        <div class="slide-indicator">{{ currentSlideIndex + 1 }} / {{ slideshowImages.length }}</div>
+                    </div>
+                </div>
+
+            </div>
             </div>
         </div>
     </div>
-</div>
+
+<script>
+    Vue.component('comment-item', {
+        props: ['comment'],
+        data() {
+            return {
+                expanded: this.comment.expanded || false,
+            };
+        },
+        methods: {
+            toggleComments() {
+                this.expanded = !this.expanded;
+            },
+            likeComment() {
+                // Gọi EventBus từ root instance
+                this.$root.EventBus.$emit('like-comment', this.comment.id);
+            },
+            replyComment() {
+                this.$root.EventBus.$emit('reply-comment', this.comment);
+
+            }
+        },
+        template: `
+    <div class="comment-item" :class="{ 'depth-0': comment.depth === 0 }">
+        <div class="comment-container">
+            <div v-if="comment.depth > 0" class="comment-border"></div>
+            <div class="comment-body" :style="{ paddingLeft: comment.depth === 0 ? '0px' : (40 * comment.depth + 'px') }">
+                <figure class="mr-2">
+                    <img src="/images/resources/admin.jpg" alt="User Avatar" class="avatar rounded-circle">
+                </figure>
+                <div>
+                    <div class="comment-content">
+                        <strong>{{ comment.fullName }}</strong>
+                        <p class="mb-1">{{ comment.content }}</p>
+                    </div>
+                    <div class="comment-actions">
+                        <!-- Gọi method likeComment để phát sự kiện like -->
+                        <span v-on:click="likeComment">
+                            <span class="like-comment" :class="{ 'active': comment.likedByCurrentUser }">
+                                Thích
+                            </span>
+                        </span>
+                        <span v-on:click="replyComment">Phản hồi</span>
+                        <span class="timestamp">{{ comment.displayDate }}</span>
+                        <span class="react-comment-count" style="margin-right: 5px;">
+                            {{ comment.reactCount }} thích
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Show replies only if expanded -->
+         <div v-if="comment.childrenArray && comment.childrenArray.length > 0">
+            <div v-if="expanded" class="comment-replies">
+                <comment-item v-for="child in comment.childrenArray"
+                              :key="child.id"
+                              :comment="child"
+                              v-on:reply="$emit('reply', child)"
+                              v-on:like="$emit('like', child.id)">
+                </comment-item>
+            </div>
+
+            <div class="see-more-comments-container">
+                <div v-if="comment.depth < 2" class="comment-border" :class="{ 'depth-0': comment.depth === 0, 'depth-1': comment.depth === 1 }"></div>
+                <button v-if="!expanded" v-on:click="toggleComments" class="see-more-comments" :class="{ 'depth-0': comment.depth === 0, 'depth-1': comment.depth === 1 }">See More Comments</button>
+            </div>
+        </div>
+
+    </div>
+    `,
+    });
+</script>
+
