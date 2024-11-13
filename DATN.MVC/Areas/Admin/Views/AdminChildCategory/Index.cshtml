@@ -1,0 +1,107 @@
+﻿@model IEnumerable<DATN.MVC.Areas.Admin.Models.AdminChildCategory.Response.CategoriesChild_Res>
+
+<style>
+    /* Định dạng bảng */
+    .table {
+        width: 100%;
+        max-width: 800px;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        /* Header của bảng */
+        .table thead {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+            .table thead th {
+                padding: 12px;
+                font-weight: bold;
+                text-align: left;
+                font-size: 14px;
+            }
+
+        /* Các hàng dữ liệu */
+        .table tbody tr {
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s;
+        }
+
+        /* Định dạng ô dữ liệu */
+        .table tbody td {
+            padding: 12px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* Đổi màu khi di chuột qua hàng */
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+</style>
+
+<h2 style="text-align: center;">Danh Sách Danh Mục Con</h2>
+<!-- Nút thêm danh mục nhỏ -->
+<div style="text-align: center;">
+    <a href="@Url.Action("CreateChildCategory", "AdminChildCategory")" class="btn-add-category">Thêm Danh Mục Con</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên danh mục</th>
+            <th>ID Danh mục lớn</th>
+            <th>Ngày tạo</th>
+            <th>Ngày cập nhật</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@(item.ParentCategoryId.HasValue ? item.ParentCategoryId.Value.ToString() : "Không có")</td> <!-- Hiển thị ID của danh mục cha -->
+                <td>@item.CreatedDate</td> <!-- Hiển thị ngày tạo -->
+                <td>@item.UpdatedDate</td> <!-- Hiển thị ngày cập nhật -->
+                <td>
+                    <!-- Nút sửa liên kết đến action UpdateChildCategory -->
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Chỉnh sửa</a>
+                    <button type="button" class="btn btn-danger" onclick="deleteCategory(@item.Id)">Xóa</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        function deleteCategory(id) {
+            // Hiển thị hộp thoại xác nhận
+            if (confirm("Bạn có chắc chắn muốn xóa danh mục con này không?")) {
+                // Nếu người dùng xác nhận, gửi yêu cầu xóa qua Ajax
+                $.ajax({
+                    url: '@Url.Action("DeleteChildCategory", "AdminCategory")' + '/' + id,
+                    type: 'POST',
+                    success: function (response) {
+                        alert('Xóa danh mục con thành công');
+                        location.reload(); // Tải lại trang để cập nhật danh sách
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Có lỗi xảy ra khi xóa danh mục con');
+                        console.error('Error:', error);
+                    }
+                });
+            } else {
+                // Nếu người dùng hủy, không làm gì cả
+                console.log("Người dùng đã hủy hành động xóa");
+            }
+        }
+    </script>
+}

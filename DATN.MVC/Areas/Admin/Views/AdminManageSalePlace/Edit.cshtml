@@ -1,0 +1,96 @@
+﻿@model DATN.MVC.Areas.Admin.Models.AdminSalePlace.Request.EditSalePlaceStatus_Req
+
+@{
+    ViewData["Title"] = "Chỉnh sửa trạng thái gian hàng";
+}
+
+<style>
+    .edit-saleplace-status-form-container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f1f1f1;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 50px;
+    }
+
+    .edit-saleplace-status-title {
+        text-align: center;
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .edit-saleplace-status-form-group {
+        margin-bottom: 15px;
+    }
+
+    .edit-saleplace-status-label {
+        font-weight: bold;
+        color: #555;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .edit-saleplace-status-input, .edit-saleplace-status-select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+
+    .edit-saleplace-status-btn {
+        width: 100%;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .edit-saleplace-status-btn:hover {
+            background-color: #0056b3;
+        }
+
+    .edit-saleplace-status-error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+</style>
+
+<div class="edit-saleplace-status-form-container">
+    <h2 class="edit-saleplace-status-title">@ViewData["Title"]</h2>
+
+    <form method="post" asp-action="UpdateStatusSalePlace" asp-controller="AdminManageSalePlace" >
+        <!-- Hiển thị ID gian hàng -->
+        <div class="edit-saleplace-status-form-group">
+            <label for="SalePlaceId" class="edit-saleplace-status-label">ID Gian hàng:</label>
+            <input type="text" id="SalePlaceId" name="Id" class="edit-saleplace-status-input" value="@Model.Id" readonly />
+        </div>
+
+        <!-- Hiển thị trạng thái gian hàng -->
+        <div class="edit-saleplace-status-form-group">
+            <label for="Status" class="edit-saleplace-status-label">Trạng thái gian hàng:</label>
+            <select id="Status" name="Status" class="edit-saleplace-status-select">
+                @if (Model.Status == 1)
+                {
+                    <option value="1" selected>Đang mở</option>
+                    <option value="0">Đang đóng</option>
+                }
+                else
+                {
+                    <option value="1">Đang mở</option>
+                    <option value="0" selected>Đang đóng</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="edit-saleplace-status-btn">Cập nhật trạng thái</button>
+    </form>
+</div>
