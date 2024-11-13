@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace DATN.MVC.Areas.Admin.Controllers
+namespace DATN.MVC.Areas.Admin.Controllers.AdminCategory
 {
     [Area("Admin")]
     public class AdminCategoryController : Controller
@@ -57,9 +57,6 @@ namespace DATN.MVC.Areas.Admin.Controllers
 
 
 
-
-
-
         // GET: AdminCategory/CreateParentCategory
         public IActionResult CreateParentCategory()
         {
@@ -96,10 +93,6 @@ namespace DATN.MVC.Areas.Admin.Controllers
             // Nếu Model không hợp lệ hoặc có lỗi, hiển thị lại form tạo danh mục
             return View(model);
         }
-
-
-
-
 
 
 
@@ -168,10 +161,6 @@ namespace DATN.MVC.Areas.Admin.Controllers
 
             return View("Edit", model);
         }
-
-
-
-
 
 
 
