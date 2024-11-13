@@ -6,7 +6,7 @@ namespace DATN.MVC.Models.Response
     public class Post_ReadAllRes
     {
         public int Id { get; set; }
-        public int UserID { get; set; }
+        public int UserId { get; set; }
         public string FullName { get; set; }
         public string PostContent { get; set; }
         public int? PostShareId { get; set; }
@@ -17,11 +17,8 @@ namespace DATN.MVC.Models.Response
         public int CommentCount { get; set; }
         public int ReactCount { get; set; }
         public int ShareCount { get; set; }
+        public List<string>? ImageUrls { get; set; }
 
-        public int? OriginalIdPost { get; set; } 
-        public string? OriginalPostOwner { get; set; }
-        public int? OriginalPostCreatedDate { get; set; }
-        public int? OriginalPostUpdatedDate { get; set; }
 
         // DateTime formatting helpers for the main post
         public DateTime CreatedDateTime
@@ -43,36 +40,6 @@ namespace DATN.MVC.Models.Response
         public string UpdatedDateFormatted
         {
             get => DateTimeHelper.FormatDateTimeVietnam(UpdatedDateTime);
-        }
-
-        // DateTime formatting helpers for the original post if it's shared
-        public DateTime? OriginalPostCreatedDateTime
-        {
-            get => OriginalPostCreatedDate.HasValue
-                ? DateTimeHelper.UnixToDateTime(OriginalPostCreatedDate.Value)
-                : (DateTime?)null;
-        }
-
-        public DateTime? OriginalPostUpdatedDateTime
-        {
-            get => OriginalPostUpdatedDate.HasValue
-                ? DateTimeHelper.UnixToDateTime(OriginalPostUpdatedDate.Value)
-                : (DateTime?)null;
-        }
-
-        // Formatted date-time for the original shared post
-        public string OriginalPostCreatedDateFormatted
-        {
-            get => OriginalPostCreatedDateTime.HasValue
-                ? DateTimeHelper.FormatDateTimeVietnam(OriginalPostCreatedDateTime.Value)
-                : null;
-        }
-
-        public string OriginalPostUpdatedDateFormatted
-        {
-            get => OriginalPostUpdatedDateTime.HasValue
-                ? DateTimeHelper.FormatDateTimeVietnam(OriginalPostUpdatedDateTime.Value)
-                : null;
         }
     }
 }

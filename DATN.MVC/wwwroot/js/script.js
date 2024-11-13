@@ -368,9 +368,6 @@ $(document).ready(function ($) {
     });
 
 
-    if ($.isFunction($.fn.chosen)) {
-        $("select").chosen();
-    }
     if ($.isFunction($.fn.userincr)) {
         $(".manual-adjust").userincr({
             buttonlabels: {

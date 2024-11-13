@@ -7,15 +7,27 @@ namespace DATN.MVC.Controllers
     {
         public IActionResult Index()
         {
-            var viewSettings = new ViewSettings
-            {
-                ShowSidebar = false, // Tắt sidebar
-                ShowHeader = true,   // Bật header
-                ShowFriendList = false // Tắt danh sách bạn bè
-            };
-            ViewBag.ViewSettings = viewSettings;
 
-            return View();
+            var userId = HttpContext.Session.GetInt32("UserID");
+            if (userId != null)
+            {
+                ViewBag.UserId = userId;
+                ViewBag.FullName = HttpContext.Session.GetString("FullName");
+                ViewBag.Token = HttpContext.Session.GetString("Token");
+                var viewSettings = new ViewSettings
+                {
+                    ShowSidebar = true, // Tắt sidebar
+                    ShowHeader = true,   // Bật header
+                    ShowFriendList = true // Tắt danh sách bạn bè
+                };
+                ViewBag.ViewSettings = viewSettings;
+
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
     }
 }

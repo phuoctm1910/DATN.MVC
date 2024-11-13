@@ -42,10 +42,12 @@ namespace DATN.MVC.Controllers
             {
                 // Lưu token vào session nếu đăng nhập thành công
                 HttpContext.Session.SetInt32("UserID", result.ID);
-                HttpContext.Session.SetString("UserName", result.UserName);
+                HttpContext.Session.SetString("FullName", result.FullName);
                 HttpContext.Session.SetString("RoleName", result.RoleName);
                 HttpContext.Session.SetString("Token", result.Token);
+                HttpContext.Session.SetString("UserImage", result.UserImage);
 
+                
 
 
                 return Json(new { success = true, message = "Login successful." });

@@ -8,8 +8,9 @@ namespace DATN.MVC.Request.Post
         public int UserId { get; set; }
         public int? PostId { get; set; }
         public string? Content { get; set; }
-        public string CreatedDate { get; set; }
+        public string? CreatedDate { get; set; }
         public int? PostFor { get; set; }
+        public IEnumerable<IFormFile>? ImageFile { get; set; }
     }
 
 

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace DATN.MVC.Helpers
 {
@@ -61,6 +62,53 @@ namespace DATN.MVC.Helpers
                 throw new Exception($"Error posting data: {ex.Message}");
             }
         }
+
+        public static T1 PostMethodWithFileAsync<T1, T2>(string apiUrl, T2 data, IEnumerable<IFormFile> files, string fileKeyName = "ImageFile")
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                using (var form = new MultipartFormDataContent())
+                {
+                    // Thêm các thuộc tính của đối tượng data vào form-data
+                    foreach (var property in typeof(T2).GetProperties())
+                    {
+                        var value = property.GetValue(data)?.ToString() ?? string.Empty;
+                        form.Add(new StringContent(value), property.Name);
+                    }
+
+                    // Thêm tất cả các tệp vào form-data với cùng tên fileKeyName
+                    if (files != null)
+                    {
+                        foreach (var file in files)
+                        {
+                            var fileContent = new StreamContent(file.OpenReadStream());
+                            fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+                            form.Add(fileContent, fileKeyName, file.FileName); // Dùng fileKeyName mà không có chỉ số
+                        }
+                    }
+
+                    // Gửi yêu cầu POST
+                    var response = client.PostAsync(apiUrl, form).Result;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = response.Content.ReadAsStringAsync().Result;
+                        return JsonConvert.DeserializeObject<T1>(responseContent);
+                    }
+                    else
+                    {
+                        var errorContent = response.Content.ReadAsStringAsync().Result;
+                        throw new Exception($"Failed to post data to API. Status Code: {response.StatusCode}, Error: {errorContent}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error posting data with file: {ex.Message}");
+            }
+        }
+
 
         public static T PutMethod<T>(string apiUrl, object data)
         {

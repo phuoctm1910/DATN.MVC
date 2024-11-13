@@ -1424,22 +1424,21 @@ header.sticky {
     width: 100%;
 }
 
-.sidebar .widget {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    margin-bottom: 20px;
-    background: #fff;
-    border: 1px solid #ede9e9;
-    border-radius: 6px;
-}
+    .sidebar .widget {
+        position: fixed;
+        margin-bottom: 20px;
+        background: #fff;
+        border: 1px solid #ede9e9;
+        border-radius: 6px;
+        width: 200px;
+        max-width: 200px;
+    }
 
 .sidebar .widget:last-child {
     margin-bottom: 0;
 }
 
 .sidebar .widget>ul {
-    display: inline-block;
     list-style: outside none none;
     margin-bottom: 0;
     padding: 0 20px 20px;
@@ -1449,14 +1448,13 @@ header.sticky {
 .sidebar .widget-title {
     border-bottom: 1px solid #e6ecf5;
     color: #474962;
-    display: inline-block;
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 20px;
     padding: 15px 20px;
     position: relative;
     text-transform: capitalize;
-    width: 100%;
+    width:100%;
 }
 
 .sidebar .widget-title::before {
@@ -1470,10 +1468,8 @@ header.sticky {
 }
 
 .sidebar .widget li {
-    display: inline-block;
+    display: block;
     margin-bottom: 14px;
-    position: relative;
-    width: 100%;
     align-items: center;
 }
 
@@ -1613,19 +1609,9 @@ ul.naves>li svg {
     vertical-align: top;
 }
 
-.newpst-input {
-    display: inline-block;
-    vertical-align: top;
-    width: 90%;
-}
 
-.newpst-input>form {
-    display: inline-block;
-    width: 100%;
-}
 
 .newpst-input textarea {
-    float: left;
     width: 100%;
     border: none;
 }
@@ -1717,7 +1703,7 @@ ul.naves>li svg {
 textarea {
     border: 1px solid #eeeeee;
     border-radius: 6px 6px 0 0;
-    padding: 10px;
+    padding: 20px 0;
     width: 100%;
     border-bottom: 0;
 }
@@ -2853,7 +2839,6 @@ footer::before {
 
 .widget {
     float: left;
-    width: 100%;
 }
 
 .location {
@@ -2905,7 +2890,6 @@ footer::before {
 .widget-title {
     float: left;
     margin-bottom: 35px;
-    width: 100%;
 }
 
 footer .widget-title h4 {
@@ -3438,6 +3422,7 @@ footer .widget .colla-apps>li a {
 /*-- widgets ---*/
 
 .sidebar .widget ul.recent-photos li {
+    position:fixed;
     float: left;
     margin-bottom: 5px;
     margin-left: 2.5px;
@@ -4408,16 +4393,6 @@ form .form-group.half:nth-child(2) {
     width: 100%;
 }
 
-.chosen-container-single .chosen-single {
-    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-    border: 1px solid #dedede;
-    box-shadow: none;
-    color: #535165 !important;
-    font-size: 13px;
-    font-weight: 300;
-    height: auto;
-    padding: 10px 12px;
-}
 
 form .dob .form-group {
     display: inline-block;
@@ -4425,9 +4400,6 @@ form .dob .form-group {
     width: 30.6%;
 }
 
-.chosen-container {
-    width: 100% !important;
-}
 
 form .dob .form-group:last-child {
     margin-right: 0;
@@ -8217,14 +8189,6 @@ input[type="checkbox"]:checked+label {
 .mesg-seting .set-title {
     margin-bottom: 5px;
     margin-top: 30px;
-}
-
-.chosen-container-active.chosen-with-drop .chosen-single div b {
-    background-position: -16px 10px;
-}
-
-.chosen-container-single .chosen-single div b {
-    background: rgba(0, 0, 0, 0) url("chosen-sprite.png") no-repeat scroll 0 10px;
 }
 
 .select-options .chosen-single>span {
