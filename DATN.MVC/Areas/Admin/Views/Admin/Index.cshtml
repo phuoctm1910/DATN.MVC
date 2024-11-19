@@ -1,0 +1,65 @@
+﻿@model IEnumerable<DATN.MVC.Areas.Admin.Models.UserRegistration>
+
+@{
+    ViewData["Title"] = "User Details";
+    var user = Model.FirstOrDefault();  // Assuming the model contains at least one user
+}
+
+<h2 class="text-center">Thông Tin Người Dùng</h2>
+
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="card-title">Chi Tiết Người Dùng</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <!-- Full Name -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Tên Đầy Đủ</label>
+                    <p>@user?.FullName</p>
+                </div>
+
+                <!-- Birth Date -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Ngày Sinh</label>
+                    <p>@user?.Birth.ToString("dd/MM/yyyy")</p>
+                </div>
+
+                <!-- Gender -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Giới Tính</label>
+                    <p>@(user.Gender ? "Nam" : "Nữ")</p>
+                </div>
+
+                <!-- Address -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Địa Chỉ</label>
+                    <p>@user?.Address</p>
+                </div>
+
+                <!-- Phone Number -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Số Điện Thoại</label>
+                    <p>@user?.PhoneNumber</p>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Email</label>
+                    <p>@user?.Email</p>
+                </div>
+
+                <!-- Role -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Quyền</label>
+                    <p>@(user?.RoleName == "Admin" ? "User" : "Admin")</p>
+                </div>
+            </div>
+            <div class="text-end">
+                <a asp-action="Edit" asp-route-id="@user?.Id" class="btn btn-primary">Chỉnh Sửa</a>
+                <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+            </div>
+        </div>
+    </div>
+</div>
