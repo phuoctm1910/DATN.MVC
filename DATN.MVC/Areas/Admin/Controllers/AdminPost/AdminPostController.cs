@@ -89,7 +89,6 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminPost
 
 
 
-
         [HttpPost]
         public async Task<IActionResult> UpdateStatusPost(EditPostStatus_Req model )
         {
@@ -121,6 +120,7 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminPost
 
             return View("Edit", model);
         }
+
 
 
 

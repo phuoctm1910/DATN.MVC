@@ -1,97 +1,135 @@
-﻿@model IEnumerable<DATN.MVC.Areas.Admin.Models.AdminCategory.Response.ParentCategoriesReadAll_Res>
-
+﻿<h1>Danh Sách Danh Mục Lớn</h1>
+<div style="margin: 20px 0;">
+    <!-- Nút kích hoạt Modal Thêm -->
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createParentCategoryModal">
+        Thêm danh mục lớn
+    </button>
+</div>
 <style>
-    /* Định dạng bảng */
-    .table {
-        width: 100%;
-        max-width: 800px;
-        margin: 20px auto;
-        border-collapse: collapse;
-        background-color: #ffffff;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        overflow: hidden;
+    /* Cải thiện kiểu dáng của nút "Tạo" */
+    .btn2.btn-primary {
+        margin-top: 10px;
+        background-color: #007bff; /* Màu nền xanh */
+        color: white; /* Màu chữ trắng */
+        border: none; /* Loại bỏ viền */
+        border-radius: 5px; /* Làm tròn các góc của nút */
+        padding: 10px 20px; /* Cách đều nội dung trong nút */
+        transition: background-color 0.3s, transform 0.2s; /* Hiệu ứng chuyển màu và phóng to khi hover */
     }
 
-        /* Header của bảng */
-        .table thead {
-            background-color: #007bff;
-            color: #ffffff;
-        }
+      
 
-            .table thead th {
-                padding: 12px;
-                font-weight: bold;
-                text-align: left;
-                font-size: 14px;
-            }
-
-        /* Các hàng dữ liệu */
-        .table tbody tr {
-            border-bottom: 1px solid #ddd;
-            transition: background-color 0.3s;
-        }
-
-        /* Định dạng ô dữ liệu */
-        .table tbody td {
-            padding: 12px;
-            font-size: 14px;
-            color: #333;
-        }
-
-        /* Đổi màu khi di chuột qua hàng */
-        .table tbody tr:hover {
-            background-color: #f1f1f1;
-        }
 </style>
-<h2 style="text-align: center;">Danh Sách Danh Mục Lớn</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Tên danh mục</th>
-            <th>Trạng thái</th>
-            <th>Hành động</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Name</td>
-                <td>@(item.IsActived ? "Sử dụng" : "Không sử dụng")</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Chỉnh sửa</a>
-                    <button type="button" class="btn btn-danger" onclick="deleteCategory(@item.Id)">Xóa</button>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<!-- Card chứa bảng -->
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Danh Mục Lớn
+    </div>
+    <div class="card-body">
+        <table id="datatablesParentCategory" class="table table-striped table-bordered" style="margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên danh mục</th>
+                    <th>Trạng thái</th>
+                    <th>Ngày tạo</th>  <!-- Thêm cột Ngày tạo -->
+                    <th>Ngày cập nhật</th> <!-- Thêm cột Ngày cập nhật -->
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>@(item.IsActived ? "Sử dụng" : "Không sử dụng")</td>
+                        <td>@item.CreatedDateTime.ToString("dd/MM/yyyy HH:mm")</td> <!-- Hiển thị Ngày tạo -->
+                        <td>@item.UpdatedDateTime.ToString("dd/MM/yyyy HH:mm")</td> <!-- Hiển thị Ngày cập nhật -->
+                        <td>
+                            <!-- Nút Chỉnh sửa -->
+                            <button type="button" class="btn btn-primary edit-category-btn"
+                                    data-id="@item.Id"
+                                    data-name="@item.Name"
+                                    data-status="@item.IsActived"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editParentCategoryModal">
+                                Chỉnh sửa
+                            </button>
+                            <!-- Nút Xóa -->
+                            <button type="button" class="btn btn-danger" onclick="deleteCategory(@item.Id)">Xóa</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+<!-- Modal Thêm danh mục lớn -->
+<div class="modal fade" id="createParentCategoryModal" tabindex="-1" aria-labelledby="createParentCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createParentCategoryModalLabel">Thêm Danh Mục Lớn</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createCategoryForm">
+                    <div class="form-group">
+                        <label for="Name">Tên Danh Mục:</label>
+                        <input type="text" id="Name" name="Name" class="form-control" required />
+                        <span id="NameError" class="error-message" style="color: red;"></span> <!-- Thông báo lỗi -->
+                    </div>
+                    <div class="form-group">
+                        <label for="IsActived">Trạng Thái Danh Mục:</label>
+                        <select id="IsActived" name="IsActived" class="form-control" required>
+                            <option value="true">Sử dụng</option>
+                            <option value="false">Không sử dụng</option>
+                        </select>
+                        <span id="IsActivedError" class="error-message"></span>
+                    </div>
+                    <button type="submit" class="btn2 btn-primary">Tạo</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Chỉnh sửa danh mục -->
+<div class="modal fade" id="editParentCategoryModal" tabindex="-1" aria-labelledby="editParentCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editParentCategoryModalLabel">Chỉnh sửa danh mục lớn</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editCategoryForm">
+                    <div class="form-group">
+                        <label for="editName">Tên Danh Mục:</label>
+                        <input type="text" id="editName" name="Name" class="form-control" required />
+                        <span id="editNameError" class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="editIsActived">Trạng Thái Danh Mục:</label>
+                        <select id="editIsActived" name="IsActived" class="form-control" required>
+                            <option value="true">Sử dụng</option>
+                            <option value="false">Không sử dụng</option>
+                        </select>
+
+                    </div>
+                    <input type="hidden" id="editId" name="Id" />
+                    <button type="submit" class="btn2 btn-primary">Cập nhật</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
-    <script>
-        function deleteCategory(id) {
-            // Hiển thị hộp thoại xác nhận
-            if (confirm("Bạn có chắc chắn muốn xóa danh mục này không?")) {
-                // Nếu người dùng xác nhận, gửi yêu cầu xóa qua Ajax
-                $.ajax({
-                    url: '@Url.Action("DeleteParentCategory", "AdminCategory")' + '/' + id,
-                    type: 'POST',
-                    success: function (response) {
-                        alert('Xóa danh mục thành công');
-                        location.reload(); // Tải lại trang để cập nhật danh sách
-                    },
-                    error: function (xhr, status, error) {
-                        alert('Có lỗi xảy ra khi xóa danh mục');
-                        console.error('Error:', error);
-                    }
-                });
-            } else {
-                // Nếu người dùng hủy, không làm gì cả
-                console.log("Người dùng đã hủy hành động xóa");
-            }
-        }
-    </script>
+    <script src="~/admin/js/datatable-parent-category.js"></script>
 }

@@ -66,7 +66,7 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminCategory
 
         // POST: AdminCategory/CreateParentCategory
         [HttpPost]
-        public async Task<IActionResult> CreateParentCategory(ParentCategories_Req model)
+        public async Task<IActionResult> CreateParentCategory([FromBody] ParentCategories_Req model)
         {
             if (ModelState.IsValid)
             {
@@ -75,24 +75,33 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminCategory
                 var jsonContent = JsonConvert.SerializeObject(model);
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-                // Gửi yêu cầu POST tới API để tạo danh mục cha
-                var response = await client.PostAsync("https://localhost:7296/api/ParentCategories/create-parent-category", content);
+                try
+                {
+                    // Gửi yêu cầu POST tới API để tạo danh mục cha
+                    var response = await client.PostAsync("https://localhost:7296/api/ParentCategories/create-parent-category", content);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    // Nếu thành công, chuyển hướng về trang danh sách danh mục hoặc trang khác
-                    return RedirectToAction("Edit", "HomeAdmin");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Trả về kết quả thành công dưới dạng JSON
+                        return Json(new { success = true, message = "Thêm danh mục thành công!" });
+                    }
+                    else
+                    {
+                        // Nếu có lỗi khi gọi API, trả về thông báo lỗi
+                        return Json(new { success = false, message = "Có lỗi xảy ra khi tạo danh mục. Vui lòng thử lại." });
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    // Nếu có lỗi khi tạo danh mục, bạn có thể thêm thông báo lỗi cho người dùng
-                    ModelState.AddModelError("", "Có lỗi khi tạo danh mục. Vui lòng thử lại.");
+                    // Trường hợp xảy ra lỗi ngoài mong đợi (ví dụ: không thể kết nối API)
+                    return Json(new { success = false, message = $"Lỗi hệ thống: {ex.Message}" });
                 }
             }
 
-            // Nếu Model không hợp lệ hoặc có lỗi, hiển thị lại form tạo danh mục
-            return View(model);
+            // Nếu Model không hợp lệ, trả về thông báo lỗi
+            return Json(new { success = false, message = "Dữ liệu không hợp lệ." });
         }
+
 
 
 
@@ -125,78 +134,76 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminCategory
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateParentCategory(int id, ParentCategories_Req model)
+        public JsonResult UpdateParentCategory([FromBody] ParentCategories_Req request)
         {
             if (ModelState.IsValid)
             {
                 var client = _httpClientFactory.CreateClient();
-                var jsonContent = JsonConvert.SerializeObject(model);
+                var jsonContent = JsonConvert.SerializeObject(request);
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
                 try
                 {
-                    var response = await client.PutAsync($"https://localhost:7296/api/ParentCategories/update-parent-category/{id}", content);
+                    var response = client.PutAsync($"https://localhost:7296/api/ParentCategories/update-parent-category", content).Result;
 
                     if (response.IsSuccessStatusCode)
                     {
-                        // Chuyển hướng về trang Index nếu thành công
-                        return RedirectToAction("Index", "AdminCategory");
+                        // Nếu thành công, trả về success = true
+                        return Json(new { success = true, message = "Cập nhật danh mục thành công" });
                     }
                     else
                     {
-                        // Ghi lại thông tin lỗi vào console hoặc log
-                        var errorDetails = await response.Content.ReadAsStringAsync();
+                        // Nếu có lỗi, trả về success = false và chi tiết lỗi
+                        var errorDetails = response.Content.ReadAsStringAsync().Result;
                         Console.WriteLine($"Error Status: {response.StatusCode}");
                         Console.WriteLine($"Error Details: {errorDetails}");
 
-                        ModelState.AddModelError("", $"Có lỗi khi cập nhật danh mục. Mã lỗi: {response.StatusCode}. Chi tiết: {errorDetails}");
+                        return Json(new { success = false, message = $"Có lỗi khi cập nhật danh mục. Mã lỗi: {response.StatusCode}. Chi tiết: {errorDetails}" });
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Exception khi gửi yêu cầu PUT: " + ex.Message);
-                    ModelState.AddModelError("", "Không thể kết nối đến API. Vui lòng kiểm tra lại kết nối.");
+                    return Json(new { success = false, message = "Không thể kết nối đến API. Vui lòng kiểm tra lại kết nối." });
                 }
             }
 
-            return View("Edit", model);
+            return Json(new { success = false, message = "Dữ liệu không hợp lệ" });
         }
 
 
 
         [HttpPost]
-        public async Task<IActionResult> DeleteParentCategory(int id)
+        public JsonResult DeleteParentCategory(int id)
         {
             var client = _httpClientFactory.CreateClient();
 
             try
             {
                 // Gửi yêu cầu DELETE đến API
-                var response = await client.DeleteAsync($"https://localhost:7296/api/ParentCategories/delete-parent-category/{id}");
+                var response =  client.DeleteAsync($"https://localhost:7296/api/ParentCategories/delete-parent-category/{id}").Result;
 
                 if (response.IsSuccessStatusCode)
                 {
                     // Nếu thành công, chuyển hướng về trang Index
-                    return RedirectToAction("Index");
+                    return Json(new { success = true, message = "Cập nhật danh mục thành công" });
                 }
                 else
                 {
                     // Ghi lại thông tin lỗi vào console hoặc log
-                    var errorDetails = await response.Content.ReadAsStringAsync();
+                    var errorDetails =  response.Content.ReadAsStringAsync();
                     Console.WriteLine($"Error Status: {response.StatusCode}");
                     Console.WriteLine($"Error Details: {errorDetails}");
 
-                    TempData["ErrorMessage"] = $"Có lỗi khi xóa danh mục. Mã lỗi: {response.StatusCode}. Chi tiết: {errorDetails}";
+                    return Json(new { success = false, message = $"Có lỗi khi cập nhật danh mục. Mã lỗi: {response.StatusCode}. Chi tiết: {errorDetails}" });
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Exception khi gửi yêu cầu DELETE: " + ex.Message);
-                TempData["ErrorMessage"] = "Không thể kết nối đến API. Vui lòng kiểm tra lại kết nối.";
+                    return Json(new { success = false, message = "Không thể kết nối đến API. Vui lòng kiểm tra lại kết nối." });
             }
 
-            // Nếu có lỗi, quay lại Index và hiển thị thông báo lỗi
-            return RedirectToAction("Index");
         }
 
     }
