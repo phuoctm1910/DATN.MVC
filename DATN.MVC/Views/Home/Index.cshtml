@@ -468,6 +468,10 @@
                 font-size: 18px; /* Điều chỉnh kích thước biểu tượng nếu cần */
             }
         .slideshow-modal {
+            display: none;
+        }
+
+        .slideshow-modal.show {
             display: flex;
             position: fixed;
             top: 0;
@@ -536,7 +540,18 @@
             color: white;
             font-size: 16px;
         }
-
+        .comment-count:hover{
+            cursor: pointer;
+            text-decoration:underline;
+        }
+        .share-count:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .reaction-summary:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
     </style>
 }
 @section Scripts{
@@ -556,7 +571,7 @@
                 newComment: '',
                 replyTarget: null,
                 newPostContent: '',
-                userId: 2, // thay đổi thành session
+                userId: userLogged, // thay đổi thành session
                 newPostFor: 0,
                 showSlideshow: false,
                 slideshowImages: [],
@@ -959,7 +974,7 @@
             }
         });
     </script>
-    }
+}
 <div class="gap2 gray-bg" id="app">
     <div class="container">
         <div class="row">
@@ -1016,10 +1031,10 @@
                             <div class="new-postbox">
                                 <div class="d-flex">
                                     <div style="margin-right:10px">
-                                        <img src="~/images/resources/admin.jpg" alt="">
+                                        <img :src="'@(ViewBag.UserImage)'" height="50" width="50" alt="">
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <div class="d-flex">Minh Phước</div>
+                                        <div class="d-flex">@ViewBag.FullName</div>
                                         <div>
                                             <select v-model="newPostFor">
                                                 <option v-bind:value="0" selected>Công khai</option>
@@ -1035,7 +1050,7 @@
                                                   rows="2"
                                                   placeholder="Chia sẻ điều bạn đang nghĩ?"
                                                   class="post-textarea">
-                </textarea>
+                                        </textarea>
 
                                         <!-- Giao diện tải lên ảnh/video, ẩn theo mặc định -->
                                         <div v-if="showImageUpload" class="image-upload-modal" style="position:relative">
@@ -1078,7 +1093,8 @@
                                 <div class="user-post">
                                     <div class="friend-info">
                                         <figure>
-                                            <img src="~/images/resources/friend-avatar10.jpg" alt="">
+                                            <img :src="post.posterImage || 'https://smmhwsdluglunrhndxcb.supabase.co/storage/v1/object/public/images/default-userImg.jpg'"
+                                                 alt="">
                                         </figure>
                                         <div class="friend-name">
                                             <div class="more">
@@ -1251,7 +1267,7 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="showSlideshow" class="slideshow-modal">
+                <div v-bind:class="{ 'show': showSlideshow }" class="slideshow-modal">
                     <div class="slideshow-content">
                         <button class="close-slideshow" v-on:click="closeSlideshow">&times;</button>
                         <img :src="slideshowImages[currentSlideIndex]" class="slideshow-image" alt="Slide Image">

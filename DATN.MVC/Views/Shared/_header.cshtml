@@ -397,13 +397,13 @@
         </ul>
         <div class="user-img">
             <h5>@ViewBag.FullName</h5>
-            <img :src="'@(ViewBag.UserImage ?? "https://smmhwsdluglunrhndxcb.supabase.co/storage/v1/object/public/images/default-userImg.jpg")'"
+            <img src="@ViewBag.UserImage"
                  width="40"
                  height="40"
                  alt="User Image">
             <span class="status f-online"></span>
             <div class="user-setting">
-                <span class="seting-title">Cài đặt người dùng <a href="#" title="">xem tất cả</a></span>
+                <span class="seting-title">Cài đặt người dùng</span>
                 <ul class="log-out">
                     <li><a href="about.html" title=""><i class="ti-user"></i> Xem hồ sơ</a></li>
                     <li><a href="/user/UpdateInformation" title=""><i class="ti-pencil-alt"></i> Chỉnh sửa hồ sơ</a></li>

@@ -83,9 +83,9 @@ namespace DATN.MVC.Controllers
                 HttpContext.Session.SetString("FullName", result.FullName);
                 HttpContext.Session.SetString("RoleName", result.RoleName);
                 HttpContext.Session.SetString("Token", result.Token);
-                HttpContext.Session.SetString("UserImage", result.UserImage);
+                HttpContext.Session.SetString("UserImage", result.UserImage ?? "https://smmhwsdluglunrhndxcb.supabase.co/storage/v1/object/public/images/default-userImg.jpg");
 
-                
+
 
                 return Json(new { success = true, message = "Login successful." });
             }

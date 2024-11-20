@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.Features;
+﻿using DATN.MVC.Hubs;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace DATN.MVC
 {
@@ -10,6 +11,10 @@ namespace DATN.MVC
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSignalR(options =>
+            {
+                options.MaximumReceiveMessageSize = 104857600; // Tăng giới hạn lên 10MB
+            });
 
             builder.Services.AddControllers()
                 .AddNewtonsoftJson();
@@ -45,6 +50,8 @@ namespace DATN.MVC
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapHub<ChatHub>("/chathub");
 
             app.Run();
         }

@@ -73,9 +73,13 @@ namespace DATN.MVC.Helpers
                     // Thêm các thuộc tính của đối tượng data vào form-data
                     foreach (var property in typeof(T2).GetProperties())
                     {
-                        var value = property.GetValue(data)?.ToString() ?? string.Empty;
-                        form.Add(new StringContent(value), property.Name);
+                        var value = property.GetValue(data)?.ToString();
+                        if (value != null) // Bỏ qua trường null
+                        {
+                            form.Add(new StringContent(value), property.Name);
+                        }
                     }
+
 
                     // Thêm tất cả các tệp vào form-data với cùng tên fileKeyName
                     if (files != null)

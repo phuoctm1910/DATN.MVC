@@ -8,6 +8,15 @@
             { 204 , "Resource not found" }
         };
     }
+
+    public enum MessageStatus : int
+    {
+        Sending = 0, // Đang gửi
+        Sent = 1,    // Đã gửi
+        Read = 2     // Đã đọc
+    }
+
+
     public enum FriendStatus : int
     {
         Pending = 0,        // Gửi lời mời kết bạn

@@ -198,11 +198,6 @@
                 return;
             }
 
-            // Kiểm tra độ dài tài khoản
-            if (username.length < 6) {
-                $('#errorMessage').text("Tài khoản phải có ít nhất 6 ký tự").show();
-                return;
-            }
 
             // Kiểm tra ký tự đặc biệt trong username và password
             if (hasSpecialCharacters(username)) {
@@ -291,13 +286,10 @@
                 <p class="login-info">Đăng nhập lại, bạn vừa đăng xuất khỏi đây</p>
 
                 <form class="form-login " id="loginForm">
-                    <input type="text" id="username" placeholder="Tên Người Dùng" value="Adam James">
+                    <input type="text" id="username" placeholder="Tên Người Dùng" value="user1">
                     <span class="error-message" id="username-error"></span>
-
-                    <button name="login" type="submit">Đăng nhập</button>
-                    <a class="register" href="register">Đăng ký</a>
-                    <div id="errorMessage" style="color: red; margin-top: 10px; display: none;">Vui lòng nhập tất cả ô trống.</div>
-
+                    <input type="password" id="password" placeholder="Mật Khẩu" value="123456">
+                    <span class="error-message" id="password-error"></span>
                     <button name="login" type="submit">Đăng Nhập</button>
                     <a class="register" href="register.html">Đăng Ký</a>
                     <div id="errorMessage" style="color: red; margin-top: 10px; display: none;">Vui lòng điền đầy đủ thông tin.</div>

@@ -17,13 +17,16 @@
     <link rel="stylesheet" href="~/icons/themify-icons/themify-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.25/signalr.min.js" integrity="sha512-hJP90Q+3UdSvwBhVIze6qNNDZ+tEbuTv+HBAtoC0tpRrZ0r48hbcUmTdtumkC7m0z16bqNu4pSytecT3/js+VQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
     <script>
-        var userID = @ViewBag.UserId;
-        var fullname = @ViewBag.FullName;
+        var userLogged = @ViewBag.UserId;
     </script>
     <script>
         moment.locale('vi');
-        
+
     </script>
     @await RenderSectionAsync("Styles", required: false)
 
@@ -466,11 +469,13 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @*<script src="~/lib/vue/vue.global.js"></script>*@
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/main.min.js" asp-append-version="true"></script>
     <script src="~/js/script.js" asp-append-version="true"></script>
-
+    <script src="~/js/sidebarRight.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

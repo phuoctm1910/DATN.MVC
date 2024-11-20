@@ -8,6 +8,7 @@ namespace DATN.MVC.Models.Response
         public int Id { get; set; }
         public int UserId { get; set; }
         public string FullName { get; set; }
+        public string? PosterImage { get; set; }
         public string PostContent { get; set; }
         public int? PostShareId { get; set; }
         public int PostFor { get; set; }

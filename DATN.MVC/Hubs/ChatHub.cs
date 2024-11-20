@@ -1,9 +1,12 @@
 ﻿using DATN.MVC.Helpers;
+using DATN.MVC.Models;
 using DATN.MVC.Models.Request.Chat;
 using DATN.MVC.Request.Message;
 using DATN.MVC.Respone.Chat;
 using DATN.MVC.Respone.Message;
+using DATN.MVC.Ultilities;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,78 +15,122 @@ namespace DATN.MVC.Hubs
 {
     public class ChatHub : Hub
     {
-        public override async Task OnConnectedAsync()
+        public async Task<Chat_MessageAfterSendRes> SendMessageToGroup(int chatRoomId, int senderId, string content, string fileMetadataJson = null)
         {
-            await base.OnConnectedAsync();
-        }
+            // Chuyển đổi JSON metadata thành danh sách file
+            List<FileMetaData> fileMetadataList = string.IsNullOrEmpty(fileMetadataJson)
+                ? new List<FileMetaData>()
+                : JsonConvert.DeserializeObject<List<FileMetaData>>(fileMetadataJson) ?? new List<FileMetaData>();
 
-        // Method to handle a user disconnecting from the hub
-        public override async Task OnDisconnectedAsync(Exception? exception)
-        {
-            await base.OnDisconnectedAsync(exception);
-        }
+            // Chuyển đổi metadata thành IFormFile
+            var formFiles = fileMetadataList
+                .Select(metadata => FileHelper.CreateFormFile(metadata))
+                .Where(file => file != null) // Loại bỏ file null
+                .ToList();
 
-        // Method to create a chat room
-        public async Task CreateRoom(Chat_CreateReq req)
-        {
-            var existungChatRoom = ApiHelpers.PostMethodAsync<Chat_ReadRes, Chat_CreateReq>("https://localhost:7296/api/ChatRoom/find-chatRoom", req);
-            if (existungChatRoom != null)
+            var messageData = new Chat_SendMessageRequest
             {
-                // Notify the caller that the room was successfully created and return the roomId
-                await Clients.Caller.SendAsync("RoomCreated", existungChatRoom.RoomId);
-            }
-            else
+                ChatRoomId = chatRoomId,
+                SenderId = senderId,
+                Content = content,
+                ImageFile = formFiles // Truyền xuống API
+            };
+
+            try
             {
-                var createNew = ApiHelpers.PostMethodAsync<Chat_ReadRes, Chat_CreateReq>("https://localhost:7296/api/ChatRoom/create-chatRoom", req);
-                if (createNew != null)
+                // Gọi API để gửi tin nhắn và ảnh
+                var result = ApiHelpers.PostMethodWithFileAsync<Chat_MessageAfterSendRes, Chat_SendMessageRequest>(
+                    "https://localhost:7296/api/chatroom/send-message", messageData, messageData.ImageFile, fileKeyName: "ImageFile");
+
+                if (result != null && result.MessageId > 0)
                 {
-                    await Clients.Caller.SendAsync("RoomCreated", createNew.RoomId);
+                    var updateStatus = ApiHelpers.PostMethodAsync<bool, object>(
+                        "https://localhost:7296/api/chatroom/update-message-status",
+                        new { MessageId = result.MessageId, Status = MessageStatus.Sent });
+
+                    if (updateStatus)
+                    {
+                        await Clients.Caller.SendAsync("UpdateMessageStatus", result.MessageId, MessageStatus.Sent);
+
+                        await Clients.OthersInGroup(chatRoomId.ToString())
+                            .SendAsync("ReceiveMessage", senderId, content, result.CreatedDate, result.MessageId, result.MessageImageUrls);
+
+                        return result;
+                    }
+                }
+
+                throw new HubException("Failed to save the message to the database.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while sending the message: " + ex.Message);
+                throw new HubException("An error occurred while processing the message.", ex);
+            }
+        }
+
+        public async Task MarkMessagesAsRead(int chatRoomId, List<int> messageIds)
+        {
+            try
+            {
+                // Gọi API để cập nhật trạng thái tin nhắn thành "Đã đọc"
+                var result = ApiHelpers.PostMethodAsync<bool, object>(
+                    "https://localhost:7296/api/chatroom/update-message-status",
+                    new { MessageIds = messageIds, Status = MessageStatus.Read });
+
+                if (result)
+                {
+                    // Gửi thông báo về cho người gửi
+                    await Clients.OthersInGroup(chatRoomId.ToString()).SendAsync("MessagesMarkedAsRead", messageIds);
+
+                    Console.WriteLine("Messages marked as read for chat room ID: " + chatRoomId);
                 }
                 else
                 {
-                    throw new Exception("Failed to create chat room.");
+                    throw new HubException("Failed to update message status to 'Read'.");
                 }
             }
-        }
-
-        // Method to join a chat room
-        public async Task JoinRoom(int roomId)
-        {
-            await Groups.AddToGroupAsync(Context.ConnectionId, roomId.ToString());
-            Console.WriteLine($"User {Context.UserIdentifier} joined room {roomId}");
-        }
-
-        // Method to load messages from a specific chat room
-        public async Task LoadMessages(int roomId)
-        {
-            // Load messages only if this is an existing room with prior messages
-            var response =  ApiHelpers.GetMethod<List<Message_ReadRes>>($"https://localhost:7296/api/ChatRoom/getMessagesInChatRoom/{roomId}");
-
-            if (response != null && response.Count > 0)
+            catch (Exception ex)
             {
-                // Existing chat with messages
-                await Clients.Caller.SendAsync("MessagesLoaded", response);
-            }
-            else
-            {
-                // New chat with no messages, return an empty list
-                await Clients.Caller.SendAsync("MessagesLoaded", new List<Message_ReadRes>());
+                Console.WriteLine("An error occurred while marking messages as read: " + ex.Message);
+                throw new HubException("An error occurred while processing the request.", ex);
             }
         }
-
-        // Method to send a message in a chat room
-        public async Task SendMessage(Message_SendMessageReq messageDto)
+        public async Task NotifyMessageRead(int chatRoomId, int messageId)
         {
-            var response = ApiHelpers.PostMethodAsync<bool, Message_SendMessageReq>("https://localhost:7296/api/messages/sendMessage", messageDto);
+            try
+            {
+                // Cập nhật trạng thái "Đã đọc" ngay lập tức cho tin nhắn
+                var result = ApiHelpers.PostMethodAsync<bool, object>(
+                    "https://localhost:7296/api/chatroom/update-message-status",
+                    new { MessageId = messageId, Status = MessageStatus.Read });
 
-            if (response)
-            {
-                await Clients.Group(messageDto.RoomId.ToString()).SendAsync("ReceiveMessage", messageDto);
+                if (result)
+                {
+                    await Clients.OthersInGroup(chatRoomId.ToString()).SendAsync("MessageRead", messageId);
+                    Console.WriteLine($"Message ID {messageId} marked as read in chat room ID {chatRoomId}");
+                }
+                else
+                {
+                    throw new HubException("Failed to update message status to 'Read'.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                throw new Exception("Failed to send message via API.");
+                Console.WriteLine($"Error marking message as read: {ex.Message}");
+                throw new HubException("An error occurred while processing the request.", ex);
             }
+        }   
+
+        public async Task JoinChatRoom(int chatRoomId)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, chatRoomId.ToString());
+            Console.WriteLine("User with ConnectionId " + Context.ConnectionId + " joined chat room ID: " + chatRoomId);
+        }
+
+
+        public async Task LeaveChatRoom(int chatRoomId)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, chatRoomId.ToString());
         }
     }
 }
