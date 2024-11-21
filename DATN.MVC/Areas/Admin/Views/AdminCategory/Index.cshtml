@@ -81,12 +81,12 @@
                 <form id="createCategoryForm">
                     <div class="form-group">
                         <label for="Name">Tên Danh Mục:</label>
-                        <input type="text" id="Name" name="Name" class="form-control" required />
+                        <input type="text" id="Name" name="Name" class="form-control"  />
                         <span id="NameError" class="error-message" style="color: red;"></span> <!-- Thông báo lỗi -->
                     </div>
                     <div class="form-group">
                         <label for="IsActived">Trạng Thái Danh Mục:</label>
-                        <select id="IsActived" name="IsActived" class="form-control" required>
+                        <select id="IsActived" name="IsActived" class="form-control" >
                             <option value="true">Sử dụng</option>
                             <option value="false">Không sử dụng</option>
                         </select>
@@ -111,12 +111,12 @@
                 <form id="editCategoryForm">
                     <div class="form-group">
                         <label for="editName">Tên Danh Mục:</label>
-                        <input type="text" id="editName" name="Name" class="form-control" required />
-                        <span id="editNameError" class="error-message"></span>
+                        <input type="text" id="editName" name="Name" class="form-control"  />
+                        <span id="NameErrorEdit" class="error-message" style="color: red;"></span> <!-- Thông báo lỗi -->
                     </div>
                     <div class="form-group">
                         <label for="editIsActived">Trạng Thái Danh Mục:</label>
-                        <select id="editIsActived" name="IsActived" class="form-control" required>
+                        <select id="editIsActived" name="IsActived" class="form-control" >
                             <option value="true">Sử dụng</option>
                             <option value="false">Không sử dụng</option>
                         </select>
@@ -131,5 +131,7 @@
 </div>
 
 @section Scripts {
+  
+
     <script src="~/admin/js/datatable-parent-category.js"></script>
 }
