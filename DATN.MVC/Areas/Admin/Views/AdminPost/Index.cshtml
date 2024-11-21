@@ -1,103 +1,6 @@
 ﻿@model IEnumerable<DATN.MVC.Areas.Admin.Models.AdminPost.Response.ViewPostResponse_Res>
 
-<style>
-    /* Thiết lập background của modal */
-    .modal-content {
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
-        padding: 20px;
-    }
 
-    /* Căn chỉnh tiêu đề modal */
-    .modal-header {
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 10px;
-    }
-
-    .modal-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #333;
-    }
-
-    /* Đóng nút trong header */
-    .btn-close {
-        background-color: transparent;
-        border: none;
-        font-size: 1.25rem;
-        color: #888;
-    }
-
-        .btn-close:hover {
-            color: #333;
-        }
-
-    /* Cải thiện khoảng cách và kiểu dáng cho form */
-    .modal-body {
-        padding-top: 20px;
-    }
-
-    .edit-post-status-form-group {
-        margin-bottom: 20px;
-    }
-
-    .edit-post-status-label {
-        font-weight: 600;
-        color: #444;
-        display: block;
-        margin-bottom: 8px;
-    }
-
-    .edit-post-status-input, .edit-post-status-select {
-        width: 100%;
-        padding: 12px;
-        font-size: 16px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        background-color: #f9f9f9;
-        transition: border-color 0.3s ease;
-    }
-
-        .edit-post-status-input:focus, .edit-post-status-select:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-
-    /* Nút submit */
-    .edit-post-status-btn {
-        width: 100%;
-        background-color: #007bff;
-        color: #fff;
-        padding: 14px;
-        font-size: 16px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-        .edit-post-status-btn:hover {
-            background-color: #0056b3;
-        }
-
-    /* Hiệu ứng cho modal khi mở */
-    .modal.fade .modal-dialog {
-        transform: translate(0, -50px);
-        transition: transform 0.3s ease-out;
-    }
-
-    .modal.show .modal-dialog {
-        transform: translate(0, 0);
-    }
-
-    /* Thêm margin-bottom cho modal */
-    .modal-dialog {
-        max-width: 500px;
-        margin-top: 50px;
-    }
-
-</style>
 <h2>Danh Sách Bài Đăng</h2>
 <div class="card mb-4">
     <div class="card-header">
@@ -112,6 +15,8 @@
                     <th>Người Tạo</th>
                     <th>Hình Ảnh</th>
                     <th>Trạng Thái</th>
+                    <th>Ngày Tạo</th>
+                    <th>Ngày Cập Nhật</th>
                     <th>Hành Động</th>
                 </tr>
             </thead>
@@ -120,11 +25,13 @@
                 {
                     <tr>
                         <td>@item.Id</td>
-                        <td>@item.UserId</td>
+                        <td>@item.FullName</td> <!-- Hiển thị tên người tạo -->
                         <td>
                             <img src="@item.Image" alt="Hình ảnh bài đăng" style="max-width: 100px; max-height: 100px;" />
                         </td>
                         <td>@(item.IsActived ? "Hoạt động" : "Không hoạt động")</td>
+                        <td>@item.CreatedDateTime.ToString("dd/MM/yyyy HH:mm")</td> <!-- Hiển thị ngày tạo -->
+                        <td>@item.UpdatedDateTime.ToString("dd/MM/yyyy HH:mm")</td> <!-- Hiển thị ngày cập nhật -->
                         <td>
                             <!-- Nút chỉnh sửa sử dụng Modal -->
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPostStatusModal"
@@ -150,25 +57,26 @@
             </div>
             <div class="modal-body">
                 <form method="post" asp-action="UpdateStatusPost" asp-controller="AdminPost">
-                    <div class="edit-post-status-form-group">
-                        <label for="PostId" class="edit-post-status-label">ID Bài viết:</label>
-                        <input type="text" id="PostId" name="PostId" class="edit-post-status-input" readonly />
+                    <div class="mb-3">
+                        <label for="PostId" class="form-label">ID Bài viết:</label>
+                        <input type="text" id="PostId" name="PostId" class="form-control" readonly />
                     </div>
 
-                    <div class="edit-post-status-form-group">
-                        <label for="IsActived" class="edit-post-status-label">Trạng thái bài viết:</label>
-                        <select id="IsActived" name="IsActived" class="edit-post-status-select">
+                    <div class="mb-3">
+                        <label for="IsActived" class="form-label">Trạng thái bài viết:</label>
+                        <select id="IsActived" name="IsActived" class="form-select">
                             <option value="true">Hoạt động</option>
                             <option value="false">Không hoạt động</option>
                         </select>
                     </div>
 
-                    <button type="submit" class="edit-post-status-btn">Cập nhật trạng thái</button>
+                    <button type="submit" class="btn btn-primary">Cập nhật trạng thái</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 
 @section Scripts {
     <script src="~/admin/js/datatable-Post.js"></script>
