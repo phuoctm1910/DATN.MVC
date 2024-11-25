@@ -2,7 +2,7 @@
 
 <h2 class="text-center mb-4">Thêm Chức Vụ Mới</h2>
 <style>
-    /* Form Container Styling */
+   
     .form-container {
         max-width: 400px;
         margin: 20px auto;
@@ -13,7 +13,7 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    /* Form Group Styling */
+   
     .form-group {
         margin-bottom: 15px;
     }
@@ -34,7 +34,7 @@
             box-sizing: border-box;
         }
 
-    /* Button Styling */
+    
     .btn2 {
         display: block;
         width: 100%;
@@ -53,7 +53,7 @@
         background-color: #0056b3;
     }
 
-    /* Error Message Styling */
+    
     .label-error-container {
         display: flex; /* Đặt container thành flexbox */
         align-items: center; /* Căn giữa label và span theo chiều dọc */
@@ -61,14 +61,14 @@
         margin-bottom: 5px; /* Khoảng cách giữa label và input */
     }
 
-        /* Label Styling */
+        
         .label-error-container label {
             font-weight: bold;
             color: #555;
             flex: 1; /* Để label chiếm không gian linh hoạt */
         }
 
-    /* Error Message Styling */
+    
     .error-message {
         color: red;
         font-size: 12px;
@@ -135,24 +135,66 @@
 @section Scripts{
     <script>
         $(document).ready(function () {
-            // Bắt sự kiện nút Lưu
+            // Hàm hiển thị lỗi
+            function showError(selector, message) {
+                $(selector).html(`<div class="sb-nav-link-icon"><i class="fas fa-exclamation-circle"></i></div> ${message}`);
+                $(selector).show();
+            }
+
+            // Hàm ẩn lỗi
+            function hideError(selector) {
+                $(selector).html('');
+                $(selector).hide();
+            }
+
+            // Lắng nghe sự kiện nhập liệu trên trường "Tên Chức Vụ"
+            $('#Name').on('input', function () {
+                const name = $(this).val();
+                const nameTrimmed = name.trim();
+                const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/;
+
+                if (!nameTrimmed) {
+                    showError('#NameError', 'Không được bỏ trống.');
+                } else if (name !== nameTrimmed) {
+                    showError('#NameError', 'Không được có khoảng trắng ở đầu hoặc cuối.');
+                } else if (!nameRegex.test(nameTrimmed)) {
+                    showError('#NameError', 'Chỉ được chứa chữ cái và khoảng trắng.');
+                } else {
+                    hideError('#NameError');
+                }
+            });
+
+            // Lắng nghe sự kiện thay đổi trên trường "Trạng Thái"
+            $('#IsActived').on('change', function () {
+                const isActived = $(this).val();
+                if (!isActived) {
+                    showError('#IsActivedError', 'Trạng thái không được bỏ trống.');
+                } else {
+                    hideError('#IsActivedError');
+                }
+            });
+
+            // Xử lý khi nhấn nút Lưu
             $('#btnSaveRole').click(function (e) {
                 e.preventDefault(); // Ngăn hành động mặc định
-
-                // Xóa tất cả thông báo lỗi
-                $('.error-message').html('');
 
                 let isValid = true;
 
                 // Kiểm tra trường "Tên Chức Vụ"
-                const name = $('#Name').val().trim();
+                const name = $('#Name').val();
+                const nameTrimmed = name.trim();
                 const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/;
-                if (!name) {
-                    showError('#NameError', 'Tên chức vụ không được bỏ trống.');
+                if (!nameTrimmed) {
+                    showError('#NameError', 'Không được bỏ trống.');
                     isValid = false;
-                } else if (!nameRegex.test(name)) {
-                    showError('#NameError', 'Tên chức vụ chỉ được chứa chữ cái và khoảng trắng.');
+                } else if (name !== nameTrimmed) {
+                    showError('#NameError', 'Không được có khoảng trắng ở đầu hoặc cuối.');
                     isValid = false;
+                } else if (!nameRegex.test(nameTrimmed)) {
+                    showError('#NameError', 'Chỉ được chứa chữ cái và khoảng trắng.');
+                    isValid = false;
+                } else {
+                    hideError('#NameError');
                 }
 
                 // Kiểm tra trường "Trạng Thái"
@@ -160,16 +202,15 @@
                 if (!isActived) {
                     showError('#IsActivedError', 'Trạng thái không được bỏ trống.');
                     isValid = false;
+                } else {
+                    hideError('#IsActivedError');
                 }
-
-               
 
                 // Nếu hợp lệ thì gửi dữ liệu qua Ajax
                 if (isValid) {
                     const roleData = {
-                        Name: name,
+                        Name: nameTrimmed,
                         IsActived: isActived === 'true',
-                        
                     };
 
                     $.ajax({
@@ -190,7 +231,6 @@
                                 if (errorDetails.errors.IsActived) {
                                     showError('#IsActivedError', errorDetails.errors.IsActived[0]);
                                 }
-                               
                             } else {
                                 alert('Có lỗi xảy ra: ' + (xhr.responseText || 'Vui lòng thử lại.'));
                             }
@@ -198,21 +238,10 @@
                     });
                 }
             });
-
-            // Hàm hiển thị lỗi
-            function showError(selector, message) {
-                $(selector).html(`<div class="sb-nav-link-icon"><i class="fas fa-exclamation-circle"></i></div> ${message}`);
-                $(selector).show(); // Hiển thị lỗi
-            }
-
-            // Ẩn lỗi khi người dùng bắt đầu nhập lại
-            $('#createRoleForm input, #createRoleForm select').on('input change', function () {
-                const errorSpanId = `#${$(this).attr('id')}Error`;
-                $(errorSpanId).html(''); // Xóa nội dung lỗi
-            });
         });
-
     </script>
+
+
 
 }
 
