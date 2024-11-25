@@ -1,0 +1,318 @@
+﻿@model AddUpdateUserRequest
+
+<style>
+    /* Container của form */
+    .edit-user-form-container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 50px;
+    }
+
+    /* Tiêu đề */
+    .edit-user-title {
+        text-align: center;
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    /* Các nhóm của form */
+    .edit-user-form-group {
+        margin-bottom: 15px;
+    }
+
+    /* Nhãn của form */
+    .edit-user-label {
+        font-weight: bold;
+        color: #555;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    /* Các ô input */
+    .edit-user-input, .edit-user-select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    /* Nút lưu */
+    .edit-user-btn {
+        width: 100%;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        /* Hiệu ứng hover của nút lưu */
+        .edit-user-btn:hover {
+            background-color: #0056b3;
+        }
+
+    .label-container {
+        display: flex; /* Đặt flexbox để các phần tử nằm ngang hàng */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        justify-content: space-between; /* Tùy chỉnh khoảng cách giữa các phần tử */
+        margin-bottom: 5px; /* Khoảng cách dưới cùng */
+    }
+
+    /* Label */
+    .edit-user-label {
+        font-weight: bold;
+        color: #555;
+        margin-right: 10px; /* Khoảng cách giữa Label và Thông báo lỗi */
+        display: inline-block;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 12px;
+        display: flex; /* Sử dụng flex để xếp icon và text */
+        align-items: center; /* Căn giữa icon và text theo chiều dọc */
+        margin-left: 10px; /* Khoảng cách giữa Label và thông báo lỗi */
+        white-space: nowrap; /* Không cho xuống dòng */
+    }
+
+    .sb-nav-link-icon {
+        margin-right: 5px; /* Tạo khoảng cách giữa icon và text */
+        display: flex; /* Đảm bảo icon không bị xuống dòng */
+        align-items: center;
+    }
+
+        .sb-nav-link-icon i {
+            font-size: 14px; /* Kích thước icon */
+            color: red; /* Màu icon */
+        }
+    /* Thông báo lỗi */
+    .edit-user-error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    /* Button quay lại */
+    .back-btn {
+        display: inline-block;
+        margin-top: 15px;
+        background-color: #6c757d;
+        color: #fff;
+        padding: 10px 15px;
+        font-size: 16px;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+</style>
+<h2 class="text-center mb-4">Edit User</h2>
+
+<div class="edit-user-form-container">
+    <form id="editUserForm" class="form-horizontal" onsubmit="return validateForm()">
+        <input type="hidden" id="Id" name="Id" value="@Model.Id">
+        <div class="edit-user-form-group">
+            <div class="label-container">
+                <label for="UserName" class="edit-user-label">Tài Khoản</label>
+                <span class="error-message"></span> <!-- Không dùng id -->
+            </div>
+
+            
+                <input type="text" class="edit-user-input" id="UserName" name="UserName" value="@Model.UserName" placeholder="Enter username" />
+
+           
+        </div>
+        <div class="edit-user-form-group">
+            <div class="label-container">
+                <label for="FullName" class="edit-user-label">Họ và Tên</label>
+                <span id="IsActivedError" class="error-message"><div class="sb-nav-link-icon"><i class="fas fa-pinterests" hidden></i></div></span>
+            </div> 
+            
+                <input type="text" class="edit-user-input" id="FullName" name="FullName" value="@Model.FullName" placeholder="Enter full name" />
+
+           
+        </div>
+        <div class="edit-user-form-group">
+            <div class="label-container">
+                <label for="Email" class="edit-user-label">Email</label>
+                <span id="IsActivedError" class="error-message"><div class="sb-nav-link-icon"><i class="fas fa-pinterests" hidden></i></div></span>
+            </div>
+           
+                <input type="email" class="edit-user-input" id="Email" name="Email" value="@Model.Email" placeholder="Enter email" />
+   
+            <span class="error-message"><div class="sb-nav-link-icon"><i class="fas fa-pinterests" hidden></i></div></span>
+        </div>
+
+        <div class="edit-user-form-group">
+
+            <div class="label-container">
+                <label for="PhoneNumber" class="edit-user-label">Số Điện Thoại</label>
+                <span id="IsActivedError" class="error-message"><div class="sb-nav-link-icon"><i class="fas fa-pinterests" hidden></i></div></span>
+            </div>
+            
+                <input type="text" class="edit-user-input" id="PhoneNumber" name="PhoneNumber" value="@Model.PhoneNumber" placeholder="Enter phone number" />
+         
+           
+        </div>
+
+        <div class="edit-user-form-group">
+
+            <div class="label-container">
+                <label for="IsActived" class="edit-user-label">Trạng Thái</label>
+                <span id="IsActivedError" class="error-message"><div class="sb-nav-link-icon"><i class="fas fa-pinterests" hidden></i></div></span>
+            </div>
+          
+                <select class="edit-user-select" id="IsActived" name="IsActived">
+                    <option value="true">Hoạt động</option>
+                    <option value="false">Dừng hoạt động</option>
+                </select>
+          
+          
+        </div>
+
+
+        <div class="edit-user-form-group">
+                
+                <button type="button" class="btn btn-primary" id="submitEditUser"><i class="fas fa-save"></i> Lưu</button>
+                <a href="@Url.Action("Index")" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to List</a>
+          
+           
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#submitEditUser').click(function (e) {
+            e.preventDefault(); // Ngăn chặn hành động submit mặc định
+
+            // Lấy giá trị từ các trường trong form
+            const userId = $('#Id').val();
+            const userName = $('#UserName').val().trim();
+            const fullName = $('#FullName').val().trim();
+            const email = $('#Email').val().trim();
+            const phoneNumber = $('#PhoneNumber').val().trim();
+            const isActived = $('#IsActived').val() === 'true';
+
+            // Tạo dữ liệu userData
+            const userData = {
+                Id: userId,
+                UserName: userName,
+                PasswordHash: "sample_hashed_password",
+                FullName: fullName,
+                Birth: "1990-01-01",
+                Gender: true,
+                Address: "123 Sample Street",
+                PhoneNumber: phoneNumber,
+                Email: email,
+                Image: "https://example.com/sample_image.jpg",
+                BackgroundImage: "https://example.com/sample_background_image.jpg",
+                RoleId: 2,
+                Status: 1,
+                Balance: 1000,
+                IsActived: isActived,
+                UpdatedDate: 1
+            };
+
+            console.log('Sending Data:', userData);
+
+            // Kiểm tra các trường có hợp lệ không
+            if (!validateFields(userName, fullName, email, phoneNumber)) {
+                return; // Ngừng nếu có lỗi
+            }
+
+            // Gửi AJAX request
+            $.ajax({
+                type: "PUT",
+                url: `https://localhost:7296/api/UserAdmin/update-user/${userId}`, // API endpoint
+                contentType: "application/json",
+                data: JSON.stringify(userData), // Chuyển dữ liệu thành JSON
+                success: function (response) {
+                    console.log('Response:', response); // Log phản hồi từ server
+
+                    // Kiểm tra nếu phản hồi có chứa từ "successfully" để xác nhận thành công
+                    if (response.message && response.message.includes('successfully')) {
+                        alert(response.message); // Hiển thị thông báo từ API
+                        window.location.href = '/admin/user/'; // Chuyển hướng về trang index
+                    } else {
+                        alert('Lỗi: ' + (response.message || 'Không xác định.'));
+                    }
+                },
+                error: function (xhr) {
+                    const errorMessage = xhr.status + ': ' + xhr.statusText + ' - ' + xhr.responseText;
+                    console.error('Error Response:', xhr.responseText);
+                    alert('Có lỗi xảy ra: ' + errorMessage);
+                }
+            });
+
+        });
+
+        // Hàm kiểm tra các trường
+        function validateFields(userName, fullName, email, phoneNumber) {
+            let isValid = true;
+
+            // Xóa thông báo lỗi trước đó
+            $('.error-message').html('');
+
+            if (!userName) {
+                showError('#UserName', 'Tài khoản không được để trống');
+                isValid = false;
+            }
+
+            if (!fullName) {
+                showError('#FullName', 'Họ và tên không được để trống');
+                isValid = false;
+            }
+             const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/; 
+            if (!email) {
+                showError('#Email', 'Email không được để trống');
+                isValid = false;
+            } else if (!emailRegex.test(email)) {
+                showError('#Email', 'Email không đúng định dạng');
+                isValid = false;
+            }
+
+            const phoneRegex = /^0[0-9]{9}$/; // Số bắt đầu bằng 0 và có 10 chữ số
+            if (!phoneNumber) {
+                showError('#PhoneNumber', 'Số điện thoại không được để trống');
+                isValid = false;
+            } else if (!phoneRegex.test(phoneNumber)) {
+                showError('#PhoneNumber', 'Số điện thoại phải bắt đầu bằng 0 và có đúng 10 chữ số');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Hàm hiển thị lỗi
+        function showError(selector, message) {
+            const errorSpan = $(selector).closest('.edit-user-form-group').find('.error-message');
+            errorSpan.html(`<div class="sb-nav-link-icon"><i class="fas fa-exclamation-circle"></i></div> ${message}`);
+            errorSpan.css('display', 'flex');
+        }
+
+        $('#editUserForm input, #editUserForm select').on('input change', function () {
+            const errorSpan = $(this).closest('.edit-user-form-group').find('.error-message');
+            errorSpan.html(''); // Xóa thông báo lỗi
+        });
+    });
+
+
+
+</script>
+
+
+
