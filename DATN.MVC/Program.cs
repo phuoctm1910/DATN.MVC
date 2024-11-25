@@ -11,6 +11,16 @@ namespace DATN.MVC
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("https://localhost:7260")
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod()
+                                      .AllowCredentials());
+            });
+            builder.Services.AddControllersWithViews()
+                                .AddNewtonsoftJson();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -41,6 +51,7 @@ namespace DATN.MVC
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseSession(); // Sử dụng session
 
