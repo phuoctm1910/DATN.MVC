@@ -1,0 +1,224 @@
+﻿@model UpdateRoleRequest
+
+@{
+    ViewData["Title"] = "Chỉnh sửa chức vụ";
+}
+
+<style>
+    /* Container của form */
+    .edit-role-form-container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 50px;
+    }
+
+    /* Tiêu đề */
+    .edit-role-title {
+        text-align: center;
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    /* Các nhóm của form */
+    .edit-role-form-group {
+        margin-bottom: 15px;
+    }
+
+    /* Nhãn của form */
+    .edit-role-label {
+        font-weight: bold;
+        color: #555;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    /* Các ô input */
+    .edit-role-input, .edit-role-select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    /* Nút lưu */
+    .edit-role-btn {
+        width: 100%;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Hiệu ứng hover của nút lưu */
+    .edit-role-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 12px;
+        display: flex; /* Sử dụng flex để xếp icon và text */
+        align-items: center; /* Căn giữa icon và text theo chiều dọc */
+        margin-left: 10px; /* Khoảng cách giữa Label và thông báo lỗi */
+        white-space: nowrap; /* Không cho xuống dòng */
+    }
+
+    .sb-nav-link-icon {
+        margin-right: 5px; /* Tạo khoảng cách giữa icon và text */
+        display: flex; /* Đảm bảo icon không bị xuống dòng */
+        align-items: center;
+    }
+
+        .sb-nav-link-icon i {
+            font-size: 14px; /* Kích thước icon */
+            color: red; /* Màu icon */
+        }
+    /* Thông báo lỗi */
+    .edit-role-error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    /* Button quay lại */
+    .back-btn {
+        display: inline-block;
+        margin-top: 15px;
+        background-color: #6c757d;
+        color: #fff;
+        padding: 10px 15px;
+        font-size: 16px;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+
+    .back-btn:hover {
+        background-color: #5a6268;
+    }
+
+    /* Container chứa Label và thông báo lỗi */
+    .edit-role-label-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 5px; /* Khoảng cách dưới cùng */
+    }
+
+    /* Label */
+    .edit-role-label {
+        font-weight: bold;
+        color: #555;
+        margin-right: 10px; /* Khoảng cách giữa Label và lỗi */
+        display: inline-block;
+    }
+
+   
+
+
+</style>
+
+<div class="edit-role-form-container">
+    <h2 class="edit-role-title">@ViewData["Title"]</h2>
+
+    <form asp-action="Edit" method="post" onsubmit="return validateForm()">
+        <!-- Tên chức vụ -->
+        <!-- Tên chức vụ -->
+        <div class="edit-role-form-group">
+            <div class="edit-role-label-container">
+                <label for="Name" class="edit-role-label">Tên chức vụ </label>
+                <span class="error-message"><div class="sb-nav-link-icon"><i class="fas fa-pinterests" hidden></i></div></span> <!-- Thông báo lỗi nằm cạnh Label -->
+            </div>
+            <input type="text" class="edit-role-input" id="Name" name="Name" value="@Model.Name" placeholder="Nhập tên chức vụ" />
+        </div>
+        <!-- Trạng thái -->
+        <div class="edit-role-form-group">
+            <div class="edit-role-label-container">
+                <label for="IsActived" class="edit-role-label">Trạng thái</label>
+                <span class="error-message"></span> <!-- Thông báo lỗi nằm cạnh Label -->
+            </div>
+            <select class="edit-role-select" id="IsActived" name="IsActived">
+                <option value="true" selected>Hoạt động</option>
+                <option value="false">Dừng hoạt động</option>
+            </select>
+        </div>
+
+       
+
+
+        <!-- Nút lưu -->
+        <button type="submit" class="edit-role-btn"><i class="fas fa-save"></i> Lưu</button>
+    </form>
+
+    <!-- Button quay lại -->
+    <a href="@Url.Action("Index")" class="back-btn"><i class="fas fa-arrow-left"></i> Quay lại danh sách</a>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Lắng nghe sự kiện nhập liệu trên các trường
+        document.querySelectorAll('.edit-role-input, .edit-role-select').forEach((field) => {
+            field.addEventListener('input', () => clearError(field));
+            field.addEventListener('change', () => clearError(field));
+        });
+    });
+
+    function validateForm() {
+        let isValid = true;
+
+        // Reset tất cả thông báo lỗi
+        document.querySelectorAll('.error-message').forEach(function (span) {
+            span.textContent = '';
+        });
+
+        // Kiểm tra tên chức vụ
+        let nameField = document.getElementById('Name');
+        const nameRegex = /^[a-zA-ZÀ-ỹ\u00C0-\u1EF9\s]+$/;
+        if (nameField.value.trim() === '') {
+            showError(nameField, 'Tên chức vụ không được để trống');
+            isValid = false;
+        }
+        if (!nameRegex.test(nameField.value.trim())) {
+            showError(nameField, 'Tên chức vụ chỉ được chứa chữ cái và khoảng trắng');
+            isValid = false;
+        }   
+
+        // Kiểm tra trạng thái
+        let isActiveField = document.getElementById('IsActived');
+        if (isActiveField.value.trim() === '') {
+            showError(isActiveField, 'Vui lòng chọn trạng thái');
+            isValid = false;
+        }
+
+        
+
+        return isValid; // Nếu form không hợp lệ, ngừng submit
+    }
+
+    function showError(field, message) {
+        const errorSpan = field.closest('.edit-role-form-group').querySelector('.error-message');
+        errorSpan.innerHTML = `<div class="sb-nav-link-icon"><i class="fas fa-pinterests"></i></div> ${message}`; // Thêm icon vào thông báo lỗi
+    }
+
+    function clearError(field) {
+        const errorSpan = field.closest('.edit-role-form-group').querySelector('.error-message');
+        errorSpan.textContent = ''; // Xóa toàn bộ nội dung thông báo lỗi, bao gồm icon
+    }
+
+
+
+</script>
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />

@@ -1,0 +1,110 @@
+﻿@{
+    ViewData["Title"] = "Thống kê sản phẩm";
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Thư viện Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+            <div class="card-header">
+            <h2>  <i class="fas fa-chart-bar me-1"></i>Thống Kê Sản Phẩm</h2>
+            <button id="exportChart" class="btn btn-success">Export Biểu Đồ</button>
+            </div>
+            <div class="card-body">
+                <canvas id="productChart" width="100%" height="50"></canvas>
+            </div>
+            <div class="card-footer small text-muted">Cập nhật gần nhất lúc: @DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy")</div>
+
+
+<script>
+    $(document).ready(function () {
+        // Gọi API lấy dữ liệu thống kê
+        $.ajax({
+            url: "https://localhost:7296/api/Product/all-statistics", // Đường dẫn API
+            method: "GET",
+            dataType: "json",
+            success: function (data) {
+                console.log("Dữ liệu API:", data); // Kiểm tra dữ liệu từ API
+
+                // Xử lý dữ liệu cho biểu đồ
+                const labels = data.map(item => `${item.month}/${item.year}`); // Nhãn trục X: Tháng/Năm
+                const productCounts = data.map(item => item.productCount); // Số lượng sản phẩm thêm mới
+
+                // Kiểm tra dữ liệu
+                console.log("Labels:", labels);
+                console.log("ProductCounts:", productCounts);
+
+                // Tạo biểu đồ bằng Chart.js
+                const ctx = document.getElementById('productChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar', // Loại biểu đồ: cột
+                    data: {
+                        labels: labels, // Nhãn trục X
+                        datasets: [{
+                            label: 'Số lượng sản phẩm thêm mới',
+                            data: productCounts, // Dữ liệu số lượng sản phẩm
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)', // Màu nền
+                            borderColor: 'rgba(75, 192, 192, 1)', // Màu viền
+                            borderWidth: 1 // Độ dày viền
+                        }]
+                    },
+                    options: {
+                        responsive: true, // Tự động điều chỉnh kích thước
+                        plugins: {
+                            legend: {
+                                display: true, // Hiển thị chú thích
+                                position: 'top'
+                            },
+                            tooltip: {
+                                enabled: true // Hiển thị thông tin khi hover
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Tháng/Năm' // Tiêu đề trục X
+                                },
+                                grid: {
+                                    display: true,
+                                    color: 'rgba(200, 200, 200, 0.3)' // Màu lưới trục X
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Số lượng sản phẩm' // Tiêu đề trục Y
+                                },
+                                beginAtZero: true, // Bắt đầu từ 0
+                                ticks: {
+                                    stepSize: 1, // Khoảng cách giữa các giá trị trên trục Y
+                                },
+                                grid: {
+                                    display: true,
+                                    color: 'rgba(200, 200, 200, 0.3)' // Màu lưới trục Y
+                                }
+                            }
+                        }
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Lỗi khi gọi API:", error); // Xử lý lỗi
+            }
+        });
+
+        $('#exportChart').on('click', function () {
+            const canvas = document.getElementById('productChart');
+            const canvasImage = canvas.toDataURL('image/png'); // Chuyển Canvas thành hình ảnh
+
+            // Tạo tài liệu PDF
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            // Thêm hình ảnh vào PDF
+            pdf.addImage(canvasImage, 'PNG', 10, 10, 190, 100); // Vị trí và kích thước
+            pdf.save('product_chart.pdf'); // Lưu file PDF
+        });
+    });
+</script>
+
+

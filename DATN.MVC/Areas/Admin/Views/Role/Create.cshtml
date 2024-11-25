@@ -1,0 +1,222 @@
+﻿@model AddRoleRequest
+
+<h2 class="text-center mb-4">Thêm Chức Vụ Mới</h2>
+<style>
+    /* Form Container Styling */
+    .form-container {
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Form Group Styling */
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .form-group .form-control {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+    /* Button Styling */
+    .btn2 {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    /* Error Message Styling */
+    .label-error-container {
+        display: flex; /* Đặt container thành flexbox */
+        align-items: center; /* Căn giữa label và span theo chiều dọc */
+        justify-content: space-between; /* Giãn cách giữa label và span */
+        margin-bottom: 5px; /* Khoảng cách giữa label và input */
+    }
+
+        /* Label Styling */
+        .label-error-container label {
+            font-weight: bold;
+            color: #555;
+            flex: 1; /* Để label chiếm không gian linh hoạt */
+        }
+
+    /* Error Message Styling */
+    .error-message {
+        color: red;
+        font-size: 12px;
+        display: flex; /* Sử dụng flex để xếp icon và text */
+        align-items: center; /* Căn giữa icon và text theo chiều dọc */
+        margin-left: 10px; /* Khoảng cách giữa Label và thông báo lỗi */
+        white-space: nowrap; /* Không cho xuống dòng */
+    }
+
+    .sb-nav-link-icon {
+        margin-right: 5px; /* Tạo khoảng cách giữa icon và text */
+        display: flex; /* Đảm bảo icon không bị xuống dòng */
+        align-items: center;
+    }
+
+        .sb-nav-link-icon i {
+            font-size: 14px; /* Kích thước icon */
+            color: red;
+        }
+</style>
+<div class="container">
+    <form id="createRoleForm" asp-action="Create" method="post" class="form-container" novalidate>
+
+        <!-- Tên Chức Vụ -->
+        <div class="form-group">
+            <div class="label-error-container">
+                <label for="Name">Tên Chức Vụ</label>
+                <span id="NameError" class="error-message"><div class="sb-nav-link-icon"><i class="fas fa-pinterests" hidden></i></div></span> <!-- Hiển thị lỗi cùng hàng với label -->
+            </div>
+          
+            <input type="text" class="form-control" id="Name" name="Name" placeholder="Nhập tên chức vụ" />
+            
+        </div>
+
+        <!-- Trạng Thái -->
+        <div class="form-group">
+            <div class="label-error-container">
+                <label for="IsActived">Trạng Thái</label>
+                <span id="IsActivedError" class="error-message"><div class="sb-nav-link-icon"><i class="fas fa-pinterests" hidden></i></div></span>
+            </div>
+            
+            <select class="form-control" id="IsActived" name="IsActived">
+                <option value="">-- Chọn Trạng Thái --</option>
+                <option value="true">Hoạt Động</option>
+                <option value="false">Dừng Hoạt Động</option>
+            </select>
+             <!-- Hiển thị lỗi cho trường IsActived -->
+        </div>
+
+     
+
+        <!-- Nút Gửi -->
+        <div class="form-group">
+            <button id="btnSaveRole" type="button" class="btn btn-primary">Lưu</button>
+
+            <a href="@Url.Action("Index")" class="btn btn-secondary">Quay lại danh sách</a>
+        </div>
+
+    </form>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            // Bắt sự kiện nút Lưu
+            $('#btnSaveRole').click(function (e) {
+                e.preventDefault(); // Ngăn hành động mặc định
+
+                // Xóa tất cả thông báo lỗi
+                $('.error-message').html('');
+
+                let isValid = true;
+
+                // Kiểm tra trường "Tên Chức Vụ"
+                const name = $('#Name').val().trim();
+                const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/;
+                if (!name) {
+                    showError('#NameError', 'Tên chức vụ không được bỏ trống.');
+                    isValid = false;
+                } else if (!nameRegex.test(name)) {
+                    showError('#NameError', 'Tên chức vụ chỉ được chứa chữ cái và khoảng trắng.');
+                    isValid = false;
+                }
+
+                // Kiểm tra trường "Trạng Thái"
+                const isActived = $('#IsActived').val();
+                if (!isActived) {
+                    showError('#IsActivedError', 'Trạng thái không được bỏ trống.');
+                    isValid = false;
+                }
+
+               
+
+                // Nếu hợp lệ thì gửi dữ liệu qua Ajax
+                if (isValid) {
+                    const roleData = {
+                        Name: name,
+                        IsActived: isActived === 'true',
+                        
+                    };
+
+                    $.ajax({
+                        url: '@Url.Action("AddNew", "Role")',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(roleData),
+                        success: function (response) {
+                            alert('Thêm chức vụ thành công!');
+                            window.location.href = '@Url.Action("Index", "Role")';
+                        },
+                        error: function (xhr) {
+                            const errorDetails = JSON.parse(xhr.responseText || '{}');
+                            if (errorDetails.errors) {
+                                if (errorDetails.errors.Name) {
+                                    showError('#NameError', errorDetails.errors.Name[0]);
+                                }
+                                if (errorDetails.errors.IsActived) {
+                                    showError('#IsActivedError', errorDetails.errors.IsActived[0]);
+                                }
+                               
+                            } else {
+                                alert('Có lỗi xảy ra: ' + (xhr.responseText || 'Vui lòng thử lại.'));
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Hàm hiển thị lỗi
+            function showError(selector, message) {
+                $(selector).html(`<div class="sb-nav-link-icon"><i class="fas fa-exclamation-circle"></i></div> ${message}`);
+                $(selector).show(); // Hiển thị lỗi
+            }
+
+            // Ẩn lỗi khi người dùng bắt đầu nhập lại
+            $('#createRoleForm input, #createRoleForm select').on('input change', function () {
+                const errorSpanId = `#${$(this).attr('id')}Error`;
+                $(errorSpanId).html(''); // Xóa nội dung lỗi
+            });
+        });
+
+    </script>
+
+}
+
+
+
+<!-- jQuery và Validation Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

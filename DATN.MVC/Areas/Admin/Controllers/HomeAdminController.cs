@@ -13,6 +13,25 @@ namespace DATN.MVC.Areas.Admin.Controllers
         { 
             return View();
         }
+
+        public IActionResult StatisticalUsers()
+        {
+            return View();
+        }
+
+        public IActionResult StatisticalPosts()
+        {
+            return View();
+        }
+
+        public IActionResult StatisticalProducts()
+        {
+            return View();
+        }
+        public IActionResult StatisticalMessages()
+        {
+            return View();
+        }
         public IActionResult Table()
         {
 

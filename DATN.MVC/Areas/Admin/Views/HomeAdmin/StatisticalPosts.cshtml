@@ -1,0 +1,122 @@
+﻿@{
+    ViewData["Title"] = "Bảng điều khiển";
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Thêm Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+            <div class="card-header">
+            <h2>  <i class="fas fa-chart-bar me-1"></i>Thống Kê Bài Viết</h2>
+             <button id="exportChart" class="btn btn-success">Export Biểu Đồ</button>
+            </div>
+            <div class="card-body"><canvas id="postChart" width="100%" height="50"></canvas></div>
+            <div class="card-footer small text-muted">Cập nhật gần nhất lúc: @DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy")</div>
+
+
+<script>
+    $(document).ready(function () {
+        // Lấy dữ liệu từ API
+        $.ajax({
+            url: "https://localhost:7296/api/Posts/thongke", // Đường dẫn API
+            method: "GET",
+            dataType: "json",
+            success: function (data) {
+                console.log(data); // Kiểm tra dữ liệu từ API
+
+                // Chuẩn bị dữ liệu cho biểu đồ
+                const labels = data.map(item => `${item.month}/${item.year}`); // Nhãn trục X là tháng/năm
+                const totalPosts = data.map(item => item.totalPosts); // Tổng số bài viết
+                const activatedPosts = data.map(item => item.activatedPosts); // Bài viết đã kích hoạt
+                const deactivatedPosts = data.map(item => item.deactivatedPosts); // Bài viết chưa kích hoạt
+
+                // Vẽ biểu đồ dạng cột
+                const ctx = document.getElementById('postChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar', // Loại biểu đồ cột
+                    data: {
+                        labels: labels, // Các nhãn trục X
+                        datasets: [
+                            {
+                                label: 'Tổng số bài viết',
+                                data: totalPosts,
+                                backgroundColor: 'rgba(54, 162, 235, 0.6)', // Màu nền cột
+                                borderColor: 'rgba(54, 162, 235, 1)', // Màu viền cột
+                                borderWidth: 1 // Độ dày viền
+                            },
+                            {
+                                label: 'Bài viết đã kích hoạt',
+                                data: activatedPosts,
+                                backgroundColor: 'rgba(75, 192, 192, 0.6)', // Màu nền cột
+                                borderColor: 'rgba(75, 192, 192, 1)', // Màu viền cột
+                                borderWidth: 1 // Độ dày viền
+                            },
+                            {
+                                label: 'Bài viết chưa kích hoạt',
+                                data: deactivatedPosts,
+                                backgroundColor: 'rgba(255, 99, 132, 0.6)', // Màu nền cột
+                                borderColor: 'rgba(255, 99, 132, 1)', // Màu viền cột
+                                borderWidth: 1 // Độ dày viền
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true, // Responsive trên mọi thiết bị
+                        plugins: {
+                            legend: {
+                                display: true, // Hiển thị chú thích
+                                position: 'top'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Thống kê bài viết hàng tháng' // Tiêu đề biểu đồ
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Tháng/Năm' // Tiêu đề trục X
+                                },
+                                grid: {
+                                    display: true, // Hiển thị lưới trên trục X
+                                    color: 'rgba(200, 200, 200, 0.3)' // Màu lưới trục X
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Số lượng bài viết' // Tiêu đề trục Y
+                                },
+                                beginAtZero: true, // Bắt đầu từ 0
+                                ticks: {
+                                    stepSize: 1, // Khoảng cách giữa các giá trị trên trục Y
+                                },
+                                grid: {
+                                    display: true, // Hiển thị lưới trên trục Y
+                                    color: 'rgba(200, 200, 200, 0.3)' // Màu lưới trục Y
+                                }
+                            }
+                        }
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Lỗi khi lấy dữ liệu thống kê:", error);
+            }
+        });
+
+        $('#exportChart').on('click', function () {
+            const canvas = document.getElementById('postChart');
+            const canvasImage = canvas.toDataURL('image/png'); // Chuyển Canvas thành hình ảnh
+
+            // Tạo tài liệu PDF
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            // Thêm hình ảnh vào PDF
+            pdf.addImage(canvasImage, 'PNG', 10, 10, 190, 100); // Vị trí và kích thước
+            pdf.save('post_chart.pdf'); // Lưu file PDF
+        });
+    });
+</script>
+
