@@ -16,7 +16,7 @@
         margin-top: 50px;
     }
 
-    /* Tiêu đề */
+  
     .edit-role-title {
         text-align: center;
         color: #333;
@@ -24,12 +24,12 @@
         margin-bottom: 20px;
     }
 
-    /* Các nhóm của form */
+    
     .edit-role-form-group {
         margin-bottom: 15px;
     }
 
-    /* Nhãn của form */
+   
     .edit-role-label {
         font-weight: bold;
         color: #555;
@@ -37,7 +37,7 @@
         margin-bottom: 5px;
     }
 
-    /* Các ô input */
+   
     .edit-role-input, .edit-role-select {
         width: 100%;
         padding: 10px;
@@ -47,7 +47,7 @@
         box-sizing: border-box;
     }
 
-    /* Nút lưu */
+    
     .edit-role-btn {
         width: 100%;
         background-color: #007bff;
@@ -60,7 +60,7 @@
         transition: background-color 0.3s ease;
     }
 
-    /* Hiệu ứng hover của nút lưu */
+    
     .edit-role-btn:hover {
         background-color: #0056b3;
     }
@@ -91,7 +91,7 @@
         margin-top: 5px;
     }
 
-    /* Button quay lại */
+   
     .back-btn {
         display: inline-block;
         margin-top: 15px;
@@ -107,7 +107,7 @@
         background-color: #5a6268;
     }
 
-    /* Container chứa Label và thông báo lỗi */
+   
     .edit-role-label-container {
         display: flex;
         align-items: center;
@@ -115,7 +115,7 @@
         margin-bottom: 5px; /* Khoảng cách dưới cùng */
     }
 
-    /* Label */
+   
     .edit-role-label {
         font-weight: bold;
         color: #555;
@@ -137,7 +137,7 @@
         <div class="edit-role-form-group">
             <div class="edit-role-label-container">
                 <label for="Name" class="edit-role-label">Tên chức vụ </label>
-                <span class="error-message"><div class="sb-nav-link-icon"><i class="fas fa-pinterests" hidden></i></div></span> <!-- Thông báo lỗi nằm cạnh Label -->
+                <span id="NameError" class="error-message"><div class="sb-nav-link-icon"><i class="fas fa-pinterests" hidden></i></div></span> <!-- Thông báo lỗi nằm cạnh Label -->
             </div>
             <input type="text" class="edit-role-input" id="Name" name="Name" value="@Model.Name" placeholder="Nhập tên chức vụ" />
         </div>
@@ -145,7 +145,7 @@
         <div class="edit-role-form-group">
             <div class="edit-role-label-container">
                 <label for="IsActived" class="edit-role-label">Trạng thái</label>
-                <span class="error-message"></span> <!-- Thông báo lỗi nằm cạnh Label -->
+                <span id="IsActivedError" class="error-message"></span> <!-- Thông báo lỗi nằm cạnh Label -->
             </div>
             <select class="edit-role-select" id="IsActived" name="IsActived">
                 <option value="true" selected>Hoạt động</option>
@@ -156,7 +156,7 @@
        
 
 
-        <!-- Nút lưu -->
+        
         <button type="submit" class="edit-role-btn"><i class="fas fa-save"></i> Lưu</button>
     </form>
 
@@ -164,60 +164,117 @@
     <a href="@Url.Action("Index")" class="back-btn"><i class="fas fa-arrow-left"></i> Quay lại danh sách</a>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Lắng nghe sự kiện nhập liệu trên các trường
-        document.querySelectorAll('.edit-role-input, .edit-role-select').forEach((field) => {
-            field.addEventListener('input', () => clearError(field));
-            field.addEventListener('change', () => clearError(field));
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            // Hàm hiển thị lỗi
+            function showError(selector, message) {
+                $(selector).html(`<div class="sb-nav-link-icon"><i class="fas fa-exclamation-circle"></i></div> ${message}`);
+                $(selector).show();
+            }
+
+            // Hàm ẩn lỗi
+            function hideError(selector) {
+                $(selector).html('');
+                $(selector).hide();
+            }
+
+            // Lắng nghe sự kiện nhập liệu trên trường "Tên Chức Vụ"
+            $('#Name').on('input', function () {
+                const name = $(this).val();
+                const nameTrimmed = name.trim();
+                const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/;
+
+                if (!nameTrimmed) {
+                    showError('#NameError', 'Không được bỏ trống.');
+                } else if (name !== nameTrimmed) {
+                    showError('#NameError', 'Không được có khoảng trắng ở đầu hoặc cuối.');
+                } else if (!nameRegex.test(nameTrimmed)) {
+                    showError('#NameError', 'Chỉ được chứa chữ cái và khoảng trắng.');
+                } else {
+                    hideError('#NameError');
+                }
+            });
+
+            // Lắng nghe sự kiện thay đổi trên trường "Trạng Thái"
+            $('#IsActived').on('change', function () {
+                const isActived = $(this).val();
+                if (!isActived) {
+                    showError('#IsActivedError', 'Trạng thái không được bỏ trống.');
+                } else {
+                    hideError('#IsActivedError');
+                }
+            });
+
+            // Xử lý khi nhấn nút Lưu
+            $('#btnSaveRole').click(function (e) {
+                e.preventDefault(); // Ngăn hành động mặc định
+
+                let isValid = true;
+
+                // Kiểm tra trường "Tên Chức Vụ"
+                const name = $('#Name').val();
+                const nameTrimmed = name.trim();
+                const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/;
+                if (!nameTrimmed) {
+                    showError('#NameError', 'Không được bỏ trống.');
+                    isValid = false;
+                } else if (name !== nameTrimmed) {
+                    showError('#NameError', 'Không được có khoảng trắng ở đầu hoặc cuối.');
+                    isValid = false;
+                } else if (!nameRegex.test(nameTrimmed)) {
+                    showError('#NameError', 'Chỉ được chứa chữ cái và khoảng trắng.');
+                    isValid = false;
+                } else {
+                    hideError('#NameError');
+                }
+
+                // Kiểm tra trường "Trạng Thái"
+                const isActived = $('#IsActived').val();
+                if (!isActived) {
+                    showError('#IsActivedError', 'Trạng thái không được bỏ trống.');
+                    isValid = false;
+                } else {
+                    hideError('#IsActivedError');
+                }
+
+                // Nếu hợp lệ thì gửi dữ liệu qua Ajax
+                if (isValid) {
+                    const roleData = {
+                        Name: nameTrimmed,
+                        IsActived: isActived === 'true',
+                    };
+
+                    $.ajax({
+                        url: '@Url.Action("AddNew", "Role")',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(roleData),
+                        success: function (response) {
+                            alert('Thêm chức vụ thành công!');
+                            window.location.href = '@Url.Action("Index", "Role")';
+                        },
+                        error: function (xhr) {
+                            const errorDetails = JSON.parse(xhr.responseText || '{}');
+                            if (errorDetails.errors) {
+                                if (errorDetails.errors.Name) {
+                                    showError('#NameError', errorDetails.errors.Name[0]);
+                                }
+                                if (errorDetails.errors.IsActived) {
+                                    showError('#IsActivedError', errorDetails.errors.IsActived[0]);
+                                }
+                            } else {
+                                alert('Có lỗi xảy ra: ' + (xhr.responseText || 'Vui lòng thử lại.'));
+                            }
+                        }
+                    });
+                }
+            });
         });
-    });
+    </script>
 
-    function validateForm() {
-        let isValid = true;
+}
 
-        // Reset tất cả thông báo lỗi
-        document.querySelectorAll('.error-message').forEach(function (span) {
-            span.textContent = '';
-        });
-
-        // Kiểm tra tên chức vụ
-        let nameField = document.getElementById('Name');
-        const nameRegex = /^[a-zA-ZÀ-ỹ\u00C0-\u1EF9\s]+$/;
-        if (nameField.value.trim() === '') {
-            showError(nameField, 'Tên chức vụ không được để trống');
-            isValid = false;
-        }
-        if (!nameRegex.test(nameField.value.trim())) {
-            showError(nameField, 'Tên chức vụ chỉ được chứa chữ cái và khoảng trắng');
-            isValid = false;
-        }   
-
-        // Kiểm tra trạng thái
-        let isActiveField = document.getElementById('IsActived');
-        if (isActiveField.value.trim() === '') {
-            showError(isActiveField, 'Vui lòng chọn trạng thái');
-            isValid = false;
-        }
-
-        
-
-        return isValid; // Nếu form không hợp lệ, ngừng submit
-    }
-
-    function showError(field, message) {
-        const errorSpan = field.closest('.edit-role-form-group').querySelector('.error-message');
-        errorSpan.innerHTML = `<div class="sb-nav-link-icon"><i class="fas fa-pinterests"></i></div> ${message}`; // Thêm icon vào thông báo lỗi
-    }
-
-    function clearError(field) {
-        const errorSpan = field.closest('.edit-role-form-group').querySelector('.error-message');
-        errorSpan.textContent = ''; // Xóa toàn bộ nội dung thông báo lỗi, bao gồm icon
-    }
-
-
-
-</script>
 
 
 
