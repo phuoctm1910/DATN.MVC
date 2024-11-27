@@ -28,22 +28,20 @@
     </div>
     <div class="card-body">
         <table id="datatablesParentCategory" class="table table-striped table-bordered" style="margin-top: 20px;">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tên danh mục</th>
-                    <th>Trạng thái</th>
-                    <th>Ngày tạo</th>  <!-- Thêm cột Ngày tạo -->
-                    <th>Ngày cập nhật</th> <!-- Thêm cột Ngày cập nhật -->
-                    <th>Hành động</th>
+            <thead >
+                <tr >
+                    <th class="text-center align-middle">Tên danh mục</th>
+                    <th class="text-center align-middle">Trạng thái</th>
+                    <th class="text-center align-middle">Ngày tạo</th>  <!-- Thêm cột Ngày tạo -->
+                    <th class="text-center align-middle">Ngày cập nhật</th> <!-- Thêm cột Ngày cập nhật -->
+                    <th class="text-center align-middle">Hành động</th>
                 </tr>
             </thead>
 
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>@item.Id</td>
+                    <tr style="text-align: center; vertical-align:middle">
                         <td>@item.Name</td>
                         <td>@(item.IsActived ? "Sử dụng" : "Không sử dụng")</td>
                         <td>@item.CreatedDateTime.ToString("dd/MM/yyyy HH:mm")</td> <!-- Hiển thị Ngày tạo -->
