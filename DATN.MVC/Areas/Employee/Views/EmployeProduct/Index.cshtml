@@ -1,0 +1,95 @@
+﻿@model IEnumerable<DATN.MVC.Areas.Employee.Models.EmployeProduct.Response.ProductGetAll_Res>
+@section Styles{
+    <style>
+        table.dataTable thead {
+            text-align: center;
+        }   
+    </style>
+}
+<h1>Quản Lý Sản Phẩm</h1>
+
+<!-- Modal chỉnh sửa trạng thái -->
+<div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProductModalLabel">Chỉnh sửa trạng thái sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProductForm">
+                    <div class="form-group">
+                        <label for="modalProductId">Mã sản phẩm:</label>
+                        <input type="text" class="form-control" id="modalProductId" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="modalIsActived">Trạng thái hoạt động:</label>
+                        <select class="edit-category-select form-control" id="modalIsActived" name="IsActived">
+                            <option value="true">Sử dụng</option>
+                            <option value="false">Không sử dụng</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="saveChangesButton">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Card chứa bảng -->
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Danh Sách Sản Phẩm
+    </div>
+    <div class="card-body">
+        <table id="datatablesProduct" class="table table-striped table-bordered" style="margin-top: 20px;">
+            <thead >
+                <tr>
+                    <th class="text-center align-middle">Tên Gian Hàng Sở Hữu</th>
+                    <th class="text-center align-middle">Tên sản phẩm</th>
+                    <th class="text-center align-middle">Giá</th>
+                    <th class="text-center align-middle">Số lượng</th>
+                    <th class="text-center align-middle">Size</th>
+                    <th class="text-center align-middle">Trạng thái</th>
+                    <th class="text-center align-middle">Ngày tạo</th>
+                    <th class="text-center align-middle">Ngày cập nhật</th>
+                    <th class="text-center align-middle">Hành động</th>
+                </tr>
+            </thead>
+            <tbody style="text-align: center; vertical-align:middle">
+                @foreach (var product in Model)
+                {
+                    <tr>
+
+                        <td>@product.SalePlaceName</td>
+                        <td>@product.Name</td>
+                        <td>@product.Price.ToString("N0") VNĐ</td>
+                        <td>@product.Quantity</td>
+                        <td>@product.Size</td>
+                        <td>@(product.IsActived ? "Sử dụng" : "Không sử dụng")</td>
+                        <td>@product.CreatedDateTime.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@product.UpdatedDateTime.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            <button type="button" class="btn btn-primary edit-button"
+                                    data-id="@product.Id"
+                                    data-isactived="@product.IsActived"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editProductModal">
+                                Chỉnh sửa
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Employe/js/datatable-Employe-Product.js"></script>
+}
