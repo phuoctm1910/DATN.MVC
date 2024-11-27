@@ -15,7 +15,8 @@ namespace DATN.MVC
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpClient(); // Đăng ký IHttpClientFactory
-
+            builder.Services.AddControllers()
+                .AddNewtonsoftJson();
             // Thêm dịch vụ Session
             builder.Services.AddSession(options =>
             {

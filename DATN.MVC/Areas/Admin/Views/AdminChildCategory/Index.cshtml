@@ -51,21 +51,19 @@
     <a href="@Url.Action("CreateChildCategory", "AdminChildCategory")" class="btn-add-category">Thêm Danh Mục Con</a>
 </div>
 <table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Tên danh mục</th>
-            <th>ID Danh mục lớn</th>
-            <th>Ngày tạo</th>
-            <th>Ngày cập nhật</th>
-            <th>Hành động</th>
+    <thead >
+        <tr >
+            <th class="text-center align-middle">Tên danh mục</th>
+            <th class="text-center align-middle">ID Danh mục lớn</th>
+            <th class="text-center align-middle">Ngày tạo</th>
+            <th class="text-center align-middle">Ngày cập nhật</th>
+            <th class="text-center align-middle">Hành động</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody >
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@item.Id</td>
+            <tr style="text-align: center; vertical-align:middle">
                 <td>@item.Name</td>
                 <td>@(item.ParentCategoryId.HasValue ? item.ParentCategoryId.Value.ToString() : "Không có")</td> <!-- Hiển thị ID của danh mục cha -->
                 <td>@item.CreatedDate</td> <!-- Hiển thị ngày tạo -->
