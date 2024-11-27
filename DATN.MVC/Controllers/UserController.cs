@@ -1,294 +1,261 @@
 ﻿using DATN.MVC.Models;
+using DATN.MVC.Request.Friends;
 using DATN.MVC.Request.User;
+using DATN.MVC.Respone.Friends;
 using DATN.MVC.Respone.User;
+using DATN.MVC.Ultilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace DATN.MVC.Controllers;
-
-public class UserController : Controller
+namespace DATN.MVC.Controllers
 {
-    // GET: UserController
-    public ActionResult About()
+    public class UserController : BaseController
     {
-        var viewSettings = new ViewSettings
+        // GET: UserController
+        public ActionResult About()
         {
-            ShowSidebar = true, // Tắt sidebar
-            ShowHeader = true,   // Bật header
-            ShowFriendList = true // Tắt danh sách bạn bè
-        };
-        ViewBag.ViewSettings = viewSettings;
-
-        return View();
-    }
-
-    public ActionResult Notification()
-    {
-        var viewSettings = new ViewSettings
-        {
-            ShowSidebar = true, // Tắt sidebar
-            ShowHeader = true,   // Bật header
-            ShowFriendList = true // Tắt danh sách bạn bè
-        };
-        ViewBag.ViewSettings = viewSettings;
-
-        return View();
-    }
-
-    public ActionResult Friends()
-    {
-        using (var httpClient = new HttpClient())
-        {
-            HttpResponseMessage response = httpClient.GetAsync("https://localhost:7296/api/friend/get-sent-friend-requests").Result;
-            if (response.IsSuccessStatusCode)
+            var viewSettings = new ViewSettings
             {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var users = JsonConvert.DeserializeObject<List<FriendRequestResponse>>(jsonData);
+                ShowSidebar = true, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = true // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
 
-                // Lọc chỉ lấy những người có status = 0
-                var pendingRequests = users.Where(user => user.Status == 0).ToList();
+            return View();
+        }
 
-                var viewSettings = new ViewSettings
+        public ActionResult Notification()
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = true, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = true // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+
+            return View();
+        }
+
+        public ActionResult Friends()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = httpClient.GetAsync("https://localhost:7296/api/friend/get-sent-friend-requests").Result;
+                if (response.IsSuccessStatusCode)
                 {
-                    ShowSidebar = false, // Tắt sidebar
-                    ShowHeader = true,   // Bật header
-                    ShowFriendList = false // Tắt danh sách bạn bè
-                };
-                ViewBag.ViewSettings = viewSettings;
-                return View(pendingRequests);
-            }
-            else
-            {
-                TempData["Error"] = "Không có lời mời nào.";
-                return View(new List<FriendRequestResponse>());
-            }
-        }
-    }
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
+                    var users = JsonConvert.DeserializeObject<List<FriendRequestResponse>>(jsonData);
 
-    [HttpPost]
-    public IActionResult HandleFriend(Manage_FriendReq req)
-    {
-        using (var httpClient = new HttpClient())
-        {
-            var json = JsonConvert.SerializeObject(req);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = httpClient.PutAsync("https://localhost:7296/api/friend/manage-friend-request", content).Result;
+                    // Lọc chỉ lấy những người có status = 0
+                    var pendingRequests = users.Where(user => user.Status == 0).ToList();
 
-            if (response.IsSuccessStatusCode)
-            {
-                // Nếu cập nhật thành công, chuyển hướng đến AllFriends
-                TempData["Success"] = "Friend request handled successfully.";
-                return Redirect("/User/AllFriends");
-            }
-            else
-            {
-                // Nếu có lỗi, hiển thị lỗi và ở lại trang hiện tại
-                TempData["Error"] = "Failed to handle friend request. Please try again later.";
-                return RedirectToAction("Friends");
-            }
-        }
-    }
-
-    public ActionResult AllFriends()
-    {
-        using (var httpClient = new HttpClient())
-        {
-            HttpResponseMessage response = httpClient.GetAsync("https://localhost:7296/api/friend/get-all-friend").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonData = response.Content.ReadAsStringAsync().Result;
-                var users = JsonConvert.DeserializeObject<List<FriendRequestResponse>>(jsonData);
-
-                // Lọc bạn bè có status = 1
-                var friendsWithStatusOne = users.Where(friend => friend.Status == 1).ToList();
-
-                var viewSettings = new ViewSettings
+                    var viewSettings = new ViewSettings
+                    {
+                        ShowSidebar = false, // Tắt sidebar
+                        ShowHeader = true,   // Bật header
+                        ShowFriendList = false // Tắt danh sách bạn bè
+                    };
+                    ViewBag.ViewSettings = viewSettings;
+                    return View(pendingRequests);
+                }
+                else
                 {
-                    ShowSidebar = false, // Tắt sidebar
-                    ShowHeader = true,   // Bật header
-                    ShowFriendList = false // Tắt danh sách bạn bè
+                    TempData["Error"] = "Không có lời mời nào.";
+                    return View(new List<FriendRequestResponse>());
+                }
+            }
+        }
+
+
+
+        public ActionResult AllFriends()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                // Extract UserId from HttpContext
+                var userId = HttpContext.Items["userId"]?.ToString();
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return BadRequest("User ID is missing.");
+                }
+
+                // Prepare the request
+                var req = new FriendListReq
+                {
+                    UserId = int.Parse(userId), // Convert UserId to int
+                    Status = FriendStatus.Accepted
                 };
-                ViewBag.ViewSettings = viewSettings;
-                return View(friendsWithStatusOne);
+
+                try
+                {
+                    // Serialize the request to JSON
+                    var jsonContent = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
+
+                    // Send POST request
+                    HttpResponseMessage response = httpClient.PostAsync("https://localhost:7296/api/friends/get-friend-list", jsonContent).Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Read and deserialize response
+                        var jsonData = response.Content.ReadAsStringAsync().Result;
+                        var users = JsonConvert.DeserializeObject<List<FriendListRes>>(jsonData);
+
+                        // Prepare view settings
+                        var viewSettings = new ViewSettings
+                        {
+                            ShowSidebar = false, // Disable sidebar
+                            ShowHeader = true,   // Enable header
+                            ShowFriendList = false // Disable friend list
+                        };
+                        ViewBag.ViewSettings = viewSettings;
+
+                        // Pass the filtered list to the view
+                        return View(users);
+                    }
+                    else
+                    {
+                        // Return empty list in case of unsuccessful response
+                        return View(new List<FriendListRes>());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log or handle exceptions appropriately
+                    return StatusCode(500, $"Internal server error: {ex.Message}");
+                }
             }
-            else
+        }
+
+        public async Task<IActionResult> UpdateInformation()
+        {
+            using (var httpClient = new HttpClient())
             {
-                return View(new List<FriendRequestResponse>());
+                int id = 1;
+                HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7296/api/User/get/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonData = await response.Content.ReadAsStringAsync();
+                    var userInfo = JsonConvert.DeserializeObject<User_GetUserInfoRes>(jsonData);
+                    return View(userInfo);
+                }
+                else
+                {
+                    TempData["Error"] = "Không thể tải thông tin người dùng. Vui lòng thử lại sau.";
+                    return View();
+                }
             }
         }
-    }
 
-    // GET: UserController/Details/5
-    public ActionResult Details(int id)
-    {
-        return View();
-    }
-
-    // GET: UserController/Create
-    public ActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: UserController/Create
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Create(IFormCollection collection)
-    {
-        try
+        [HttpPost]
+        public IActionResult Unfriend(Friend_Unfriend req)
         {
-            return RedirectToAction(nameof(Index));
-        }
-        catch
-        {
-            return View();
-        }
-    }
-
-    // GET: UserController/Edit/5
-    public ActionResult Edit(int id)
-    {
-        return View();
-    }
-
-    // POST: UserController/Edit/5
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Edit(int id, IFormCollection collection)
-    {
-        try
-        {
-            return RedirectToAction(nameof(Index));
-        }
-        catch
-        {
-            return View();
-        }
-    }
-
-    // GET: UserController/Delete/5
-    public ActionResult Delete(int id)
-    {
-        return View();
-    }
-
-    // POST: UserController/Delete/5
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Delete(int id, IFormCollection collection)
-    {
-        try
-        {
-            return RedirectToAction(nameof(Index));
-        }
-        catch
-        {
-            return View();
-        }
-    }
-    private readonly string _apiBaseUrl = "https://localhost:7296/api/User/update";
-
-    public async Task<IActionResult> UpdateInformation()
-    {
-        using (var httpClient = new HttpClient())
-        {
-            int id = 1;
-            HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7296/api/User/get/{id}");
-
-            if (response.IsSuccessStatusCode)
+            using (var httpClient = new HttpClient())
             {
-                var jsonData = await response.Content.ReadAsStringAsync();
-                var userInfo = JsonConvert.DeserializeObject<User_GetUserInfoRes>(jsonData);
-                return View(userInfo);
+                req.Status = FriendStatus.Unfriend;
+                var json = JsonConvert.SerializeObject(req);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = httpClient.PostAsync("https://localhost:7296/api/friends/unfriend-friend-request", content).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Nếu cập nhật thành công, chuyển hướng đến AllFriends
+                    TempData["Success"] = "Friend request handled successfully.";
+                    return Redirect("/User/AllFriends");
+                }
+                else
+                {
+                    // Nếu có lỗi, hiển thị lỗi và ở lại trang hiện tại
+                    TempData["Error"] = "Failed to handle friend request. Please try again later.";
+                    return Ok();
+                }
             }
-            else
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateInformation(Update_UserReq request)
+        {
+            var file = Request.Form.Files["ImageFile"];
+            if (file != null && file.Length > 0)
             {
-                TempData["Error"] = "Không thể tải thông tin người dùng. Vui lòng thử lại sau.";
+                var filePath = Path.Combine("wwwroot/uploads", file.FileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                request.Image = "/uploads/" + file.FileName;
+            }
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Không nhập đủ thông tin. Vui lòng thử lại.";
                 return View();
             }
-        }
-    }
 
-    [HttpPost]
-    public async Task<IActionResult> UpdateInformation(Update_UserReq request)
-    {
-        var file = Request.Form.Files["ImageFile"];
-        if (file != null && file.Length > 0)
-        {
-            var filePath = Path.Combine("wwwroot/uploads", file.FileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            using (var httpClient = new HttpClient())
             {
-                await file.CopyToAsync(stream);
+                string jsonData = JsonConvert.SerializeObject(request);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await httpClient.PutAsync("https://localhost:7296/api/User/update", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Success"] = "Cập nhật thông tin thành công.";
+                    return Redirect("/");
+                }
+                else
+                {
+                    TempData["Error"] = "Đã xảy ra lỗi khi cập nhật thông tin. Vui lòng thử lại.";
+                }
             }
 
-            request.Image = "/uploads/" + file.FileName;
-        }
-        if (!ModelState.IsValid)
-        {
-            TempData["Error"] = "Không nhập đủ thông tin. Vui lòng thử lại.";
             return View();
         }
-
-        using (var httpClient = new HttpClient())
+        public async Task<IActionResult> SendRequestFriend()
         {
-            string jsonData = JsonConvert.SerializeObject(request);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = await httpClient.PutAsync(_apiBaseUrl, content);
-
-            if (response.IsSuccessStatusCode)
+            using (var httpClient = new HttpClient())
             {
-                TempData["Success"] = "Cập nhật thông tin thành công.";
-                return Redirect("/");
-            }
-            else
-            {
-                TempData["Error"] = "Đã xảy ra lỗi khi cập nhật thông tin. Vui lòng thử lại.";
+                HttpResponseMessage response = await httpClient.GetAsync("https://localhost:7296/api/User/getAll");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonData = await response.Content.ReadAsStringAsync();
+                    var userInfoList = JsonConvert.DeserializeObject<List<User_GetUserInfoRes>>(jsonData);
+                    return View(userInfoList);
+                }
+                else
+                {
+                    TempData["Error"] = "Không thể tải thông tin người dùng. Vui lòng thử lại sau.";
+                    return View(new List<User_GetUserInfoRes>());
+                }
             }
         }
-
-        return View();
-    }
-    public async Task<IActionResult> SendRequestFriend()
-    {
-        using (var httpClient = new HttpClient())
+        [HttpPost]
+        public async Task<IActionResult> SendFriend(FriendReq request)
         {
-            HttpResponseMessage response = await httpClient.GetAsync("https://localhost:7296/api/User/getAll");
+            using (var httpClient = new HttpClient())
+            {
+                request.User1Id = 1;
+                string jsonData = JsonConvert.SerializeObject(request);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await httpClient.PostAsync("https://localhost:7296/api/Friend/send-request", content);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonData = await response.Content.ReadAsStringAsync();
-                var userInfoList = JsonConvert.DeserializeObject<List<User_GetUserInfoRes>>(jsonData);
-                return View(userInfoList);
-            }
-            else
-            {
-                TempData["Error"] = "Không thể tải thông tin người dùng. Vui lòng thử lại sau.";
-                return View(new List<User_GetUserInfoRes>());
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Success"] = "Yêu cầu kết bạn đã được gửi thành công.";
+                }
+                else
+                {
+                    TempData["Error"] = "Không thể gửi yêu cầu kết bạn. Vui lòng thử lại sau.";
+                }
+                return Redirect("/User/Friends");
             }
         }
     }
-    [HttpPost]
-    public async Task<IActionResult> SendFriend(FriendReq request)
-    {
-        using (var httpClient = new HttpClient())
-        {
-            request.User1Id = 1;
-            string jsonData = JsonConvert.SerializeObject(request);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await httpClient.PostAsync("https://localhost:7296/api/Friend/send-request", content);
 
-            if (response.IsSuccessStatusCode)
-            {
-                TempData["Success"] = "Yêu cầu kết bạn đã được gửi thành công.";
-            }
-            else
-            {
-                TempData["Error"] = "Không thể gửi yêu cầu kết bạn. Vui lòng thử lại sau.";
-            }
-            return Redirect("/User/Friends");
-        }
-    }
 }
+

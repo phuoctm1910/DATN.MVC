@@ -5,23 +5,25 @@ using DATN.MVC.Models.Request;
 using DATN.MVC.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol.Plugins;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace DATN.MVC.Controllers
 {
-    public class User
-    {
-        public int Id { get; set; }
-        public string FullName { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-    }
     public class AccountController : Controller
     {
-        private static List<User> users = new List<User>
+        private Dictionary<string, string> DecodeJwtToken(string token)
         {
-            new User { Id = 1, FullName = "Full Name 1", UserName = "phuoc", Password = "123456" },
-            new User { Id = 2, FullName = "Full Name 2", UserName = "duy", Password = "123456" }  
-        };
+            var handler = new JwtSecurityTokenHandler();
+
+            if (!handler.CanReadToken(token))
+                throw new ArgumentException("Invalid token");
+
+            var jwtToken = handler.ReadJwtToken(token);
+
+            // Lấy toàn bộ các claim từ token
+            return jwtToken.Claims.ToDictionary(c => c.Type, c => c.Value);
+        }
+
         public IActionResult Login()
         {
             var viewSettings = new ViewSettings
@@ -30,32 +32,9 @@ namespace DATN.MVC.Controllers
                 ShowHeader = false,   // Bật header
                 ShowFriendList = false // Tắt danh sách bạn bè
             };
+
             ViewBag.ViewSettings = viewSettings;
             return View();
-        }
-
-        // Xử lý POST yêu cầu đăng nhập
-        [HttpPost]
-        public IActionResult Login(string username, string password)
-        {
-            // Tìm người dùng dựa trên tên đăng nhập và mật khẩu
-            var user = users.FirstOrDefault(u => u.UserName == username && u.Password == password);
-
-            if (user != null)
-            {
-                // Nếu thông tin chính xác, set session
-                HttpContext.Session.SetInt32("UserId", user.Id);
-                HttpContext.Session.SetString("FullName", user.FullName);
-
-                // Chuyển hướng tới trang chính sau khi đăng nhập thành công
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                // Nếu thông tin không chính xác, trả về lỗi
-                ViewBag.ErrorMessage = "Tên đăng nhập hoặc mật khẩu không đúng";
-                return View();
-            }
         }
 
         public IActionResult Register()
@@ -73,19 +52,15 @@ namespace DATN.MVC.Controllers
         [HttpPost]
         public JsonResult LoginAccount([FromBody] LoginRequest loginRequest)
         {
-            // Gọi API đăng nhập qua ApiHelpers và nhận về đối tượng LoginRes
+            // Gọi API đăng nhập qua ApiHelpers và nhận về token JWT
             var result = ApiHelpers.PostMethodAsync<LoginResponse, LoginRequest>("https://localhost:7296/api/Auth/login", loginRequest);
 
             if (result != null)
             {
-                // Lưu token vào session nếu đăng nhập thành công
-                HttpContext.Session.SetInt32("UserID", result.ID);
-                HttpContext.Session.SetString("FullName", result.FullName);
-                HttpContext.Session.SetString("RoleName", result.RoleName);
+                // Lưu token vào Session
                 HttpContext.Session.SetString("Token", result.Token);
-                HttpContext.Session.SetString("UserImage", result.UserImage ?? "https://smmhwsdluglunrhndxcb.supabase.co/storage/v1/object/public/images/default-userImg.jpg");
 
-
+                // Không cần giải mã hoặc lưu thêm dữ liệu, Middleware đã xử lý
 
                 return Json(new { success = true, message = "Login successful." });
             }
@@ -111,5 +86,7 @@ namespace DATN.MVC.Controllers
                 return Json(new { success = false, message = "Registration failed." });
             }
         }
+
     }
+
 }

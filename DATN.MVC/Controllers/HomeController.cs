@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace DATN.MVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -15,13 +15,7 @@ namespace DATN.MVC.Controllers
 
         public IActionResult Index()
         {
-            var userId = HttpContext.Session.GetInt32("UserID");
-            if (userId != null)
-            {
-                ViewBag.UserId = userId;
-                ViewBag.FullName = HttpContext.Session.GetString("FullName");
-                ViewBag.Token = HttpContext.Session.GetString("Token");
-                ViewBag.UserImage = HttpContext.Session.GetString("UserImage");
+           
                 var viewSettings = new ViewSettings
                 {
                     ShowSidebar = true, // Tắt sidebar
@@ -31,10 +25,6 @@ namespace DATN.MVC.Controllers
                 ViewBag.ViewSettings = viewSettings;
 
                 return View();
-            }else
-            {
-                return RedirectToAction("Login", "Account");
-            }
 
         }
     

@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Call";
+}
+
+<div id="call-app">
+    <div class="vd-video-call">
+        <!-- Call Status -->
+        <div v-if="!callState.isCallActive && !callState.isRejected">
+            <h2>{{ isCaller ? 'Calling...' : 'Incoming Call' }}</h2>
+            <p v-if="isCaller">Waiting for {{ friendName }} to answer...</p>
+            <p v-else>{{ callerName }} is calling you...</p>
+
+            <!-- Call Actions for Receiver -->
+            <div v-if="!isCaller" class="vd-call-controls">
+                <button class="accept-call" v-on:click="acceptCall">Accept</button>
+                <button class="reject-call" v-on:click="rejectCall">Reject</button>
+            </div>
+        </div>
+
+        <!-- Active Call -->
+        <div v-if="callState.isCallActive">
+            <video id="local-video" autoplay muted playsinline></video>
+            <video id="remote-video" autoplay playsinline></video>
+            <div class="vd-call-controls">
+                <button class="end-call" v-on:click="endCall">End Call</button>
+            </div>
+        </div>
+
+        <!-- Call Rejected -->
+        <div v-if="callState.isRejected">
+            <h2>Call Rejected</h2>
+            <p>The call was rejected by {{ isCaller ? friendName : callerName }}.</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/callApp.js"></script>
+}

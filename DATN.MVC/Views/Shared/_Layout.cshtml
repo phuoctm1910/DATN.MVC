@@ -17,13 +17,20 @@
     <link rel="stylesheet" href="~/icons/themify-icons/themify-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.25/signalr.min.js" integrity="sha512-hJP90Q+3UdSvwBhVIze6qNNDZ+tEbuTv+HBAtoC0tpRrZ0r48hbcUmTdtumkC7m0z16bqNu4pSytecT3/js+VQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 
-    <script>
-        var userLogged = @ViewBag.UserId;
+    <script hidden>
+        var userLogged = @(Context.Items["userId"] ?? 0); // userId, nếu null thì là 0
+        console.log(userLogged)
     </script>
+    <script hidden>
+    var userLoggedName = '@(Context.Items["fullName"]?.ToString() ?? "")'; // fullName, nếu null thì là chuỗi rỗng
+    </script>
+
     <script>
         moment.locale('vi');
 
@@ -91,15 +98,12 @@
 
             if (settings.ShowFriendList)
             {
+
                 await Html.RenderPartialAsync("~/Views/Shared/_sidebarRight.cshtml");
+
             }
+
         }
-
-        <script>
-            var userLogged = @ViewBag.UserId;
-            console.log(userLogged);
-        </script>
-
         <!--Middle-->
         <section id="home-app">
             @RenderBody()
@@ -471,11 +475,21 @@
     @*<script src="~/lib/vue/vue.global.js"></script>*@
     <!-- Swiper JS -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/main.min.js" asp-append-version="true"></script>
     <script src="~/js/script.js" asp-append-version="true"></script>
-    <script src="~/js/sidebarRight.js" asp-append-version="true"></script>
+    @if (ViewBag.ViewSettings != null)
+    {
+        var settings = ViewBag.ViewSettings as ViewSettings;
+
+        if (settings.ShowFriendList)
+        {
+
+            <script src="~/js/sidebarRight.js" asp-append-version="true"></script>
+
+        }
+
+    }
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

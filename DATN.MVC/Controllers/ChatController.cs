@@ -12,7 +12,7 @@ using Microsoft.JSInterop;
 
 namespace DATN.MVC.Controllers
 {
-    public class ChatController : Controller
+    public class ChatController : BaseController
     {
         private readonly IHubContext<ChatHub> _chatHubContext;
 
@@ -58,11 +58,12 @@ namespace DATN.MVC.Controllers
                 ViewBag.UserId = userId;
                 ViewBag.FullName = HttpContext.Session.GetString("FullName");
                 ViewBag.Token = HttpContext.Session.GetString("Token");
+                ViewBag.UserImage = HttpContext.Session.GetString("UserImage");
                 var viewSettings = new ViewSettings
                 {
-                    ShowSidebar = true, // Tắt sidebar
+                    ShowSidebar = false, // Tắt sidebar
                     ShowHeader = true,   // Bật header
-                    ShowFriendList = true // Tắt danh sách bạn bè
+                    ShowFriendList = false // Tắt danh sách bạn bè
                 };
                 ViewBag.ViewSettings = viewSettings;
 
@@ -73,5 +74,6 @@ namespace DATN.MVC.Controllers
                 return RedirectToAction("Login", "Account");
             }
         }
+        
     }
 }

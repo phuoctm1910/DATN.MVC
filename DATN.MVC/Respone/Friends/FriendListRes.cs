@@ -4,6 +4,7 @@ namespace DATN.MVC.Respone.Friends
 {
     public class FriendListRes
     {
+        public int FriendId { get; set; }
         public int FriendUserId { get; set; }
         public FriendStatus FriendshipStatus { get; set; }
         public string? FriendFullName { get; set; }

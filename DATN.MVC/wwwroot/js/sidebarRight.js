@@ -327,7 +327,7 @@
             document.body.style.overflow = '';
             if (this.swiperInstance) {
                 this.swiperInstance.destroy(true, true);
-                this.swiperInstance = null;
+                this.swiperInstance = false;
             }
         },
         initSwiper() {
@@ -422,6 +422,7 @@ Vue.component('chatbox', {
             newMessage: '',
             selectedFiles: [], // Lưu trữ danh sách tệp được chọn
             isScrollLocked: true, // Khóa cuộn khi tải dữ liệu
+            isImageSliderVisible: false,
             isImageModalVisible: false, // Trạng thái hiển thị modal
             selectedImageUrl: '' // URL ảnh được chọn để xem
         };

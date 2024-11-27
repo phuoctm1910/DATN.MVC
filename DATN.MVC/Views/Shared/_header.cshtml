@@ -396,8 +396,8 @@
             </li>
         </ul>
         <div class="user-img">
-            <h5>@ViewBag.FullName</h5>
-            <img src="@ViewBag.UserImage"
+            <h5>@Context.Items["fullName"]?.ToString()</h5>
+            <img src="@(Context.Items["UserImage"]?.ToString() ?? "https://smmhwsdluglunrhndxcb.supabase.co/storage/v1/object/public/images/default-userImg.jpg")" 
                  width="40"
                  height="40"
                  alt="User Image">

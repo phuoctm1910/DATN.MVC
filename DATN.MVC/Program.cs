@@ -1,4 +1,5 @@
 ﻿using DATN.MVC.Hubs;
+using DATN.MVC.Middleware;
 using Microsoft.AspNetCore.Http.Features;
 
 namespace DATN.MVC
@@ -21,7 +22,7 @@ namespace DATN.MVC
 
             builder.Services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(3);
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
@@ -45,13 +46,16 @@ namespace DATN.MVC
 
             app.UseRouting();
             app.UseSession();
+            app.UseMiddleware<TokenMiddleware>();
             app.UseAuthorization();
-
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.MapHub<ChatHub>("/chathub");
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<ChatHub>("/chatHub");
+            });
 
             app.Run();
         }

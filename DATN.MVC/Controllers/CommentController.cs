@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 
 namespace DATN.MVC.Controllers
 {
-    public class CommentController : Controller
+    public class CommentController : BaseController
     {
         [HttpGet]
         public JsonResult GetCommentByPostId(int Id)

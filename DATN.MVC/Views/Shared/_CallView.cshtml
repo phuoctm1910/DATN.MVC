@@ -1,0 +1,21 @@
+﻿<div id="call-app">
+    <div class="call-container">
+        <div v-if="!callState.isCallActive">
+            <h2>{{ isCaller ? 'Calling' : 'Incoming Call' }}</h2>
+            <p>{{ isCaller ? `Waiting for ${friendName}` : `${callerName} is calling you` }}</p>
+            <div v-if="!isCaller">
+                <button v-on:click="acceptCall">Accept</button>
+                <button v-on:click="rejectCall">Reject</button>
+            </div>
+        </div>
+        <div v-if="callState.isCallActive">
+            <div class="video-container">
+                <video id="local-video" autoplay muted></video>
+                <video id="remote-video" autoplay></video>
+            </div>
+            <div class="call-actions">
+                <button v-on:click="endCall">End Call</button>
+            </div>
+        </div>
+    </div>
+</div>

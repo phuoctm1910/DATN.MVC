@@ -34,24 +34,26 @@
              v-on:close-chat="closeChat"
              v-on:toggle-chat-size="toggleChatSize"
              v-on:send-message="sendMessage"
-             v-on:image-clicked="handleImageClick">
+             v-on:image-clicked="handleImageClick"
+             v-on:call-clicked="startCall">
     </chatbox>
-
-    <div id="image-slider-modal" v-if="isImageSliderVisible" class="image-modal">
-        <div class="swiper-container">
-            <!-- Main slider -->
-            <div class="swiper-wrapper">
-                <div class="swiper-slide" v-for="(image, index) in allImages" :key="index">
-                    <img :src="image" alt="Image" />
+    <div v-if="isImageSliderVisible">
+        <div id="image-slider-modal" class="image-modal">
+            <div class="swiper-container">
+                <!-- Main slider -->
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" v-for="(image, index) in allImages" :key="index">
+                        <img :src="image" alt="Image" />
+                    </div>
                 </div>
+
+                <!-- Pagination (thumbnails) -->
+                <div class="swiper-pagination"></div>
+
+                <!-- Navigation -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
             </div>
-
-            <!-- Pagination (thumbnails) -->
-            <div class="swiper-pagination"></div>
-
-            <!-- Navigation -->
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
         </div>
     </div>
 

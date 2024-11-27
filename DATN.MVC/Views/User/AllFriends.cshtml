@@ -1,34 +1,29 @@
-﻿@model List<DATN.MVC.Respone.User.FriendRequestResponse>
+﻿@model List<DATN.MVC.Respone.Friends.FriendListRes>
 
-    @section Styles {
+@section Styles {
     <style>
         .sidebar {
             background-color: #f0f2f5;
             padding: 20px;
-            max-height: 100%;
+            height: 100vh;
             width: 250px;
         }
 
-        .sidebar .menu-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            font-size: 18px;
-            border: none;
-            cursor: pointer;
-        }
+            .sidebar .menu-item {
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                margin-bottom: 5px;
+                font-size: 16px;
+                text-decoration: none;
+                color: #333;
+                border-radius: 8px;
+            }
 
-        .sidebar .menu-item img {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
-        }
-
-        .menu-item:hover {
-            color: grey;
-            background-color: #e9ecef;
-            border-radius: 8px;
-        }
+                .sidebar .menu-item:hover {
+                    color: #007bff;
+                    background-color: #e9ecef;
+                }
 
         .friend-requests {
             padding: 20px;
@@ -45,38 +40,43 @@
             align-items: center;
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .friend-card img {
-            border-radius: 8px;
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
+            .friend-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            }
 
-        .friend-card h6 {
-            font-size: 16px;
-            margin-top: 10px;
-            font-weight: bold;
-            color: #333;
-        }
+            .friend-card img {
+                border-radius: 8px;
+                width: 100%;
+                height: 150px;
+                object-fit: contain;
+            }
 
-        .friend-card .btn-group {
-            margin-top: 10px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
+            .friend-card h6 {
+                font-size: 16px;
+                margin-top: 10px;
+                font-weight: bold;
+                color: #333;
+            }
 
-        .friend-card .btn {
-            font-size: 14px;
-            font-weight: 500;
-            padding: 8px 0;
-            border-radius: 5px;
-            width: 100%;
-            max-width: 120px;
-            text-align: center;
-        }
+            .friend-card .btn-group {
+                margin-top: 10px;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+
+            .friend-card .btn {
+                font-size: 14px;
+                padding: 8px 0;
+                border-radius: 5px;
+                width: 100%;
+                max-width: 120px;
+                text-align: center;
+            }
 
         .btn-danger {
             background-color: #dc3545;
@@ -84,41 +84,44 @@
             border: none;
         }
 
-        .btn-danger:hover {
-            background-color: #c82333;
+            .btn-danger:hover {
+                background-color: #c82333;
+            }
+
+        @@media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .friend-requests {
+                padding: 10px;
+            }
         }
     </style>
 }
 
-}
 <div class="d-flex">
+
     <!-- Sidebar -->
     <div class="sidebar">
         <h5 class="fw-bold">Bạn bè</h5>
-        <button class="menu-item">
-            <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Trang chủ" class="imgpadding">
+        <a href="/User/Home" class="menu-item">
+            <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Trang chủ">
             <span>Trang chủ</span>
-        </button>
-        <button class="menu-item">
-            <a href="/User/Friends" title="" data-toggle="tooltip" data-placement="right"
-               data-original-title="Friends">
-                <img src="https://img.icons8.com/ios-filled/50/000000/user-male.png" alt="Lời mời kết bạn" class="imgpadding">
-                <span>Lời mời kết bạn</span>
-        </button>
-        <button class="menu-item">
-            <a href="/user/SendRequestFriend" title="" data-toggle="tooltip" data-placement="right"
-               data-original-title="Friends">
-                <img src="https://img.icons8.com/ios-filled/50/000000/add-user-male.png" alt="Gợi ý" class="imgpadding">
-                <span>Gợi ý</span>
-        </button>
-        <button class="menu-item">
-            <a href="/user/AllFriends" title="" data-toggle="tooltip" data-placement="right"
-               data-original-title="Friends">
-                <img src="https://img.icons8.com/ios-filled/50/000000/user-group-man-man.png" alt="Tất cả bạn bè" class="imgpadding">
-                <span>Tất cả bạn bè</span>
-        </button>
+        </a>
+        <a href="/User/Friends" class="menu-item">
+            <img src="https://img.icons8.com/ios-filled/50/000000/user-male.png" alt="Lời mời kết bạn">
+            <span>Lời mời kết bạn</span>
+        </a>
+        <a href="/user/SendRequestFriend" class="menu-item">
+            <img src="https://img.icons8.com/ios-filled/50/000000/add-user-male.png" alt="Gợi ý">
+            <span>Gợi ý</span>
+        </a>
+        <a href="/user/AllFriends" class="menu-item">
+            <img src="https://img.icons8.com/ios-filled/50/000000/user-group-man-man.png" alt="Tất cả bạn bè">
+            <span>Tất cả bạn bè</span>
+        </a>
     </div>
-
     <!-- Friend List -->
     <div class="friend-requests flex-grow-1">
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -126,25 +129,32 @@
             <a href="#" class="text-primary">Xem tất cả</a>
         </div>
 
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-            @foreach (var item in Model) // Model đã được lọc để chỉ chứa bạn bè có status = 1
-            {
-                <div class="col">
-                    <div class="friend-card">
-                        <img src="@item.Image" alt="Friend">
-                        <h6 class="mt-2">@item.FullName</h6>
-                        <div class="btn-group">
-                            <form asp-action="HandleFriend" method="post">
-                                <input type="hidden" name="Id" value="@item.Id" />
-                                <input type="hidden" name="User1Id" value="@item.User1Id" />
-                                <input type="hidden" name="User2Id" value="@item.User2Id" />
-                                <input type="hidden" name="Status" value="3" /> <!-- Chuyển status thành 3 để hủy kết bạn -->
-                                <button type="submit" class="btn btn-danger w-100">Hủy kết bạn</button>
-                            </form>
+        @if (!Model.Any())
+        {
+            <div class="text-center">
+                <h6 class="text-muted">Bạn chưa có bạn bè nào.</h6>
+            </div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+                @foreach (var item in Model)
+                {
+                    <div class="col">
+                        <div class="friend-card">
+                            <img src="@(!string.IsNullOrEmpty(item.FriendImage) ? item.FriendImage : "https://smmhwsdluglunrhndxcb.supabase.co/storage/v1/object/public/images/default-userImg.jpg" )" alt="Friend">
+                            <h6 class="mt-2">@item.FriendFullName</h6>
+                            <div class="btn-group">
+                                <form asp-action="Unfriend" asp-controller="User" method="post">
+                                    <input type="hidden" name="FriendId" value="@item.FriendId" />
+                                    <button type="submit" class="btn btn-danger w-100">Hủy kết bạn</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
-        </div>
+                }
+            </div>
+
+        }
     </div>
 </div>

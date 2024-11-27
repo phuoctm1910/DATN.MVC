@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DATN.MVC.Controllers
 {
-    public class FriendController : Controller
+    public class FriendController : BaseController
     {
         public IActionResult Index()
         {
@@ -14,7 +14,7 @@ namespace DATN.MVC.Controllers
         [HttpPost]
         public JsonResult GetListFriendOfUser([FromBody] FriendListReq req)
         {
-            var result = ApiHelpers.PostMethodAsync<IEnumerable<FriendListRes>, FriendListReq>("https://localhost:7296/api/FriendList/get-friend-list", req);
+            var result = ApiHelpers.PostMethodAsync<IEnumerable<FriendListRes>, FriendListReq>("https://localhost:7296/api/Friends/get-friend-list", req);
             return Json(new { ApiData = result });
         }
     }

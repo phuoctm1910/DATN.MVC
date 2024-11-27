@@ -22,7 +22,8 @@
         Pending = 0,        // Gửi lời mời kết bạn
         Accepted = 1,       // Đã chấp nhận, trở thành bạn bè
         Blocked = 2,        // Bị chặn
-        Cancel = 3          // Bị hủy
+        Cancel = 3,          // Bị hủy
+        Unfriend = 4
     }
 
     public enum PostReact : int

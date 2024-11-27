@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DATN.MVC.Controllers
 {
-    public class PostController : Controller
+    public class PostController : BaseController
     {
         [HttpGet]
         public JsonResult GetAll()

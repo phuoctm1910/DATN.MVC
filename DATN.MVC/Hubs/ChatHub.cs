@@ -1,6 +1,7 @@
 ﻿using DATN.MVC.Helpers;
 using DATN.MVC.Models;
 using DATN.MVC.Models.Request.Chat;
+using DATN.MVC.Request.Chat;
 using DATN.MVC.Request.Message;
 using DATN.MVC.Respone.Chat;
 using DATN.MVC.Respone.Message;
@@ -9,8 +10,9 @@ using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Threading.Tasks;
-
+using static DATN.MVC.Models.WebRTCModel;
 namespace DATN.MVC.Hubs
 {
     public class ChatHub : Hub
@@ -67,7 +69,6 @@ namespace DATN.MVC.Hubs
                 throw new HubException("An error occurred while processing the message.", ex);
             }
         }
-
         public async Task MarkMessagesAsRead(int chatRoomId, List<int> messageIds)
         {
             try
@@ -120,14 +121,11 @@ namespace DATN.MVC.Hubs
                 throw new HubException("An error occurred while processing the request.", ex);
             }
         }   
-
         public async Task JoinChatRoom(int chatRoomId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, chatRoomId.ToString());
             Console.WriteLine("User with ConnectionId " + Context.ConnectionId + " joined chat room ID: " + chatRoomId);
         }
-
-
         public async Task LeaveChatRoom(int chatRoomId)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, chatRoomId.ToString());
