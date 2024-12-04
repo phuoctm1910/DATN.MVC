@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
@@ -19,7 +20,7 @@
 <body>
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.html">Start Bootstrap</a>
+        <a class="navbar-brand ps-3" href="index.html">ADMIN</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
@@ -48,7 +49,7 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Core</div>
-                        <a class="nav-link" asp-controller="HomeAdmin" asp-action="Dashboard">
+                      @*   <a class="nav-link" asp-controller="HomeAdmin" asp-action="Dashboard">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
@@ -56,18 +57,11 @@
                         <a class="nav-link" asp-controller="HomeAdmin" asp-action="Chart">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             Charts
-                        </a>
-
-
-
-
-
-                        <div class="sb-sidenav-menu-heading">Để mấy trang của mình ở dưới đây</div>
-
+                        </a> *@
 
                         <a class="nav-link" asp-controller="AdminCategory" asp-action="Index">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                            Quản Lý Danh Mục Lớn
+                            Quản Lý Danh Mục
                         </a>
                         <a class="nav-link" asp-controller="AdminPost" asp-action="Index">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
@@ -106,12 +100,12 @@
                         </div>
 
                         <a class="nav-link" href="/admin/role">
-                            <div class="sb-nav-link-icon"><i class="fas fa-pinterests"></i></div>
-                            Chức Vụ
+                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                            Quản Lý Chức Vụ
                         </a>
                         <a class="nav-link" href="/admin/user">
-                            <div class="sb-nav-link-icon"><i class="fas fa-pinterests"></i></div>
-                            Người Dùng
+                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                            Quản Lý Người Dùng
                         </a>
                         <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
@@ -172,11 +166,6 @@
     <!-- Load JavaScript -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-html5-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.js"></script>
-@*     <script src="~/admin/assets/simple-datatables/simple-datatables.min.js"></script>
- *@    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
@@ -191,8 +180,7 @@
     @await RenderSectionAsync("Scripts", required: false)
 
 
-    <!-- Render Section Scripts -->
-    @RenderSection("Scripts", required: false)
+
 
 </body>
 </html>

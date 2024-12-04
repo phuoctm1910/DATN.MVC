@@ -119,7 +119,7 @@
     .edit-role-label {
         font-weight: bold;
         color: #555;
-        margin-right: 10px; /* Khoảng cách giữa Label và lỗi */
+        margin-right: 10px;
         display: inline-block;
     }
 
@@ -139,7 +139,7 @@
                 <label for="Name" class="edit-role-label">Tên chức vụ </label>
                 <span id="NameError" class="error-message"><div class="sb-nav-link-icon"><i class="fas fa-pinterests" hidden></i></div></span> <!-- Thông báo lỗi nằm cạnh Label -->
             </div>
-            <input type="text" class="edit-role-input" id="Name" name="Name" value="@Model.Name" placeholder="Nhập tên chức vụ" />
+            <input type="text" class="edit-role-input" id="Name" name="Name" value="@Model.Name" placeholder="Nhập tên chức vụ"  readonly/>
         </div>
         <!-- Trạng thái -->
         <div class="edit-role-form-group">
@@ -152,11 +152,6 @@
                 <option value="false">Dừng hoạt động</option>
             </select>
         </div>
-
-       
-
-
-        
         <button type="submit" class="edit-role-btn"><i class="fas fa-save"></i> Lưu</button>
     </form>
 
@@ -173,40 +168,23 @@
                 $(selector).show();
             }
 
-            // Hàm ẩn lỗi
+      
             function hideError(selector) {
                 $(selector).html('');
                 $(selector).hide();
             }
 
-            // Lắng nghe sự kiện nhập liệu trên trường "Tên Chức Vụ"
-            $('#Name').on('input', function () {
-                const name = $(this).val();
-                const nameTrimmed = name.trim();
-                const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/;
-
-                if (!nameTrimmed) {
-                    showError('#NameError', 'Không được bỏ trống.');
-                } else if (name !== nameTrimmed) {
-                    showError('#NameError', 'Không được có khoảng trắng ở đầu hoặc cuối.');
-                } else if (!nameRegex.test(nameTrimmed)) {
-                    showError('#NameError', 'Chỉ được chứa chữ cái và khoảng trắng.');
-                } else {
-                    hideError('#NameError');
-                }
-            });
-
             // Lắng nghe sự kiện thay đổi trên trường "Trạng Thái"
             $('#IsActived').on('change', function () {
                 const isActived = $(this).val();
-                if (!isActived) {
+                if (isActived === '') {
                     showError('#IsActivedError', 'Trạng thái không được bỏ trống.');
                 } else {
                     hideError('#IsActivedError');
                 }
             });
 
-            // Xử lý khi nhấn nút Lưu
+
             $('#btnSaveRole').click(function (e) {
                 e.preventDefault(); // Ngăn hành động mặc định
 
@@ -242,16 +220,16 @@
                 if (isValid) {
                     const roleData = {
                         Name: nameTrimmed,
-                        IsActived: isActived === 'true',
+                        IsActived: isActived === 'true', // Đảm bảo giá trị IsActived là boolean
                     };
 
                     $.ajax({
-                        url: '@Url.Action("AddNew", "Role")',
+                        url: '@Url.Action("Edit", "Role")',  // Cập nhật đúng URL cho hành động Edit
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify(roleData),
                         success: function (response) {
-                            alert('Thêm chức vụ thành công!');
+                            alert('Chỉnh sửa chức vụ thành công!');
                             window.location.href = '@Url.Action("Index", "Role")';
                         },
                         error: function (xhr) {
@@ -272,10 +250,7 @@
             });
         });
     </script>
-
 }
-
-
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />

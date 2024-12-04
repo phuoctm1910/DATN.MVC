@@ -46,21 +46,21 @@
             <div class="modal-body">
                 <form method="post" asp-action="UpdateStatusSalePlace" asp-controller="AdminManageSalePlace">
                     <!-- Hiển thị ID gian hàng -->
-                    <div class="edit-saleplace-status-form-group">
-                        <label for="SalePlaceId" class="edit-saleplace-status-label">ID Gian hàng:</label>
-                        <input type="text" id="SalePlaceId" name="Id" class="edit-saleplace-status-input" readonly />
+                    <div class="mb-3">
+                        <label for="SalePlaceId" class="form-label">ID Gian hàng:</label>
+                        <input type="text" id="SalePlaceId" name="Id" class="form-control" readonly />
                     </div>
 
                     <!-- Hiển thị trạng thái gian hàng -->
-                    <div class="edit-saleplace-status-form-group">
-                        <label for="Status" class="edit-saleplace-status-label">Trạng thái gian hàng:</label>
-                        <select id="Status" name="Status" class="edit-saleplace-status-select">
+                    <div class="mb-3">
+                        <label for="Status" class="form-label">Trạng thái gian hàng:</label>
+                        <select id="Status" name="Status" class="form-select">
                             <option value="1">Đang mở</option>
                             <option value="0">Đang đóng</option>
                         </select>
                     </div>
 
-                    <button type="submit" class="edit-saleplace-status-btn">Cập nhật trạng thái</button>
+                    <button type="submit" class="btn btn-primary w-100">Cập nhật trạng thái</button>
                 </form>
             </div>
         </div>

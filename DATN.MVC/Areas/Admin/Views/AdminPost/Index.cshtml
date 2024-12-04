@@ -12,7 +12,7 @@
             <thead >
                 <tr>
                     <th class="text-center align-middle">Người Tạo</th>
-                    <th class="text-center align-middle">Hình Ảnh</th>
+                  @*   <th class="text-center align-middle">Hình Ảnh</th> *@
                     <th class="text-center align-middle">Trạng Thái</th>
                     <th class="text-center align-middle">Ngày Tạo</th>
                     <th class="text-center align-middle">Ngày Cập Nhật</th>
@@ -24,10 +24,11 @@
                 {
                     <tr style="text-align: center; vertical-align:middle">
                         <td>@item.FullName</td> <!-- Hiển thị tên người tạo -->
-                        <td>
+               @*          <td>
                             <img src="@item.Image" alt="Hình ảnh bài đăng" style="max-width: 100px; max-height: 100px;" />
-                        </td>
-                        <td>@(item.IsActived ? "Hoạt động" : "Không hoạt động")</td>
+                        </td> *@
+    
+                        <td>@(item.IsActived ? "Đã duyệt" : "Chưa duyệt")</td>
                         <td>@item.CreatedDateTime.ToString("dd/MM/yyyy HH:mm")</td> <!-- Hiển thị ngày tạo -->
                         <td>@item.UpdatedDateTime.ToString("dd/MM/yyyy HH:mm")</td> <!-- Hiển thị ngày cập nhật -->
                         <td>

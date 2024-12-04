@@ -1,14 +1,42 @@
-﻿@model List<DATN.MVC.Respone.Friends.FriendListRes>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Bạn Bè</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+@model List<DATN.MVC.Respone.Friends.FriendListRes>
 
 @section Styles {
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+        }
+
+        /* Sidebar */
         .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 250px;
+            background-color: #fff;
+            padding-top: 20px;
+            border-right: 1px solid #ddd;
             background-color: #f0f2f5;
             padding: 20px;
             height: 100vh;
             width: 300px;
         }
 
+        .sidebar h4 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #007bff;
+        }
             .sidebar .menu-item {
                 display: flex;
                 align-items: center;
@@ -20,19 +48,76 @@
                 border-radius: 8px;
             }
 
+        .sidebar a {
+            display: block;
+            padding: 15px;
+            font-size: 18px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
                 .sidebar .menu-item:hover {
                     color: #007bff;
                     background-color: #e9ecef;
                 }
 
+        .sidebar a:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 270px;
+            padding: 30px;
         .friend-requests {
             padding: 20px;
             width: 100%;
         }
 
-        .friend-card {
+        .main-content h3 {
+            color: #007bff;
+        }
+
+        /* Friend List */
+        .friend-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            
+        }
+
+        .friend-list .list-wrap {
+            width: 100%;
+            max-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            padding-top: 15px;
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .friend-list .list-wrap:hover {
+            transform: translateY(-5px);
+        }
+
+        .friend-list .item-avatar img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .friend-list .item h5 {
+            font-size: 18px;
+            margin-bottom: 10px;
             text-align: center;
             padding: 10px;
             display: flex;
@@ -43,6 +128,9 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
+        .friend-list .actions {
+            text-align: center;
+        }
             .friend-card:hover {
                 transform: translateY(-5px);
                 box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
@@ -55,6 +143,26 @@
                 object-fit: contain;
             }
 
+        /* Nút Huỷ kết bạn */
+        .cancel-friendship-button {
+            display: inline-block;
+            outline: none;
+            cursor: pointer;
+            padding: 0 16px;
+            background-color: #fff;
+            border-radius: 0.25rem;
+            border: 1px solid #0070d2;
+            color: #0070d2;
+            font-size: 18px;
+            line-height: 40px;
+            font-weight: 500;
+            text-align: center;
+            : hover
+
+        {
+            background-color: #f4f6f9;
+        
+        }
             .friend-card h6 {
                 font-size: 16px;
                 margin-top: 10px;
@@ -69,6 +177,43 @@
             gap: 10px;
         }
 
+        }
+
+        .cancel-friendship-button:hover {
+            background-color: orangered; /* Thay đổi màu khi hover */
+            text-decoration: none;
+            transform: translateY(-3px); /* Hiệu ứng chuyển động nhẹ khi hover */
+        }
+
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+            }
+
+            .friend-list .col-md-3 {
+                flex: 1 1 48%;
+            }
+
+            .friend-list .col-md-2 {
+                flex: 1 1 48%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h4>Menu</h4>
+        <a href="/"><i class="fas fa-home"></i> Trang chủ</a>
+        <a href="@Url.Action("RequestFriends", "User")"><i class="fas fa-user-plus"></i> Lời mời kết bạn</a>
+        <a href="@Url.Action("suggestFriends", "User")"><i class="fas fa-user-friends"></i> Gợi ý kết bạn</a>
+        <a href="@Url.Action("Friends", "User")"><i class="fas fa-users"></i> Tất cả bạn bè</a>
         .friend-card .btn {
             font-size: 14px;
             font-weight: bold;
@@ -103,12 +248,157 @@
         </a>
     </div>
 
+    <!-- Main Content -->
+    <div class="main-content">
+        <h3>Tất cả bạn bè</h3>
+        
+        <div class="friend-list row">
+            <!-- Friend 1 -->
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/Duymai2.jpg" class="avatar user-14-avatar avatar-200 photo" width="200" height="200" alt="Profile picture of John Thompson">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Mai Huỳnh Anh Duy</a></h5>
+                        <div class="actions">
+                            <a class="cancel-friendship-button" href="#">Huỷ kết bạn</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friend 2 -->
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/Phuoc2.jpg" class="avatar user-14-avatar avatar-200 photo" width="200" height="200" alt="Profile picture of Phước Tạ">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Tạ Minh Phước</a></h5>
+                        <div class="actions">
+                            <a class="cancel-friendship-button" href="#">Huỷ kết bạn</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
     <!-- Friend Requests -->
     <div class="friend-requests flex-grow-1">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="fw-bold">Lời mời kết bạn</h5>
             <a href="#" class="text-primary">Xem tất cả</a>
         </div>
+             <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/Hau.jpg" class="avatar user-14-avatar avatar-200 photo" width="200" height="200" alt="Profile picture of Phước Tạ">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Dương Minh Hậu</a></h5>
+                        <div class="actions">
+                            <a class="cancel-friendship-button" href="#">Huỷ kết bạn</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/kha.jpg" class="avatar user-14-avatar avatar-200 photo" width="200" height="200" alt="Profile picture of Phước Tạ">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Trần Minh Khá</a></h5>
+                        <div class="actions">
+                            <a class="cancel-friendship-button" href="#">Huỷ kết bạn</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/Duy.jpg" class="avatar user-14-avatar avatar-200 photo" width="200" height="200" alt="Profile picture of Phước Tạ">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Duy Mai</a></h5>
+                        <div class="actions">
+                            <a class="cancel-friendship-button" href="#">Huỷ kết bạn</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/Hieu3.jpg" class="avatar user-14-avatar avatar-200 photo" width="200" height="200" alt="Profile picture of Phước Tạ">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">HUI PHAN</a></h5>
+                        <div class="actions">
+                            <a class="cancel-friendship-button" href="#">Huỷ kết bạn</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/Hieu2.jpg" class="avatar user-14-avatar avatar-200 photo" width="200" height="200" alt="Profile picture of Phước Tạ">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Hàn Vũ</a></h5>
+                        <div class="actions">
+                            <a class="cancel-friendship-button" href="#">Huỷ kết bạn</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/Hieu1.jpg" class="avatar user-14-avatar avatar-200 photo" width="200" height="200" alt="Profile picture of Phước Tạ">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Từ Thứ</a></h5>
+                        <div class="actions">
+                            <a class="cancel-friendship-button" href="#">Huỷ kết bạn</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add more friends here... -->
+
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
         <div class="row row-cols-1 row-cols-md-4 g-4">
             @foreach (var item in Model)
             {
