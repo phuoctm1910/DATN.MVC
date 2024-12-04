@@ -52,13 +52,6 @@ namespace DATN.MVC.Controllers
         public IActionResult Index()
         {
 
-            var userId = HttpContext.Session.GetInt32("UserID");
-            if (userId != null)
-            {
-                ViewBag.UserId = userId;
-                ViewBag.FullName = HttpContext.Session.GetString("FullName");
-                ViewBag.Token = HttpContext.Session.GetString("Token");
-                ViewBag.UserImage = HttpContext.Session.GetString("UserImage");
                 var viewSettings = new ViewSettings
                 {
                     ShowSidebar = false, // Tắt sidebar
@@ -68,11 +61,6 @@ namespace DATN.MVC.Controllers
                 ViewBag.ViewSettings = viewSettings;
 
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("Login", "Account");
-            }
         }
         
     }

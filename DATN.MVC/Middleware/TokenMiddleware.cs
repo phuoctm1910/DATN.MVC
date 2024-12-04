@@ -29,7 +29,11 @@ namespace DATN.MVC.Middleware
                 await _next(context);
                 return;
             }
-
+            if (path?.Contains("/account/register") == true)
+            {
+                await _next(context);
+                return;
+            }
             if (!string.IsNullOrEmpty(token))
             {
                 try

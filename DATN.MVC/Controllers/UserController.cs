@@ -44,15 +44,28 @@ namespace DATN.MVC.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                HttpResponseMessage response = httpClient.GetAsync("https://localhost:7296/api/friend/get-sent-friend-requests").Result;
+                // Extract UserId from HttpContext
+                var userId = HttpContext.Items["userId"]?.ToString();
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return BadRequest("User ID is missing.");
+                }
+
+                // Prepare the request
+                var req = new FriendListReq
+                {
+                    UserId = int.Parse(userId), // Convert UserId to int
+                    Status = FriendStatus.Pending
+                };
+                // Serialize the request to JSON
+                var jsonContent = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = httpClient.PostAsync("https://localhost:7296/api/friends/get-friend-list", jsonContent).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonData = response.Content.ReadAsStringAsync().Result;
-                    var users = JsonConvert.DeserializeObject<List<FriendRequestResponse>>(jsonData);
-
-                    // Lọc chỉ lấy những người có status = 0
-                    var pendingRequests = users.Where(user => user.Status == 0).ToList();
-
+                    var users = JsonConvert.DeserializeObject<List<FriendListRes>>(jsonData);
+                        
                     var viewSettings = new ViewSettings
                     {
                         ShowSidebar = false, // Tắt sidebar
@@ -60,12 +73,12 @@ namespace DATN.MVC.Controllers
                         ShowFriendList = false // Tắt danh sách bạn bè
                     };
                     ViewBag.ViewSettings = viewSettings;
-                    return View(pendingRequests);
+                    return View(users);
                 }
                 else
                 {
                     TempData["Error"] = "Không có lời mời nào.";
-                    return View(new List<FriendRequestResponse>());
+                    return View(new List<FriendListRes>());
                 }
             }
         }
@@ -151,14 +164,14 @@ namespace DATN.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Unfriend(Friend_Unfriend req)
+        public IActionResult Unfriend(Friend_Manage req)
         {
             using (var httpClient = new HttpClient())
             {
                 req.Status = FriendStatus.Unfriend;
                 var json = JsonConvert.SerializeObject(req);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = httpClient.PostAsync("https://localhost:7296/api/friends/unfriend-friend-request", content).Result;
+                HttpResponseMessage response = httpClient.PostAsync("https://localhost:7296/api/friends/manage-friend-request", content).Result;
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -175,6 +188,55 @@ namespace DATN.MVC.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult AcceptFriend(Friend_Manage req)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                req.Status = FriendStatus.Accepted;
+                var json = JsonConvert.SerializeObject(req);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = httpClient.PostAsync("https://localhost:7296/api/friends/manage-friend-request", content).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Nếu cập nhật thành công, chuyển hướng đến AllFriends
+                    TempData["Success"] = "Friend request handled successfully.";
+                    return Redirect("/User/AllFriends");
+                }
+                else
+                {
+                    // Nếu có lỗi, hiển thị lỗi và ở lại trang hiện tại
+                    TempData["Error"] = "Failed to handle friend request. Please try again later.";
+                    return Ok();
+                }
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CancelFriend(Friend_Manage req)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                req.Status = FriendStatus.Cancel;
+                var json = JsonConvert.SerializeObject(req);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = httpClient.PostAsync("https://localhost:7296/api/friends/manage-friend-request", content).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Nếu cập nhật thành công, chuyển hướng đến AllFriends
+                    TempData["Success"] = "Friend request handled successfully.";
+                    return Redirect("/User/AllFriends");
+                }
+                else
+                {
+                    // Nếu có lỗi, hiển thị lỗi và ở lại trang hiện tại
+                    TempData["Error"] = "Failed to handle friend request. Please try again later.";
+                    return Ok();
+                }
+            }
+        }
         [HttpPost]
         public async Task<IActionResult> UpdateInformation(Update_UserReq request)
         {
@@ -215,22 +277,23 @@ namespace DATN.MVC.Controllers
 
             return View();
         }
-        public async Task<IActionResult> SendRequestFriend()
+        public async Task<IActionResult> SuggestFriend()
         {
             using (var httpClient = new HttpClient())
             {
-                HttpResponseMessage response = await httpClient.GetAsync("https://localhost:7296/api/User/getAll");
+                var userId = int.Parse(HttpContext.Items["userId"].ToString());
+                HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7296/api/Friends/get-suggested-list/{userId}");
 
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonData = await response.Content.ReadAsStringAsync();
-                    var userInfoList = JsonConvert.DeserializeObject<List<User_GetUserInfoRes>>(jsonData);
+                    var userInfoList = JsonConvert.DeserializeObject<List<Friend_SuggestUserRes>>(jsonData);
                     return View(userInfoList);
                 }
                 else
                 {
                     TempData["Error"] = "Không thể tải thông tin người dùng. Vui lòng thử lại sau.";
-                    return View(new List<User_GetUserInfoRes>());
+                    return View(new List<Friend_SuggestUserRes>());
                 }
             }
         }
@@ -239,7 +302,8 @@ namespace DATN.MVC.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                request.User1Id = 1;
+                
+                request.User1Id = int.Parse(HttpContext.Items["userId"].ToString());
                 string jsonData = JsonConvert.SerializeObject(request);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await httpClient.PostAsync("https://localhost:7296/api/Friend/send-request", content);
@@ -252,7 +316,7 @@ namespace DATN.MVC.Controllers
                 {
                     TempData["Error"] = "Không thể gửi yêu cầu kết bạn. Vui lòng thử lại sau.";
                 }
-                return Redirect("/User/Friends");
+                return Redirect("/User/SuggestFriend");
             }
         }
     }

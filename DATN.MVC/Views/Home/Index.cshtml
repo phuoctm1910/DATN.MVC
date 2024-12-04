@@ -1031,10 +1031,10 @@
                             <div class="new-postbox">
                                 <div class="d-flex">
                                     <div style="margin-right:10px">
-                                        <img :src="'@(ViewBag.UserImage)'" height="50" width="50" alt="">
+                                        <img :src="'@(Context.Items["UserImage"]?.ToString() ?? "https://smmhwsdluglunrhndxcb.supabase.co/storage/v1/object/public/images/default-userImg.jpg")'" height="50" width="50" alt="">
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <div class="d-flex">@ViewBag.FullName</div>
+                                        <div class="d-flex">@Context.Items["fullName"]?.ToString()</div>
                                         <div>
                                             <select v-model="newPostFor">
                                                 <option v-bind:value="0" selected>Công khai</option>
@@ -1197,7 +1197,7 @@
                                 <div class="user-post">
                                     <div class="friend-info">
                                         <figure>
-                                            <img src="~/images/resources/friend-avatar10.jpg" alt="">
+                                            <img src="https://smmhwsdluglunrhndxcb.supabase.co/storage/v1/object/public/images/default-userImg.jpg" alt="">
                                         </figure>
                                         <div class="friend-name">
                                             <ins><a href="time-line.html" title="">{{ selectedPost.fullName }}</a></ins>
@@ -1244,7 +1244,7 @@
                                 <!-- Add new comment -->
                                 <div class="add-comment d-flex align-items-center mt-3 p-3 rounded bg-light">
                                     <figure class="mr-2">
-                                        <img src="~/images/resources/admin.jpg" alt="Your Avatar" class="avatar rounded-circle">
+                                        <img src="https://smmhwsdluglunrhndxcb.supabase.co/storage/v1/object/public/images/default-userImg.jpg" alt="Your Avatar" class="avatar rounded-circle">
                                     </figure>
                                     <div class="box-input position-relative w-100">
                                         <input type="text" v-model="newComment" placeholder="Viết câu trả lời..." class="form-control custom-input rounded-pill px-4">
@@ -1313,7 +1313,7 @@
             <div v-if="comment.depth > 0" class="comment-border"></div>
             <div class="comment-body" :style="{ paddingLeft: comment.depth === 0 ? '0px' : (40 * comment.depth + 'px') }">
                 <figure class="mr-2">
-                    <img src="/images/resources/admin.jpg" alt="User Avatar" class="avatar rounded-circle">
+                    <img src="https://smmhwsdluglunrhndxcb.supabase.co/storage/v1/object/public/images/default-userImg.jpg" alt="User Avatar" class="avatar rounded-circle">
                 </figure>
                 <div>
                     <div class="comment-content">
@@ -1351,7 +1351,7 @@
 
             <div class="see-more-comments-container">
                 <div v-if="comment.depth < 2" class="comment-border" :class="{ 'depth-0': comment.depth === 0, 'depth-1': comment.depth === 1 }"></div>
-                <button v-if="!expanded" v-on:click="toggleComments" class="see-more-comments" :class="{ 'depth-0': comment.depth === 0, 'depth-1': comment.depth === 1 }">See More Comments</button>
+                <button v-if="!expanded" v-on:click="toggleComments" class="see-more-comments" :class="{ 'depth-0': comment.depth === 0, 'depth-1': comment.depth === 1 }">Xem thêm</button>
             </div>
         </div>
 
