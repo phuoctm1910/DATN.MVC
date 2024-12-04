@@ -9,6 +9,8 @@ using DATN.MVC.Request.User;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
+using DATN.MVC.Respone.User;
+using System.Text.Json;
 
 namespace DATN.MVC.Areas.Admin.Controllers
 {
@@ -28,16 +30,26 @@ namespace DATN.MVC.Areas.Admin.Controllers
             {
                 using (var client = new HttpClient())
                 {
+                    // Gọi API
                     var response = await client.GetAsync("https://localhost:7296/api/Role/get-roles");
                     if (response.IsSuccessStatusCode)
                     {
-                        var roles = await System.Text.Json.JsonSerializer.DeserializeAsync<List<RoleResponse>>(await response.Content.ReadAsStreamAsync());
+                        var options = new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        };
+
+                        // Deserialize danh sách người dùng
+                        var roles = await response.Content.ReadFromJsonAsync<List<RoleResponse>>(options);
+
+                        // Trả danh sách người dùng vào View
                         return View(roles);
                     }
                     else
                     {
-                        TempData["Error"] = "An error occurred while retrieving roles from the API.";
-                        return View("Error");
+                        // Xử lý lỗi nếu API trả về lỗi
+                        TempData["Error"] = $"API returned an error: {response.ReasonPhrase}";
+                        return View(new List<RoleResponse>());
                     }
                 }
             }
@@ -56,7 +68,7 @@ namespace DATN.MVC.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            
+
             return View();
         }
 
@@ -78,7 +90,7 @@ namespace DATN.MVC.Areas.Admin.Controllers
                     else
                     {
                         TempData["Error"] = "Failed to add role using the API.";
-                       
+
                         return View(request);
                     }
                 }
@@ -86,13 +98,13 @@ namespace DATN.MVC.Areas.Admin.Controllers
             catch (HttpRequestException httpEx)
             {
                 TempData["Error"] = "An error occurred while making a request to the API: " + httpEx.Message;
-             
+
                 return View(request);
             }
             catch (Exception ex)
             {
                 TempData["Error"] = "An unexpected error occurred: " + ex.Message;
-              
+
                 return View(request);
             }
         }
@@ -109,7 +121,7 @@ namespace DATN.MVC.Areas.Admin.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         var role = await System.Text.Json.JsonSerializer.DeserializeAsync<UpdateRoleRequest>(await response.Content.ReadAsStreamAsync());
-                        
+
                         return View(role);
                     }
                     else
@@ -194,6 +206,6 @@ namespace DATN.MVC.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
         }
-    
+
     }
 }

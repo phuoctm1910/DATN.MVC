@@ -58,6 +58,7 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminCategory
 
 
         // GET: AdminCategory/CreateParentCategory
+        // GET: AdminCategory/CreateParentCategory
         public IActionResult CreateParentCategory()
         {
             return View();
@@ -101,6 +102,7 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminCategory
             // Nếu Model không hợp lệ, trả về thông báo lỗi
             return Json(new { success = false, message = "Dữ liệu không hợp lệ." });
         }
+
 
 
 

@@ -60,38 +60,38 @@
         }
 
     .label-container {
-        display: flex; /* Đặt flexbox để các phần tử nằm ngang hàng */
-        align-items: center; /* Căn giữa theo chiều dọc */
-        justify-content: space-between; /* Tùy chỉnh khoảng cách giữa các phần tử */
-        margin-bottom: 5px; /* Khoảng cách dưới cùng */
+        display: flex; 
+        align-items: center; 
+        justify-content: space-between; 
+        margin-bottom: 5px; 
     }
 
   
     .edit-user-label {
         font-weight: bold;
         color: #555;
-        margin-right: 10px; /* Khoảng cách giữa Label và Thông báo lỗi */
+        margin-right: 10px; 
         display: inline-block;
     }
 
     .error-message {
         color: red;
         font-size: 12px;
-        display: flex; /* Sử dụng flex để xếp icon và text */
-        align-items: center; /* Căn giữa icon và text theo chiều dọc */
-        margin-left: 10px; /* Khoảng cách giữa Label và thông báo lỗi */
-        white-space: nowrap; /* Không cho xuống dòng */
+        display: flex; 
+        align-items: center; 
+        margin-left: 10px; 
+        white-space: nowrap; 
     }
 
     .sb-nav-link-icon {
-        margin-right: 5px; /* Tạo khoảng cách giữa icon và text */
-        display: flex; /* Đảm bảo icon không bị xuống dòng */
+        margin-right: 5px;
+        display: flex;
         align-items: center;
     }
 
         .sb-nav-link-icon i {
-            font-size: 14px; /* Kích thước icon */
-            color: red; /* Màu icon */
+            font-size: 14px; 
+            color: red; 
         }
 
     .edit-user-error-message {
@@ -144,7 +144,6 @@
                 <label for="PhoneNumber" class="edit-user-label">Số Điện Thoại</label>
                 <span id="PhoneNumberError" class="error-message"><div class="sb-nav-link-icon"><i class="fas fa-pinterests" hidden></i></div></span>
             </div>
-            
                 <input type="text" class="edit-user-input" id="PhoneNumber" name="PhoneNumber" value="@Model.PhoneNumber" placeholder="Enter phone number" />
         </div>
 
@@ -184,6 +183,7 @@
                 const fullName = $('#FullName').val().trim();
                 const phoneNumber = $('#PhoneNumber').val().trim();
                 const isActived = $('#IsActived').val() === 'true';
+
                 const userData = {
                     Id: userId,
                     UserName: userName,
@@ -205,24 +205,20 @@
 
                 console.log('Sending Data:', userData);
 
-                // Kiểm tra các trường có hợp lệ không
                 if (!validateFields(userName, fullName, phoneNumber)) {
-                    return; // Ngừng nếu có lỗi
+                    return;
                 }
 
-                // Gửi AJAX request
                 $.ajax({
                     type: "PUT",
-                    url: `https://localhost:7296/api/UserAdmin/update-user/${userId}`, // API endpoint
+                    url: `https://localhost:7296/api/UserAdmin/update-user/${userId}`,
                     contentType: "application/json",
-                    data: JSON.stringify(userData), // Chuyển dữ liệu thành JSON
+                    data: JSON.stringify(userData),
                     success: function (response) {
-                        console.log('Response:', response); // Log phản hồi từ server
-
-                        // Kiểm tra nếu phản hồi có chứa từ "successfully" để xác nhận thành công
+                        console.log('Response:', response);
                         if (response.message && response.message.includes('successfully')) {
-                            alert(response.message); // Hiển thị thông báo từ API
-                            window.location.href = '/admin/user/'; // Chuyển hướng về trang index
+                            alert(response.message);
+                            window.location.href = '/admin/user/';
                         } else {
                             alert('Lỗi: ' + (response.message || 'Không xác định.'));
                         }
@@ -233,34 +229,29 @@
                         alert('Có lỗi xảy ra: ' + errorMessage);
                     }
                 });
-
             });
 
-
-           
-            // Hàm kiểm tra các trường
             function showError(selector, message) {
                 const errorSpan = $(selector).closest('.edit-user-form-group').find('.error-message');
                 errorSpan.html(`<div class="sb-nav-link-icon"><i class="fas fa-exclamation-circle"></i></div> ${message}`);
-                errorSpan.css('display', 'flex'); // Hiển thị lỗi
+                errorSpan.css('display', 'flex');
             }
 
-            // Hàm kiểm tra và xóa lỗi khi nhập đúng
             $('#editUserForm input, #editUserForm select').on('input change', function () {
-                const fieldId = $(this).attr('id'); // Lấy ID của trường đang nhập
-                const value = $(this).val().trim(); // Lấy giá trị không có khoảng trắng đầu hoặc cuối
-
-                // Tìm thẻ span chứa lỗi tương ứng
+                const fieldId = $(this).attr('id');
+                const value = $(this).val().trim();
                 const errorSpan = $(this).closest('.edit-user-form-group').find('.error-message');
 
-                // Kiểm tra dữ liệu và xóa lỗi nếu hợp lệ
                 if (fieldId === 'UserName') {
+                    const userNameRegex = /^[a-zA-Z0-9]+$/;
                     if (!value) {
                         showError('#UserNameError', 'Tài khoản không được để trống');
                     } else if (value !== $(this).val()) {
                         showError('#UserNameError', 'Tài khoản không được có khoảng trắng ở đầu hoặc cuối');
+                    } else if (!userNameRegex.test(value)) {
+                        showError('#UserNameError', 'Tài khoản chỉ được chứa chữ cái và số');
                     } else {
-                        errorSpan.html(''); // Xóa lỗi nếu hợp lệ
+                        errorSpan.html('');
                     }
                 } else if (fieldId === 'FullName') {
                     const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/;
@@ -268,69 +259,44 @@
                         showError('#FullNameError', 'Họ và tên không được để trống');
                     } else if (value !== $(this).val()) {
                         showError('#FullNameError', 'Họ và tên không được có khoảng trắng ở đầu hoặc cuối');
+                    } else if (!nameRegex.test(value)) {
+                        showError('#FullNameError', 'Họ và tên chỉ được chứa chữ cái và khoảng trắng');
                     } else {
-                        errorSpan.html(''); // Xóa lỗi nếu hợp lệ
+                        errorSpan.html('');
                     }
                 } else if (fieldId === 'PhoneNumber') {
-                    const phoneRegex = /^0[0-9]{9}$/;
+                    const phoneRegex = /^[0-9]{10}$/;
                     if (!value) {
                         showError('#PhoneNumberError', 'Số điện thoại không được để trống');
                     } else if (!phoneRegex.test(value)) {
-                        showError('#PhoneNumberError', 'Số điện thoại phải bắt đầu bằng 0 và có đúng 10 chữ số');
-                    } else if (value !== $(this).val()) {
-                        showError('#PhoneNumberError', 'Số điện thoại không được có khoảng trắng ở đầu hoặc cuối');
+                        showError('#PhoneNumberError', 'Số điện thoại chỉ được nhập số và phải có 10 chữ số');
                     } else {
-                        errorSpan.html(''); // Xóa lỗi nếu hợp lệ
+                        errorSpan.html('');
                     }
                 }
             });
 
-            // Hàm kiểm tra các trường trước khi gửi
             function validateFields(userName, fullName, phoneNumber) {
                 let isValid = true;
 
-                // Xóa lỗi trước đó
-                $('.error-message').html('');
-
-                // Kiểm tra Tài Khoản
-                if (!userName.trim()) {
-                    showError('#UserNameError', 'Tài khoản không được để trống');
-                    isValid = false;
-                } else if (userName !== userName.trim()) {
-                    showError('#UserNameError', 'Tài khoản không được có khoảng trắng ở đầu hoặc cuối');
+                if (!userName || !/^[a-zA-Z0-9]+$/.test(userName)) {
+                    showError('#UserNameError', 'Tài khoản không hợp lệ');
                     isValid = false;
                 }
 
-                // Kiểm tra Họ và Tên
-                const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/;
-                if (!fullName.trim()) {
-                    showError('#FullNameError', 'Họ và tên không được để trống');
-                    isValid = false;
-                } else if (fullName !== fullName.trim()) {
-                    showError('#FullNameError', 'Họ và tên không được có khoảng trắng ở đầu hoặc cuối');
+                if (!fullName || !/^[a-zA-ZÀ-ỹ\s]+$/.test(fullName)) {
+                    showError('#FullNameError', 'Họ và tên không hợp lệ');
                     isValid = false;
                 }
 
-                // Kiểm tra Số Điện Thoại
-                const phoneRegex = /^0[0-9]{9}$/;
-                if (!phoneNumber.trim()) {
-                    showError('#PhoneNumberError', 'Số điện thoại không được để trống');
-                    isValid = false;
-                } else if (phoneNumber !== phoneNumber.trim()) {
-                    showError('#PhoneNumberError', 'Số điện thoại không được có khoảng trắng ở đầu hoặc cuối');
-                    isValid = false;
-                } else if (!phoneRegex.test(phoneNumber.trim())) {
-                    showError('#PhoneNumberError', 'Số điện thoại phải bắt đầu bằng 0 và có đúng 10 chữ số');
+                if (!phoneNumber || !/^[0-9]{10}$/.test(phoneNumber)) {
+                    showError('#PhoneNumberError', 'Số điện thoại không hợp lệ');
                     isValid = false;
                 }
 
                 return isValid;
             }
-
         });
-
-
-
     </script>
 }
 

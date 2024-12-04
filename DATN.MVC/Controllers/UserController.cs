@@ -33,6 +33,30 @@ namespace DATN.MVC.Controllers
             return View();
         }
 
+        public IActionResult SuggestFriends()
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = false // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+            return View();
+        }
+
+        public IActionResult RequestFriends()
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = false // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+            return View();
+        }
+
         public ActionResult Friends()
         {
             var viewSettings = new ViewSettings
@@ -44,6 +68,9 @@ namespace DATN.MVC.Controllers
             ViewBag.ViewSettings = viewSettings;
             return View();
         }
+
+
+
 
         // GET: UserController/Details/5
         public ActionResult Details(int id)

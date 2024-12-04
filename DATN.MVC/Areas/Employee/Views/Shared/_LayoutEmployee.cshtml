@@ -19,7 +19,7 @@
 <body>
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.html">Start Bootstrap</a>
+        <a class="navbar-brand ps-3" href="index.html">EMPLOYEE</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
@@ -48,7 +48,7 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Core</div>
-                        <a class="nav-link" asp-controller="HomeAdmin" asp-action="Dashboard">
+                        @* <a class="nav-link" asp-controller="HomeAdmin" asp-action="Dashboard">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
@@ -62,7 +62,7 @@
                             Tables
                         </a>
 
-                        <div class="sb-sidenav-menu-heading">Để mấy trang của mình ở dưới đây</div>
+                        <div class="sb-sidenav-menu-heading">Để mấy trang của mình ở dưới đây</div> *@
                         <a class="nav-link" asp-controller="EmployeProduct" asp-action="Index">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             Quản Lý Sản Phẩm
@@ -70,6 +70,10 @@
                         <a class="nav-link" asp-controller="EmployePost" asp-action="Index">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             Quản Lý Bài Đăng
+                        </a>
+                        <a class="nav-link" asp-controller="EmployeUser" asp-action="Index">
+                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                            Quản Lý Người Dùng
                         </a>
                         <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">

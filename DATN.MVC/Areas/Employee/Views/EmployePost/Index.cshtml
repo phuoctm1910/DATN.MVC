@@ -45,7 +45,7 @@
                 <tr>
                     <th class="text-center align-middle">Tên Người Dùng</th>
                     <th class="text-center align-middle">Nội Dung</th>
-                    <th class="text-center align-middle">Hình Ảnh</th>
+                 @*    <th class="text-center align-middle">Hình Ảnh</th> *@
                     <th class="text-center align-middle">Đối Tượng</th>
                     <th class="text-center align-middle">Trạng Thái</th>
                     <th class="text-center align-middle">Ngày Tạo</th>
@@ -59,7 +59,7 @@
                     <tr style="text-align: center; vertical-align: middle;">
                         <td>@post.FullName</td>
                         <td>@post.Content</td>
-                        <td>
+                        @* <td>
                             @if (!string.IsNullOrEmpty(post.Image))
                             {
                                 <img src="@post.Image" alt="Post Image" style="width: 100px; height: auto;" />
@@ -68,9 +68,9 @@
                             {
                                 <span>Không có ảnh</span>
                             }
-                        </td>
+                        </td> *@
                         <td>@post.PostFor</td>
-                        <td>@(post.IsActived ? "Sử dụng" : "Không sử dụng")</td>
+                        <td>@(post.IsActived ? "Đã duyệt" : "Chưa duyệt")</td>
                         <td>@post.CreatedDateTime.ToString("dd/MM/yyyy HH:mm")</td>
                         <td>@post.UpdatedDateTime.ToString("dd/MM/yyyy HH:mm")</td>
                         <td>

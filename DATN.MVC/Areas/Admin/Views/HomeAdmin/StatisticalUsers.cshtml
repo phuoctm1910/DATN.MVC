@@ -7,7 +7,7 @@
 
        
             <div class="card-header">
-            <h2>  <i class="fas fa-chart-bar me-1"></i>Thống Kê Người Dùng Đăng Ký</h2>
+            <h2>  <i class="fas fa-chart-bar me-1"></i>Thống Kê Người Dùng Mới</h2>
              <button id="exportChart" class="btn btn-success">Export Biểu Đồ</button>
             </div>
             <div class="card-body"><canvas id="registrationChart" width="100%" height="50"></canvas></div>
@@ -35,7 +35,7 @@
                     data: {
                         labels: labels, // Các nhãn trục X
                         datasets: [{
-                            label: 'Số lượng người đăng ký', // Nhãn dữ liệu
+                            label: 'Số lượng người mới', // Nhãn dữ liệu
                             data: registrations, // Số lượng đăng ký
                             backgroundColor: 'rgba(75, 192, 192, 0.6)', // Màu nền cột
                             borderColor: 'rgba(75, 192, 192, 1)', // Màu viền cột

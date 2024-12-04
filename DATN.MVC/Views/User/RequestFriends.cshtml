@@ -1,0 +1,411 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 250px;
+            background-color: #fff;
+            padding-top: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+        
+
+            .sidebar h4 {
+                text-align: center;
+                font-size: 24px;
+                margin-bottom: 30px;
+                color: #007bff;
+            }
+
+            .sidebar a {
+                display: block;
+                padding: 15px;
+                font-size: 18px;
+                color: #333;
+                text-decoration: none;
+                transition: background-color 0.3s;
+            }
+
+                .sidebar a:hover {
+                    background-color: #f1f1f1;
+                }
+
+                .sidebar a i {
+                    margin-right: 8px; /* Khoảng cách giữa icon và văn bản */
+                    font-size: 20px; /* Kích thước của icon */
+                }
+
+        .muted-text {
+            font-size: 15px;
+            text-align: center;
+        }
+        /* Main Content */
+        .main-content {
+            margin-left: 270px;
+            padding: 30px;
+        }
+
+            .main-content h3 {
+                color: #007bff;
+            }
+
+        /* Friend List */
+        .friend-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+           
+        }
+
+            .friend-list .list-wrap {
+                width: 100%;
+                max-width: 300px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                background-color: #fff;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                padding: 15px;
+                padding-top: 15px;
+                transition: transform 0.3s ease;
+                margin-bottom: 20px;
+            }
+
+                .friend-list .list-wrap:hover {
+                    transform: translateY(-5px);
+                }
+
+            .friend-list .item-avatar img {
+                width: 300px; /* Cố định chiều rộng */
+                height: 300px; /* Cố định chiều cao */
+                object-fit: cover; /* Giữ tỷ lệ ảnh mà không bị biến dạng */
+                border-radius: 10px; /* Bo góc nhẹ cho ảnh */
+                margin-bottom: 15px;
+            }
+
+            .friend-list .item h5 {
+                font-size: 18px;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+
+            .friend-list .actions {
+                text-align: center;
+            }
+
+                .friend-list .actions button {
+                    padding: 14px 30px; /* Kéo dài thêm chiều dài của button */
+                    font-size: 16px;
+                    border-radius: 5px;
+                    border: none;
+                    text-transform: uppercase;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    margin: 5px;
+                    width: 100%; /* Đảm bảo nút chiếm hết chiều rộng có sẵn */
+                }
+
+                .friend-list .actions .generic-button {
+                    display: inline-block;
+                    outline: none;
+                    cursor: pointer;
+                    padding: 0 16px;
+                    background-color: #fff;
+                    border-radius: 0.25rem;
+                    border: 1px solid #0070d2;
+                    color: #0070d2;
+                    font-size: 18px;
+                    line-height: 40px;
+                    font-weight: 500;
+                    text-align: center;
+                    : hover
+
+        {
+            background-color: #f4f6f9;
+        }
+         }
+
+        .friend-list .actions .generic-button:hover {
+            background-color: #0056b3;
+            text-decoration: none;
+        }
+
+         .friend-list .actions .remove-button {
+            display: inline-block;
+            outline: none;
+            cursor: pointer;
+            padding: 0 16px;
+            background-color: #fff;
+            border-radius: 0.25rem;
+            border: 1px solid #ff0000;
+            color: #ff0000;
+            font-size: 18px;
+            line-height: 40px;
+            font-weight: 500;
+            text-align: center;
+            : hover
+
+        {
+            background-color: #f4f6f9;
+        }
+         }
+
+                .friend-list .actions button:hover {
+                    opacity: 0.8; /* Hiệu ứng khi hover */
+            background-color: #cc4c2c;
+                    text-decoration: none;
+                }
+
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+            }
+
+            .friend-list .col-md-3 {
+                flex: 1 1 48%;
+            }
+
+            .friend-list .col-md-2 {
+                flex: 1 1 48%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h4>Menu</h4>
+        <a href="/"><i class="fas fa-home"></i> Trang chủ</a>
+        <a href="@Url.Action("RequestFriends", "User")"><i class="fas fa-user-plus"></i> Lời mời kết bạn</a>
+        <a href="@Url.Action("suggestFriends", "User")"><i class="fas fa-user-friends"></i> Gợi ý kết bạn</a>
+        <a href="@Url.Action("Friends", "User")"><i class="fas fa-users"></i> Tất cả bạn bè</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h3>Lời Mời Kết Bạn</h3>
+
+        <div class="friend-list row">
+            <!-- Friend 1 -->
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/Hau.jpg" class="avatar" alt="Profile picture">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">John Thompson</a></h5>
+                        <p class="muted-text">13 bạn bè chung</p>
+                        <div class="actions">
+                            <button class="generic-button">Chấp nhận</button>
+                            <button class="remove-button">Từ chối</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friend 2 -->
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/Duymai2.jpg" class="avatar" alt="Profile picture">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Phước Tạ</a></h5>
+                        <p class="muted-text">17 bạn bè chung</p>
+                        <div class="actions">
+                            <button class="generic-button">Chấp nhận</button>
+                            <button class="remove-button">Từ chối</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friend 3 -->
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/Duy3.jpg" class="avatar" alt="Profile picture">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Huỳnh Anh Duy</a></h5>
+                        <p class="muted-text">33 bạn bè chung</p>
+                        <div class="actions">
+                            <button class="generic-button">Chấp nhận</button>
+                            <button class="remove-button">Từ chối</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friend 4 -->
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/PC07025.jpg" class="avatar" alt="Profile picture">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Phan Hữu Hiệu</a></h5>
+                        <p class="muted-text">13 bạn bè chung</p>
+                        <div class="actions">
+                            <button class="generic-button">Chấp nhận</button>
+                            <button class="remove-button">Từ chối</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friend 5 -->
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/album2.jpg" class="avatar" alt="Profile picture">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Lý Minh Tú</a></h5>
+                        <p class="muted-text">10 bạn bè chung</p>
+                        <div class="actions">
+                            <button class="generic-button">Chấp nhận</button>
+                            <button class="remove-button">Từ chối</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friend 6 -->
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/author.jpg" class="avatar" alt="Profile picture">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Tôn Kiến Hùng</a></h5>
+                        <p class="muted-text">8 bạn bè chung</p>
+                        <div class="actions">
+                            <button class="generic-button">Chấp nhận</button>
+                            <button class="remove-button">Từ chối</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friend 7 -->
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/album1.jpg" class="avatar" alt="Profile picture">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Nguyễn Thị Mai</a></h5>
+                        <p class="muted-text">15 bạn bè chung</p>
+                        <div class="actions">
+                            <button class="generic-button">Chấp nhận</button>
+                            <button class="remove-button">Từ chối</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friend 8 -->
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/Duymai2.jpg" class="avatar" alt="Profile picture">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Lê Minh Khuê</a></h5>
+                        <p class="muted-text">5 bạn bè chung</p>
+                        <div class="actions">
+                            <button class="generic-button">Chấp nhận</button>
+                            <button class="remove-button">Từ chối</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friend 9 -->
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/kha.jpg" class="avatar" alt="Profile picture">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Hồ Văn Hiếu</a></h5>
+                        <p class="muted-text">20 bạn bè chung</p>
+                        <div class="actions">
+                            <button class="generic-button">Chấp nhận</button>
+                            <button class="remove-button">Từ chối</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friend 10 -->
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="list-wrap">
+                    <div class="item-avatar">
+                        <a href="#">
+                            <img loading="lazy" src="~/images/resources/Phuoc2.jpg" class="avatar" alt="Profile picture">
+                        </a>
+                    </div>
+                    <div class="item">
+                        <h5><a href="#">Nguyễn Thị Lệ</a></h5>
+                        <p class="muted-text">7 bạn bè chung</p>
+                        <div class="actions">
+                            <button class="generic-button">Chấp nhận</button>
+                            <button class="remove-button">Từ chối</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
