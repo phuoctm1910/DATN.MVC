@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model List<DATN.MVC.Respone.Friends.FriendListRes>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -95,8 +97,8 @@
                 }
 
             .friend-list .item-avatar img {
-                width: 300px; /* Cố định chiều rộng */
-                height: 300px; /* Cố định chiều cao */
+                width: 250px; /* Cố định chiều rộng */
+                height: 250px; /* Cố định chiều cao */
                 object-fit: cover; /* Giữ tỷ lệ ảnh mà không bị biến dạng */
                 border-radius: 10px; /* Bo góc nhẹ cho ảnh */
                 margin-bottom: 15px;
@@ -129,7 +131,7 @@
                     display: inline-block;
                     outline: none;
                     cursor: pointer;
-                    padding: 0 16px;
+                    padding: 0 26px;
                     background-color: #fff;
                     border-radius: 0.25rem;
                     border: 1px solid #0070d2;
@@ -147,6 +149,7 @@
 
         .friend-list .actions .generic-button:hover {
             background-color: #0056b3;
+            color: #fff;
             text-decoration: none;
         }
 
@@ -172,7 +175,8 @@
 
                 .friend-list .actions button:hover {
                     opacity: 0.8; /* Hiệu ứng khi hover */
-            background-color: #cc4c2c;
+                    background-color: #cc4c2c;
+                    color: #fff;
                     text-decoration: none;
                 }
 
@@ -203,8 +207,8 @@
         <h4>Menu</h4>
         <a href="/"><i class="fas fa-home"></i> Trang chủ</a>
         <a href="@Url.Action("RequestFriends", "User")"><i class="fas fa-user-plus"></i> Lời mời kết bạn</a>
-        <a href="@Url.Action("suggestFriends", "User")"><i class="fas fa-user-friends"></i> Gợi ý kết bạn</a>
-        <a href="@Url.Action("Friends", "User")"><i class="fas fa-users"></i> Tất cả bạn bè</a>
+        <a href="@Url.Action("SuggestFriend", "User")"><i class="fas fa-user-friends"></i> Gợi ý kết bạn</a>
+        <a href="@Url.Action("AllFriends", "User")"><i class="fas fa-users"></i> Tất cả bạn bè</a>
     </div>
 
     <!-- Main Content -->
@@ -212,195 +216,46 @@
         <h3>Lời Mời Kết Bạn</h3>
 
         <div class="friend-list row">
-            <!-- Friend 1 -->
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="list-wrap">
-                    <div class="item-avatar">
-                        <a href="#">
-                            <img loading="lazy" src="~/images/resources/Hau.jpg" class="avatar" alt="Profile picture">
-                        </a>
-                    </div>
-                    <div class="item">
-                        <h5><a href="#">John Thompson</a></h5>
-                        <p class="muted-text">13 bạn bè chung</p>
-                        <div class="actions">
-                            <button class="generic-button">Chấp nhận</button>
-                            <button class="remove-button">Từ chối</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Friend 2 -->
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="list-wrap">
-                    <div class="item-avatar">
-                        <a href="#">
-                            <img loading="lazy" src="~/images/resources/Duymai2.jpg" class="avatar" alt="Profile picture">
-                        </a>
-                    </div>
-                    <div class="item">
-                        <h5><a href="#">Phước Tạ</a></h5>
-                        <p class="muted-text">17 bạn bè chung</p>
-                        <div class="actions">
-                            <button class="generic-button">Chấp nhận</button>
-                            <button class="remove-button">Từ chối</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @foreach (var item in Model)
+            {
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="list-wrap">
+                        <div class="item-avatar">
+                            <a href="#">
+                                <img loading="lazy" src="@(!string.IsNullOrEmpty(item.FriendImage) ? item.FriendImage : "https://smmhwsdluglunrhndxcb.supabase.co/storage/v1/object/public/images/default-userImg.jpg" )" alt="Friend">
 
-            <!-- Friend 3 -->
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="list-wrap">
-                    <div class="item-avatar">
-                        <a href="#">
-                            <img loading="lazy" src="~/images/resources/Duy3.jpg" class="avatar" alt="Profile picture">
-                        </a>
-                    </div>
-                    <div class="item">
-                        <h5><a href="#">Huỳnh Anh Duy</a></h5>
-                        <p class="muted-text">33 bạn bè chung</p>
-                        <div class="actions">
-                            <button class="generic-button">Chấp nhận</button>
-                            <button class="remove-button">Từ chối</button>
+                        
+                            </a>
                         </div>
-                    </div>
-                </div>
-            </div>
+                        <div class="item">
+                            <h5><a href="#">@item.FriendFullName</a></h5>
+                            @*  <p class="muted-text">@item.MutualFriendsCount Bạn bè chung</p> *@
+                            @* <form class="actions" asp-action="AcceptFriend" asp-controller="" method="post">
+                                <input type="hidden" name="FriendId" value="@item.FriendId" />
+                                <button class="generic-button">Chấp nhận</button>
 
-            <!-- Friend 4 -->
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="list-wrap">
-                    <div class="item-avatar">
-                        <a href="#">
-                            <img loading="lazy" src="~/images/resources/PC07025.jpg" class="avatar" alt="Profile picture">
-                        </a>
-                    </div>
-                    <div class="item">
-                        <h5><a href="#">Phan Hữu Hiệu</a></h5>
-                        <p class="muted-text">13 bạn bè chung</p>
-                        <div class="actions">
-                            <button class="generic-button">Chấp nhận</button>
-                            <button class="remove-button">Từ chối</button>
+                            </form>
+                            <div class="actions"  asp-action="CancelFriend" method="post">
+                                <input type="hidden" name="FriendId" value="@item.FriendId" />
+                                <button class="remove-button">Từ chối</button>
+                            </div> *@
+                            <div class="actions">
+                                <form asp-action="AcceptFriend" method="post">
+                                    <input type="hidden" name="FriendId" value="@item.FriendId" />
+                                    <button type="submit" class="generic-button">Chấp nhận</button>
+                                </form>
+                                <form asp-action="CancelFriend" method="post">
+                                    <input type="hidden" name="FriendId" value="@item.FriendId" />
+                                    <button type="submit" class="remove-button">Từ chối</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Friend 5 -->
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="list-wrap">
-                    <div class="item-avatar">
-                        <a href="#">
-                            <img loading="lazy" src="~/images/resources/album2.jpg" class="avatar" alt="Profile picture">
-                        </a>
-                    </div>
-                    <div class="item">
-                        <h5><a href="#">Lý Minh Tú</a></h5>
-                        <p class="muted-text">10 bạn bè chung</p>
-                        <div class="actions">
-                            <button class="generic-button">Chấp nhận</button>
-                            <button class="remove-button">Từ chối</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Friend 6 -->
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="list-wrap">
-                    <div class="item-avatar">
-                        <a href="#">
-                            <img loading="lazy" src="~/images/resources/author.jpg" class="avatar" alt="Profile picture">
-                        </a>
-                    </div>
-                    <div class="item">
-                        <h5><a href="#">Tôn Kiến Hùng</a></h5>
-                        <p class="muted-text">8 bạn bè chung</p>
-                        <div class="actions">
-                            <button class="generic-button">Chấp nhận</button>
-                            <button class="remove-button">Từ chối</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Friend 7 -->
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="list-wrap">
-                    <div class="item-avatar">
-                        <a href="#">
-                            <img loading="lazy" src="~/images/resources/album1.jpg" class="avatar" alt="Profile picture">
-                        </a>
-                    </div>
-                    <div class="item">
-                        <h5><a href="#">Nguyễn Thị Mai</a></h5>
-                        <p class="muted-text">15 bạn bè chung</p>
-                        <div class="actions">
-                            <button class="generic-button">Chấp nhận</button>
-                            <button class="remove-button">Từ chối</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Friend 8 -->
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="list-wrap">
-                    <div class="item-avatar">
-                        <a href="#">
-                            <img loading="lazy" src="~/images/resources/Duymai2.jpg" class="avatar" alt="Profile picture">
-                        </a>
-                    </div>
-                    <div class="item">
-                        <h5><a href="#">Lê Minh Khuê</a></h5>
-                        <p class="muted-text">5 bạn bè chung</p>
-                        <div class="actions">
-                            <button class="generic-button">Chấp nhận</button>
-                            <button class="remove-button">Từ chối</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Friend 9 -->
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="list-wrap">
-                    <div class="item-avatar">
-                        <a href="#">
-                            <img loading="lazy" src="~/images/resources/kha.jpg" class="avatar" alt="Profile picture">
-                        </a>
-                    </div>
-                    <div class="item">
-                        <h5><a href="#">Hồ Văn Hiếu</a></h5>
-                        <p class="muted-text">20 bạn bè chung</p>
-                        <div class="actions">
-                            <button class="generic-button">Chấp nhận</button>
-                            <button class="remove-button">Từ chối</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Friend 10 -->
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="list-wrap">
-                    <div class="item-avatar">
-                        <a href="#">
-                            <img loading="lazy" src="~/images/resources/Phuoc2.jpg" class="avatar" alt="Profile picture">
-                        </a>
-                    </div>
-                    <div class="item">
-                        <h5><a href="#">Nguyễn Thị Lệ</a></h5>
-                        <p class="muted-text">7 bạn bè chung</p>
-                        <div class="actions">
-                            <button class="generic-button">Chấp nhận</button>
-                            <button class="remove-button">Từ chối</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
+  
+        
         </div>
     </div>
 

@@ -23,7 +23,9 @@
         Accepted = 1,       // Đã chấp nhận, trở thành bạn bè
         Blocked = 2,        // Bị chặn
         Cancel = 3,          // Bị hủy
-        Unfriend = 4
+        Unfriend = 4,
+        RemoveSuggest = 5
+
     }
 
     public enum PostReact : int
