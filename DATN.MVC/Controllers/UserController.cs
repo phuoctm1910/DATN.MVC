@@ -39,54 +39,6 @@ namespace DATN.MVC.Controllers
 
             return View();
         }
-
-
-        public IActionResult MarketPlace()
-        {
-            var viewSettings = new ViewSettings
-            {
-                ShowSidebar = false, // Tắt sidebar
-                ShowHeader = true,   // Bật header
-                ShowFriendList = false // Tắt danh sách bạn bè
-            };
-            ViewBag.ViewSettings = viewSettings;
-            return View();
-        }
-
-        public IActionResult DetailProduct()
-        {
-            var viewSettings = new ViewSettings
-            {
-                ShowSidebar = false, // Tắt sidebar
-                ShowHeader = true,   // Bật header
-                ShowFriendList = false // Tắt danh sách bạn bè
-            };
-            ViewBag.ViewSettings = viewSettings;
-            return View();
-        }
-
-        public IActionResult DisplayProduct()
-        {
-            var viewSettings = new ViewSettings
-            {
-                ShowSidebar = false, // Tắt sidebar
-                ShowHeader = true,   // Bật header
-                ShowFriendList = false // Tắt danh sách bạn bè
-            };
-            ViewBag.ViewSettings = viewSettings;
-            return View();
-        }
-        public IActionResult SaleMans()
-        {
-            var viewSettings = new ViewSettings
-            {
-                ShowSidebar = false, // Tắt sidebar
-                ShowHeader = true,   // Bật header
-                ShowFriendList = false // Tắt danh sách bạn bè
-            };
-            ViewBag.ViewSettings = viewSettings;
-            return View();
-        }
         public IActionResult RequestFriends()
         {
             var viewSettings = new ViewSettings
@@ -364,6 +316,78 @@ namespace DATN.MVC.Controllers
                     return StatusCode(500, $"Internal server error: {ex.Message}");
                 }
             }
+        // POST: UserController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, IFormCollection collection)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public IActionResult SuggestFriends()
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = false // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+            return View();
+        }
+
+        public IActionResult MarketPlace()
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = false // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+            return View();
+        }
+
+        public IActionResult DetailProduct()
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = false // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+            return View();
+        }
+
+        public IActionResult DisplayProduct()
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = false // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+            return View();
+        }
+        public IActionResult SaleMans()
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = false // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+            return View();
         }
 
     }
