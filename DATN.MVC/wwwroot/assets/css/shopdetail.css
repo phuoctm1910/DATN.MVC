@@ -1,0 +1,222 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.shop-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.shop-info-section {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.shop-info-left-container {
+    position: relative;
+    padding: 10px;
+    max-width: 350px;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.bg-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://cdn.pixabay.com/photo/2024/06/30/10/28/sky-8862862_1280.png");
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: blur(5px);
+    z-index: 1;
+}
+
+.bg-dark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+}
+
+.shop-info-left {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.shop-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: 4px solid #b8b8b8;
+}
+
+.shop-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.shop-name {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.shop-status {
+    font-size: 1.1rem;
+    color: #999;
+    margin-bottom: 10px;
+}
+
+.shop-actions {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.shop-actions button {
+    width: 46%;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.4rem;
+    background: transparent;
+    border: 1px solid #fff;
+    padding: 6px 15px;
+}
+
+.follow-btn {
+    background-color: #f53d2d;
+    color: white;
+}
+
+.chat-btn {
+    background-color: #3498db;
+    color: white;
+}
+
+.shop-info-right {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    flex-basis: 100%;
+    margin-left: 20px;
+}
+
+.shop-info-right .shop-stats p {
+    font-size: 1.3rem;
+}
+
+.shop-stats p {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.shop-stats span {
+    font-weight: bold;
+    color: #555;
+}
+
+
+/* Navigation Tabs */
+
+.shop-navigation {
+    display: flex;
+    padding: 15px 20px 0 20px;
+    background-color: #f7f7f7;
+    border-top: 2px solid #f53d2d;
+    flex-wrap: wrap;
+}
+
+.shop-navigation a {
+    margin-right: 20px;
+    text-decoration: none;
+    font-size: 1.4rem;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+.navigation-link {
+    padding-bottom: 20px;
+    width: 100%;
+    max-width: 150px;
+    text-align: center;
+}
+
+.shop-navigation a.active,
+.shop-navigation a:hover {
+    color: #f53d2d;
+    border-bottom: 2px solid #f53d2d;
+}
+
+.app__content .title h2 {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+    .shop-info-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .shop-info-left,
+    .shop-info-right {
+        flex-basis: 100%;
+        margin-bottom: 10px;
+    }
+    .shop-navigation a {
+        margin-right: 10px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .shop-name {
+        font-size: 1.2rem;
+    }
+    .shop-navigation {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .shop-navigation a {
+        margin-bottom: 10px;
+    }
+    .shop-logo {
+        width: 60px;
+        height: 60px;
+    }
+    .shop-actions button {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+}
