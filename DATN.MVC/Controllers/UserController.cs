@@ -41,7 +41,8 @@ namespace DATN.MVC.Controllers
         }
 
 
-        public IActionResult RequestFriends()
+
+        public IActionResult SuggestFriends()
         {
             using (var httpClient = new HttpClient())
             {
@@ -52,36 +53,63 @@ namespace DATN.MVC.Controllers
                     return BadRequest("User ID is missing.");
                 }
 
-                // Prepare the request
-                var req = new FriendListReq
-                {
-                    UserId = int.Parse(userId), // Convert UserId to int
-                    Status = FriendStatus.Pending
-                };
-                // Serialize the request to JSON
-                var jsonContent = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
+        public IActionResult MarketPlace()
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = false // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+            return View();
+        }
 
-                HttpResponseMessage response = httpClient.PostAsync("https://localhost:7296/api/friends/get-friend-list", jsonContent).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    var jsonData = response.Content.ReadAsStringAsync().Result;
-                    var users = JsonConvert.DeserializeObject<List<FriendListRes>>(jsonData);
+        public IActionResult DetailProduct()
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = false // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+            return View();
+        }
 
-                    var viewSettings = new ViewSettings
-                    {
-                        ShowSidebar = false, // Tắt sidebar
-                        ShowHeader = true,   // Bật header
-                        ShowFriendList = false // Tắt danh sách bạn bè
-                    };
-                    ViewBag.ViewSettings = viewSettings;
-                    return View(users);
-                }
-                else
-                {
-                    TempData["Error"] = "Không có lời mời nào.";
-                    return View(new List<FriendListRes>());
-                }
-            }
+        public IActionResult DisplayProduct()
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = false // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+            return View();
+        }
+        public IActionResult SaleMans()
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = false // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+            return View();
+        }
+
+        public IActionResult RequestFriends()
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = false // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+            return View();
         }
 
 
