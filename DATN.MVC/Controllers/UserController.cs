@@ -41,18 +41,6 @@ namespace DATN.MVC.Controllers
         }
 
 
-
-        public IActionResult SuggestFriends()
-        {
-            using (var httpClient = new HttpClient())
-            {
-                // Extract UserId from HttpContext
-                var userId = HttpContext.Items["userId"]?.ToString();
-                if (string.IsNullOrEmpty(userId))
-                {
-                    return BadRequest("User ID is missing.");
-                }
-
         public IActionResult MarketPlace()
         {
             var viewSettings = new ViewSettings
@@ -99,7 +87,6 @@ namespace DATN.MVC.Controllers
             ViewBag.ViewSettings = viewSettings;
             return View();
         }
-
         public IActionResult RequestFriends()
         {
             var viewSettings = new ViewSettings
@@ -111,88 +98,6 @@ namespace DATN.MVC.Controllers
             ViewBag.ViewSettings = viewSettings;
             return View();
         }
-
-
-
-
-        public ActionResult AllFriends()
-        {
-            using (var httpClient = new HttpClient())
-            {
-                // Extract UserId from HttpContext
-                var userId = HttpContext.Items["userId"]?.ToString();
-                if (string.IsNullOrEmpty(userId))
-                {
-                    return BadRequest("User ID is missing.");
-                }
-
-                // Prepare the request
-                var req = new FriendListReq
-                {
-                    UserId = int.Parse(userId), // Convert UserId to int
-                    Status = FriendStatus.Accepted
-                };
-
-                try
-                {
-                    // Serialize the request to JSON
-                    var jsonContent = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
-
-                    // Send POST request
-                    HttpResponseMessage response = httpClient.PostAsync("https://localhost:7296/api/friends/get-friend-list", jsonContent).Result;
-                    if (response.IsSuccessStatusCode)
-                    {
-                        // Read and deserialize response
-                        var jsonData = response.Content.ReadAsStringAsync().Result;
-                        var users = JsonConvert.DeserializeObject<List<FriendListRes>>(jsonData);
-
-                        // Prepare view settings
-                        var viewSettings = new ViewSettings
-                        {
-                            ShowSidebar = false, // Disable sidebar
-                            ShowHeader = true,   // Enable header
-                            ShowFriendList = false // Disable friend list
-                        };
-                        ViewBag.ViewSettings = viewSettings;
-
-                        // Pass the filtered list to the view
-                        return View(users);
-                    }
-                    else
-                    {
-                        // Return empty list in case of unsuccessful response
-                        return View(new List<FriendListRes>());
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Log or handle exceptions appropriately
-                    return StatusCode(500, $"Internal server error: {ex.Message}");
-                }
-            }
-        }
-
-        public async Task<IActionResult> UpdateInformation()
-        {
-            using (var httpClient = new HttpClient())
-            {
-                int id = 1;
-                HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7296/api/User/get/{id}");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var jsonData = await response.Content.ReadAsStringAsync();
-                    var userInfo = JsonConvert.DeserializeObject<User_GetUserInfoRes>(jsonData);
-                    return View(userInfo);
-                }
-                else
-                {
-                    TempData["Error"] = "Không thể tải thông tin người dùng. Vui lòng thử lại sau.";
-                    return View();
-                }
-            }
-        }
-
         [HttpPost]
         public IActionResult Unfriend(Friend_Manage req)
         {
@@ -351,7 +256,7 @@ namespace DATN.MVC.Controllers
                         ShowFriendList = false // Tắt danh sách bạn bè
                     };
                     ViewBag.ViewSettings = viewSettings;
-                  
+
                     return View(userInfoList);
                 }
                 else
@@ -366,7 +271,7 @@ namespace DATN.MVC.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                
+
                 request.User1Id = int.Parse(HttpContext.Items["userId"].ToString());
                 string jsonData = JsonConvert.SerializeObject(request);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -384,7 +289,83 @@ namespace DATN.MVC.Controllers
 
             }
         }
-    }
+        public async Task<IActionResult> UpdateInformation()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                int id = 1;
+                HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7296/api/User/get/{id}");
 
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonData = await response.Content.ReadAsStringAsync();
+                    var userInfo = JsonConvert.DeserializeObject<User_GetUserInfoRes>(jsonData);
+                    return View(userInfo);
+                }
+                else
+                {
+                    TempData["Error"] = "Không thể tải thông tin người dùng. Vui lòng thử lại sau.";
+                    return View();
+                }
+            }
+        }
+        public ActionResult AllFriends()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                // Extract UserId from HttpContext
+                var userId = HttpContext.Items["userId"]?.ToString();
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return BadRequest("User ID is missing.");
+                }
+
+                // Prepare the request
+                var req = new FriendListReq
+                {
+                    UserId = int.Parse(userId), // Convert UserId to int
+                    Status = FriendStatus.Accepted
+                };
+
+                try
+                {
+                    // Serialize the request to JSON
+                    var jsonContent = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
+
+                    // Send POST request
+                    HttpResponseMessage response = httpClient.PostAsync("https://localhost:7296/api/friends/get-friend-list", jsonContent).Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Read and deserialize response
+                        var jsonData = response.Content.ReadAsStringAsync().Result;
+                        var users = JsonConvert.DeserializeObject<List<FriendListRes>>(jsonData);
+
+                        // Prepare view settings
+                        var viewSettings = new ViewSettings
+                        {
+                            ShowSidebar = false, // Disable sidebar
+                            ShowHeader = true,   // Enable header
+                            ShowFriendList = false // Disable friend list
+                        };
+                        ViewBag.ViewSettings = viewSettings;
+
+                        // Pass the filtered list to the view
+                        return View(users);
+                    }
+                    else
+                    {
+                        // Return empty list in case of unsuccessful response
+                        return View(new List<FriendListRes>());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log or handle exceptions appropriately
+                    return StatusCode(500, $"Internal server error: {ex.Message}");
+                }
+            }
+        }
+
+    }
 }
 
