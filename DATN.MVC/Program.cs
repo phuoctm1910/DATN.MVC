@@ -46,7 +46,7 @@ namespace DATN.MVC
             {
                 options.MultipartBodyLengthLimit = 104857600; // Hạn chế dung lượng file upload (100MB)
             });
-
+            builder.Services.AddMemoryCache();  
 
             var app = builder.Build();
 
@@ -80,6 +80,10 @@ namespace DATN.MVC
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<ChatHub>("/chatHub");
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapHub<GeneralHub>("/generalHub");
             });
 

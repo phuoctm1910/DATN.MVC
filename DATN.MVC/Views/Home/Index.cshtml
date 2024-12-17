@@ -560,6 +560,7 @@
             el: '#app',
             data: {
                 EventBus: new Vue(),
+                connection: null,
                 showImageUpload: false,
                 posts: [],
                 postReactions: [],
@@ -579,13 +580,56 @@
                 selectedImages: []
             },
             created() {
+                this.setupSignalR();
                 this.loadPosts();
                 // Lắng nghe sự kiện 'like-comment' từ EventBus
                 this.EventBus.$on('like-comment', this.likeComment);
                 this.EventBus.$on('reply-comment', this.replyToComment);
-
             },
             methods: {
+                setupSignalR() {
+                    this.connection = new signalR.HubConnectionBuilder()
+                        .withUrl("/generalHub")
+                        .withAutomaticReconnect()
+                        .configureLogging(signalR.LogLevel.Information)
+                        .build();
+
+                    this.connection.serverTimeoutInMilliseconds = 60000;
+
+                    this.connection.start()
+                        .then(() => console.log("SignalR connected"))
+                        .catch(err => console.error("SignalR error: ", err));
+
+                    // Cập nhật lượt thích từ SignalR
+                    this.connection.on("ReceivePostLikeUpdate", (data) => {
+                        console.log(data.postId);  // Lấy PostId từ đối tượng
+                        console.log(data.likeCount);  // Lấy LikeCount từ đối tượng
+
+                        // Tìm bài viết trong danh sách posts
+                        const post = this.posts.find(p => p.id === data.postId);
+                        if (post) {
+                            post.reactCount = data.likeCount;  // Cập nhật reactCount của bài viết
+                        }
+
+                        console.log(post);  // Kiểm tra lại bài viết sau khi cập nhật
+                    });
+
+                    // Cập nhật lượt thích từ SignalR
+                    this.connection.on("ReceiveCommentLikeUpdate", (data) => {
+                        console.log(data.commentId);  // Lấy CommentId từ đối tượng
+                        console.log(data.likeCount);  // Lấy LikeCount từ đối tượng
+
+                        // Tìm bài viết trong danh sách posts
+                        const comment = this.commentsNotBuild.find(c => c.id === data.commentId);
+                        console.log(comment);
+                        if (comment) {
+                            comment.reactCount = data.likeCount;  // Cập nhật reactCount của bài viết
+                        }
+
+                        console.log(comment);  // Kiểm tra lại bài viết sau khi cập nhật
+                    });
+                }
+                ,
                 toggleImageUpload() {
                     this.showImageUpload = true;
                 },
@@ -745,36 +789,24 @@
                         console.error('Error fetching reactions:', error);
                     }
                 },
+                // Thích hoặc bỏ thích bài viết
                 async likePost(post) {
-                    const postData = {
-                        UserId: this.userId,
-                        PostId: post.id,
-                        type: post.likedByCurrentUser ? 0 : 1 // 0 = unlike, 1 = like
-                    };
+                   
 
                     try {
-                        const response = await fetch('/Post/ReactionPost', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json charset=utf-8'
-                            },
-                            body: JSON.stringify(postData)
-                        });
-
-                        const data = await response.json();
-
-                        if (response.ok && data.success) {
-                            post.likedByCurrentUser = !post.likedByCurrentUser; // Toggle the like status
-
-                            // Refresh the reactions after like/unlike
-                            this.loadPosts();
-                        } else {
-                            console.error('Error liking post:', data.message || 'An error occurred');
-                        }
+                        const postData = {
+                            userId: this.userId,
+                            postId: post.id,
+                            type: post.likedByCurrentUser ? 0 : 1
+                        };
+                        console.log(postData);
+                        await this.connection.invoke("LikePost", postData.userId, postData.postId, postData.type);
+                        post.likedByCurrentUser = !post.likedByCurrentUser;
                     } catch (error) {
-                        console.error('Error sending like request:', error);
+                        console.error('Error liking post:', error);
                     }
-                },
+                }
+                ,
                 getRelativeTime(date) {
                     const now = new Date();
                     const rtf = new Intl.RelativeTimeFormat('vi', { numeric: 'auto' });
@@ -886,40 +918,25 @@
                     return result;
                 },
                 async likeComment(commentId) {
-                    console.log("Comment ID (parent):", commentId);
-                    const comment = this.commentsNotBuild.find(c => c.id === commentId);
-                    if (!comment) {
-                        console.error('Comment not found!');
-                        return;
-                    }
-
-                    const commentData = {
-                        UserId: this.userId,
-                        CommentId: comment.id,
-                        type: comment.likedByCurrentUser ? 0 : 1, // 0 = unlike, 1 = like
-                    };
-
                     try {
-                        const response = await fetch('/Comment/ReactionComment', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json; charset=utf-8'
-                            },
-                            body: JSON.stringify(commentData)
-                        });
-
-                        const data = await response.json();
-
-                        if (data.success) {
-                            comment.likedByCurrentUser = !comment.likedByCurrentUser;
-                            comment.reactCount += comment.likedByCurrentUser ? 1 : -1;
-                        } else {
-                            console.error('Failed to like/unlike comment on the server');
+                        const comment = this.commentsNotBuild.find(c => c.id === commentId);
+                        if (!comment) {
+                            console.error('Comment not found!');
+                            return;
                         }
+
+                        const commentData = {
+                            userId: this.userId,
+                            commentId: comment.id,
+                            type: comment.likedByCurrentUser ? 0 : 1, // 0 = unlike, 1 = like
+                        };
+                        await this.connection.invoke("LikeComment", commentData.userId, commentData.commentId, commentData.type);   
+                        comment.likedByCurrentUser = !comment.likedByCurrentUser;
                     } catch (error) {
-                        console.error('Error sending like request:', error);
+                        console.error('Error liking comment:', error);
                     }
-                },
+                }
+                ,
                 replyToComment(comment) {
                     console.log(comment);
                     this.replyTarget = comment;
@@ -1179,6 +1196,8 @@
                         </div>
                     </div>
                 </div>
+
+
                 <!-- Modal for Comments -->
                 <div class="modal fade" id="commentsModal" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">

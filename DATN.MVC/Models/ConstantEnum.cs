@@ -30,8 +30,8 @@
 
     public enum PostReact : int
     {
-        NotReact = 0,         // Công khai
-        React = 1,         // Bị chặn
+        NotReact = 0,         // ko thích
+        React = 1,         // thích
     }
 
     public enum PostFor : int
