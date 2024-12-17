@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System.Text.RegularExpressions;
 
 namespace DATN.MVC.Hubs
 {
-    public class NotificationHub : Hub
+    public class GeneralHub : Hub
     {
         // Khi một user kết nối, tự động thêm vào group của họ
         public override async Task OnConnectedAsync()
@@ -35,6 +34,7 @@ namespace DATN.MVC.Hubs
             await base.OnDisconnectedAsync(exception);
         }
 
+        #region Thông báo real time
         // Gửi thông báo cá nhân
         public async Task SendPersonalNotification(string userId, string message)
         {
@@ -62,5 +62,6 @@ namespace DATN.MVC.Hubs
             var groupName = $"FriendsOf_{userId}";
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
         }
+        #endregion
     }
 }

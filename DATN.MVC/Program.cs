@@ -80,6 +80,7 @@ namespace DATN.MVC
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<ChatHub>("/chatHub");
+                endpoints.MapHub<GeneralHub>("/generalHub");
             });
 
             app.Run();
