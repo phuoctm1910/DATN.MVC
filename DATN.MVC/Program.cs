@@ -22,6 +22,7 @@ namespace DATN.MVC
                                       .AllowAnyMethod()
                                       .AllowCredentials());
             });
+            builder.Services.AddHttpClient();
             builder.Services.AddControllersWithViews()
                                 .AddNewtonsoftJson();
 

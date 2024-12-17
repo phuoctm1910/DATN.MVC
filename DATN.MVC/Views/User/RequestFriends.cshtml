@@ -217,21 +217,23 @@
 
         <div class="friend-list row">
 
-            @foreach (var item in Model)
+            @if (Model.Any())
             {
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="list-wrap">
-                        <div class="item-avatar">
-                            <a href="#">
-                                <img loading="lazy" src="@(!string.IsNullOrEmpty(item.FriendImage) ? item.FriendImage : "https://smmhwsdluglunrhndxcb.supabase.co/storage/v1/object/public/images/default-userImg.jpg" )" alt="Friend">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-3 col-sm-6 col-12">
+                        <div class="list-wrap">
+                            <div class="item-avatar">
+                                <a href="#">
+                                    <img loading="lazy" src="@(!string.IsNullOrEmpty(item.FriendImage) ? item.FriendImage : "https://smmhwsdluglunrhndxcb.supabase.co/storage/v1/object/public/images/default-userImg.jpg" )" alt="Friend">
 
-                        
-                            </a>
-                        </div>
-                        <div class="item">
-                            <h5><a href="#">@item.FriendFullName</a></h5>
-                            @*  <p class="muted-text">@item.MutualFriendsCount Bạn bè chung</p> *@
-                            @* <form class="actions" asp-action="AcceptFriend" asp-controller="" method="post">
+
+                                </a>
+                            </div>
+                            <div class="item">
+                                <h5><a href="#">@item.FriendFullName</a></h5>
+                                @*  <p class="muted-text">@item.MutualFriendsCount Bạn bè chung</p> *@
+                                @* <form class="actions" asp-action="AcceptFriend" asp-controller="" method="post">
                                 <input type="hidden" name="FriendId" value="@item.FriendId" />
                                 <button class="generic-button">Chấp nhận</button>
 
@@ -240,22 +242,28 @@
                                 <input type="hidden" name="FriendId" value="@item.FriendId" />
                                 <button class="remove-button">Từ chối</button>
                             </div> *@
-                            <div class="actions">
-                                <form asp-action="AcceptFriend" method="post">
-                                    <input type="hidden" name="FriendId" value="@item.FriendId" />
-                                    <button type="submit" class="generic-button">Chấp nhận</button>
-                                </form>
-                                <form asp-action="CancelFriend" method="post">
-                                    <input type="hidden" name="FriendId" value="@item.FriendId" />
-                                    <button type="submit" class="remove-button">Từ chối</button>
-                                </form>
+                                <div class="actions">
+                                    <form asp-action="AcceptFriend" method="post">
+                                        <input type="hidden" name="FriendId" value="@item.FriendId" />
+                                        <button type="submit" class="generic-button">Chấp nhận</button>
+                                    </form>
+                                    <form asp-action="CancelFriend" method="post">
+                                        <input type="hidden" name="FriendId" value="@item.FriendId" />
+                                        <button type="submit" class="remove-button">Từ chối</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
+
             }
-  
-        
+            else
+            {
+                <p>Không có lời mời kết bạn</p>
+            }
+
+
         </div>
     </div>
 
