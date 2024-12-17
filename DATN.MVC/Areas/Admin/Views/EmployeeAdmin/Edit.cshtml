@@ -1,0 +1,129 @@
+﻿@using DATN.MVC.Areas.Admin.Models.ManagerEmployee.Request
+@model EmployeeUpdateReq
+
+@{
+    ViewData["Title"] = "Edit Employee";
+}
+
+<h2 style="text-align:center;">Chỉnh sửa Nhân Viên</h2>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#editEmployeeForm').submit(function (e) {
+                e.preventDefault();
+
+                // Reset lỗi trước khi validate
+                $('.error-message').text('');
+
+                let userName = $('#UserName').val();
+                let passwordHash = $('#PasswordHash').val();
+                let isActived = $('#IsActived').prop('checked');
+                let isValid = true;
+
+                // Kiểm tra tên người dùng
+                let nameRegex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯẠ-ỹ\s]+$/u;
+                if (!nameRegex.test(userName)) {
+                    $('#UserNameError').text('Tên chỉ được chứa chữ cái và khoảng trắng.');
+                    isValid = false;
+                }
+                if (!userName.trim()) {
+                    $('#UserNameError').text('Tên không được để trống.');
+                    isValid = false;
+                }
+
+                // Kiểm tra mật khẩu
+                if (!passwordHash.trim()) {
+                    $('#PasswordError').text('Mật khẩu không được để trống.');
+                    isValid = false;
+                }
+
+                if (!isValid) return;
+
+                // Chuẩn bị dữ liệu để gửi API
+                var employeeData = {
+                    Id: $('#Id').val(),
+                    UserName: userName,
+                    PasswordHash: passwordHash,
+                    IsActived: isActived
+                };
+
+                // Gửi dữ liệu qua Ajax
+                $.ajax({
+                    url: 'https://localhost:7296/api/Employee/Update', // Đường dẫn API
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(employeeData),
+                    success: function (response) {
+                        alert('Cập nhật nhân viên thành công!');
+                        window.location.href = '@Url.Action("Index", "EmployeeAdmin")'; // Chuyển hướng
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Có lỗi xảy ra: ' + (xhr.responseText || 'Vui lòng thử lại sau.'));
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<form id="editEmployeeForm" method="post" class="form-container">
+  
+    <div class="form-group">
+        <label for="IsActived">Kích hoạt:</label>
+        <input type="checkbox" id="IsActived" name="IsActived" class="form-control" @(Model.IsActived ? "checked" : "") />
+    </div>
+    <input type="hidden" id="Id" value="@Model.Id" />
+    <button type="submit" class="btn2 btn-primary">Cập Nhật Nhân Viên</button>
+</form>
+
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: 30px auto;
+        padding: 20px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+        font-family: 'Arial', sans-serif;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .btn2 {
+        background-color: #007bff;
+        color: #fff;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+        .btn2:hover {
+            background-color: #0056b3;
+        }
+
+    .error-message {
+        font-size: 12px;
+        color: red;
+        margin-top: 5px;
+    }
+</style>

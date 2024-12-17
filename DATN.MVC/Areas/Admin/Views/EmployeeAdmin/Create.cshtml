@@ -1,0 +1,157 @@
+﻿@{
+    ViewData["Title"] = "Create Employee";
+}
+
+<h2 style="text-align:center;">Thêm Nhân Viên</h2>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#createEmployeeForm').submit(function (e) {
+                e.preventDefault();
+
+                // Reset tất cả lỗi trước khi validate
+                $('.error-message').text('');
+
+                let userName = $('#UserName').val();
+                let passwordHash = $('#PasswordHash').val();
+                let isActived = $('#IsActived').prop('checked');
+                let isValid = true;
+
+                // Regex kiểm tra tên (chỉ chứa chữ cái và khoảng trắng)
+                let nameRegex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯẠ-ỹ\s]+$/u;
+
+                if (!nameRegex.test(userName)) {
+                    $('#UserNameError').text('Tên chỉ được chứa chữ cái và khoảng trắng.');
+                    isValid = false;
+                }
+                if (!userName.trim()) {
+                    $('#UserNameError').text('Tên không được để trống.');
+                    isValid = false;
+                }
+
+                // Kiểm tra mật khẩu
+                if (!passwordHash.trim()) {
+                    $('#PasswordError').text('Mật khẩu không được để trống.');
+                    isValid = false;
+                }
+
+                if (!isValid) return; // Dừng nếu không hợp lệ
+
+                // Chuẩn bị dữ liệu để gửi API
+                var employeeData = {
+                    UserName: userName,
+                    PasswordHash: passwordHash,
+                    IsActived: isActived
+                };
+
+                // Gửi dữ liệu qua Ajax
+                $.ajax({
+                    url: 'https://localhost:7296/api/Employee/Create',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(employeeData),
+                    success: function (response) {
+                        alert('Thêm nhân viên thành công!');
+                        window.location.href = '@Url.Action("Index", "EmployeeAdmin")'; // Chuyển hướng
+                    },
+                    error: function (xhr, status, error) {
+                        let errorMsg = 'Vui lòng thử lại sau.';
+                        if (xhr.responseText) {
+                            try {
+                                let json = JSON.parse(xhr.responseText);
+                                errorMsg = json.message || json.error || errorMsg;
+                            } catch (e) {
+                                errorMsg = xhr.responseText;
+                            }
+                        }
+                        alert('Có lỗi xảy ra: ' + errorMsg);
+                    }
+                });
+            });
+        });
+    </script>
+
+}
+<form id="createEmployeeForm" method="post" class="form-container">
+    <div class="form-group">
+        <label for="UserName">Tên Nhân Viên:</label>
+        <input type="text" id="UserName" name="UserName" class="form-control" placeholder="Nhập tên nhân viên" required />
+        <span id="UserNameError" class="error-message"></span>
+    </div>
+    <div class="form-group">
+        <label for="PasswordHash">Mật khẩu:</label>
+        <input type="password" id="PasswordHash" name="PasswordHash" class="form-control" placeholder="Nhập mật khẩu" required />
+        <span id="PasswordError" class="error-message"></span>
+    </div>
+    <div class="form-group">
+        <label for="IsActived">Trạng Thái Hoạt động:</label>
+        <select id="IsActived" name="IsActived" class="form-control" required>
+            <option value="true">Hoạt động</option>
+            <option value="false">Không Hoạt động</option>
+        </select>
+        <span id="IsActivedError" class="error-message"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Thêm Nhân Viên</button>
+</form>
+
+
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: 30px auto;
+        padding: 20px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+        font-family: 'Arial', sans-serif;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        transition: border-color 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+    .btn2 {
+        background-color: #007bff;
+        color: #fff;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+        .btn2:hover {
+            background-color: #0056b3;
+            transform: scale(1.03);
+        }
+
+    .error-message {
+        font-size: 12px;
+        color: red;
+        margin-top: 5px;
+        transition: opacity 0.3s;
+    }
+</style>

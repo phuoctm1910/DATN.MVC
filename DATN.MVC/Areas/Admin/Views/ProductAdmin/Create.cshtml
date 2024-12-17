@@ -1,0 +1,157 @@
+﻿@{
+    ViewData["Title"] = "Create Product";
+}
+
+<h2 style="text-align:center;">Thêm Sản Phẩm</h2>
+
+<form id="createProductForm" class="form-container" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="Name">Tên Sản Phẩm:</label>
+        <input type="text" id="Name" name="Name" class="form-control" required />
+        <span id="NameError" class="error-message"></span>
+    </div>
+    <div class="form-group">
+        <label for="Price">Giá:</label>
+        <input type="number" id="Price" name="Price" class="form-control" required />
+        <span id="PriceError" class="error-message"></span>
+    </div>
+    <div class="form-group">
+        <label for="Quantity">Số Lượng:</label>
+        <input type="number" id="Quantity" name="Quantity" class="form-control" required />
+        <span id="QuantityError" class="error-message"></span>
+    </div>
+    <div class="form-group">
+        <label for="Size">Size:</label>
+        <input type="text" id="Size" name="Size" class="form-control" required />
+        <span id="SizeError" class="error-message"></span>
+    </div>
+    <div class="form-group">
+        <label for="ImageFile">Hình Ảnh:</label>
+        <input type="file" id="ImageFile" name="ImageFile" class="form-control" accept="image/*" />
+        <span id="ImageError" class="error-message"></span>
+    </div>
+   
+    <button type="submit" class="btn2 btn-primary">Thêm Sản Phẩm</button>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#createProductForm').submit(function (e) {
+                e.preventDefault(); // Ngăn form gửi đi mặc định
+
+                // Reset tất cả lỗi
+                $('.error-message').text('');
+
+                // Lấy dữ liệu từ form
+                let formData = new FormData(this);
+
+                // Kiểm tra dữ liệu (tên, giá, số lượng, kích thước)
+                let isValid = true;
+
+                // Tên sản phẩm
+                let name = formData.get('Name');
+                if (!name.trim()) {
+                    $('#NameError').text('Tên sản phẩm không được để trống.');
+                    isValid = false;
+                }
+
+                // Giá
+                let price = formData.get('Price');
+                if (isNaN(price) || parseFloat(price) <= 0) {
+                    $('#PriceError').text('Giá phải là một số dương.');
+                    isValid = false;
+                }
+
+                // Số lượng
+                let quantity = formData.get('Quantity');
+                if (!Number.isInteger(parseFloat(quantity)) || parseInt(quantity) < 0) {
+                    $('#QuantityError').text('Số lượng phải là số nguyên không âm.');
+                    isValid = false;
+                }
+
+                // Kích thước
+                let size = formData.get('Size');
+                if (!size.trim()) {
+                    $('#SizeError').text('Kích thước không được để trống.');
+                    isValid = false;
+                }
+
+                // Hình ảnh (bắt buộc)
+                if (!formData.get('ImageFile').name) {
+                    $('#ImageError').text('Vui lòng chọn hình ảnh.');
+                    isValid = false;
+                }
+
+                if (!isValid) return; // Nếu không hợp lệ, dừng
+
+                // Gửi dữ liệu qua AJAX
+                $.ajax({
+                    url: 'https://localhost:7296/api/Product/Create',
+                    type: 'POST',
+                    processData: false, // Không xử lý FormData thành chuỗi
+                    contentType: false, // Để mặc định để gửi tệp
+                    data: formData,
+                    success: function (response) {
+                        alert('Thêm sản phẩm thành công!');
+                        window.location.href = '@Url.Action("Index", "ProductAdmin")'; // Chuyển hướng
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Có lỗi xảy ra: ' + (xhr.responseText || 'Vui lòng thử lại sau.'));
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: 30px auto;
+        padding: 20px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+        font-family: 'Arial', sans-serif;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .btn2 {
+        background-color: #007bff;
+        color: #fff;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+        .btn2:hover {
+            background-color: #0056b3;
+        }
+
+    .error-message {
+        font-size: 12px;
+        color: red;
+        margin-top: 5px;
+    }
+</style>

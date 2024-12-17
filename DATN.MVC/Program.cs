@@ -1,16 +1,34 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using DATN.MVC.Areas.Admin.Controllers;
+
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DATN.MVC
 {
     public class Program
     {
+        [Area("Admin")]
+        [Route("Admin/[controller]/[action]")]
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Đăng ký DbContext với connection string
+
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            // Đăng ký IHttpClientFactory
+            builder.Services.AddHttpClient();
+            builder.Services.AddControllers();
+
+            // Thêm đăng ký cho DI container
+            //builder.Services.AddScoped<IProductService, ProductService>();
+            //builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
+
 
             // Thêm dịch vụ Session
             builder.Services.AddSession(options =>
@@ -19,6 +37,8 @@ namespace DATN.MVC
                 options.Cookie.HttpOnly = true; // Giúp bảo mật cookie
                 options.Cookie.IsEssential = true; // Cookie cần thiết cho ứng dụng
             });
+
+
 
             var app = builder.Build();
 
@@ -38,8 +58,9 @@ namespace DATN.MVC
             app.UseAuthorization();
 
             app.MapControllerRoute(
-                name: "areas",
-                pattern: "{area:exists}/{controller=HomeAdmin}/{action=Index}/{id?}");
+                 name: "areas",
+                 pattern: "{area:exists}/{controller=HomeAdmin}/{action=Index}/{id?}");
+
 
             app.MapControllerRoute(
                 name: "default",
@@ -49,3 +70,15 @@ namespace DATN.MVC
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
