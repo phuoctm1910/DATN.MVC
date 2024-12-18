@@ -602,8 +602,6 @@
 
                     // Cập nhật lượt thích từ SignalR
                     this.connection.on("ReceivePostLikeUpdate", (data) => {
-                        console.log(data.postId);  // Lấy PostId từ đối tượng
-                        console.log(data.likeCount);  // Lấy LikeCount từ đối tượng
 
                         // Tìm bài viết trong danh sách posts
                         const post = this.posts.find(p => p.id === data.postId);
@@ -616,8 +614,6 @@
 
                     // Cập nhật lượt thích từ SignalR
                     this.connection.on("ReceiveCommentLikeUpdate", (data) => {
-                        console.log(data.commentId);  // Lấy CommentId từ đối tượng
-                        console.log(data.likeCount);  // Lấy LikeCount từ đối tượng
 
                         // Tìm bài viết trong danh sách posts
                         const comment = this.commentsNotBuild.find(c => c.id === data.commentId);
@@ -628,8 +624,43 @@
 
                         console.log(comment);  // Kiểm tra lại bài viết sau khi cập nhật
                     });
-                }
-                ,
+
+                    // Cập nhật lượt thích từ SignalR
+                    this.connection.on("ReceiveNewComment", (data) => {
+
+                        console.log("New comment added:", data);
+                        // Kiểm tra nếu bình luận thuộc bài viết đang xem
+                        if (data.postId === this.selectedPost.id) {
+                            // Thêm bình luận mới vào danh sách comments
+                            this.comments.push({
+                                id: data.commentId,          // ID của bình luận
+                                userId: data.userId,         // ID người dùng
+                                content: data.content,       // Nội dung bình luận
+                                createdDate: data.CreatedDate, // Thời gian tạo bình luận
+                            });
+
+                            // Tăng số lượng bình luận hiển thị (commentCount) nếu thuộc tính này tồn tại
+                            if (this.selectedPost.commentCount !== undefined) {
+                                this.selectedPost.commentCount += 1;
+                            }
+
+                            // Nếu có `commentsNotBuild`, cũng cập nhật tại đây (nếu cần thiết)
+                            const commentNotBuild = this.commentsNotBuild.find(c => c.id === data.commentId);
+                            if (!commentNotBuild) {
+                                this.commentsNotBuild.push({
+                                    id: data.commentId,
+                                    userId: data.userId,
+                                    content: data.content,
+                                    createdDate: data.CreatedDate,
+                                });
+                            }
+
+                            
+                        } else {
+                            console.log("New comment received for another post:", data);
+                        }
+                    });
+                },
                 toggleImageUpload() {
                     this.showImageUpload = true;
                 },
@@ -807,6 +838,8 @@
                     }
                 }
                 ,
+      
+                
                 getRelativeTime(date) {
                     const now = new Date();
                     const rtf = new Intl.RelativeTimeFormat('vi', { numeric: 'auto' });
@@ -963,27 +996,25 @@
                     };
 
                     try {
-                        const response = await fetch('/Comment/AddNew', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(newCommentData),
-                        });
-                        const data = await response.json();
+                        // const response = await fetch('/Comment/AddNew', {
+                        //     method: 'POST',
+                        //     headers: {
+                        //         'Content-Type': 'application/json',
+                        //     },
+                        //     body: JSON.stringify(newCommentData),
+                        // });
+                        // const data = await response.json();
+                        await this.connection.invoke("AddComment", newCommentData);
 
-                        if (data.success) {
-                            this.loadComments(this.selectedPost.id);
-                            this.newComment = '';  // Clear the comment input
+
+                        this.newComment = '';  // Clear the comment input
                             this.replyTarget = null;  // Reset the reply target after submitting
-                            console.log('Comment added successfully');
-                        } else {
-                            console.error('Error adding comment:', data.message || 'Failed to add comment.');
-                        }
+                       
                     } catch (error) {
                         console.error('Error submitting comment:', error);
                     }
                 }
+
             },
             beforeDestroy() {
                 // Loại bỏ lắng nghe sự kiện để tránh memory leaks khi component bị hủy

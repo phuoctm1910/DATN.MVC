@@ -1,4 +1,5 @@
 ﻿using DATN.MVC.Helpers;
+using DATN.MVC.Models.Request;
 using DATN.MVC.Request.Comment;
 using DATN.MVC.Request.Post;
 using DATN.MVC.Ultilities;
@@ -17,6 +18,15 @@ namespace DATN.MVC.Hubs
         {
             _memoryCache = memoryCache;
         }
+
+        // Gửi thông báo bình luận mới cho tất cả client
+        public async Task NotifyNewComment(int postId)
+        {
+            await Clients.All.SendAsync("CommentAdded", postId);
+        }
+
+
+
         // Khi một user kết nối, tự động thêm vào group của họ
         public override async Task OnConnectedAsync()
         {
@@ -142,9 +152,25 @@ namespace DATN.MVC.Hubs
             }
         }
 
+        public async Task AddComment(Comment_CreateReq newComment)
+        {
+            try
+            {
+                // Thực hiện API gọi để xử lý hành động like
+                var result = ApiHelpers.PostMethodAsync<bool, Comment_CreateReq>("https://localhost:7296/api/Comment/create", newComment);
 
-
-
+                if (result)
+                {
+                    // Gửi thông báo cho những người dùng khác trong nhóm (có thể nhóm bạn bè hoặc nhóm chung)
+                    await Clients.All.SendAsync("ReceiveNewComment", newComment);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi (log, thông báo lỗi, ...)
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
 
 
         #region Thông báo real time
