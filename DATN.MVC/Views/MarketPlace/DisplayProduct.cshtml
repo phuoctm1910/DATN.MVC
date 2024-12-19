@@ -4,148 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng Sản Phẩm Thương Mại Điện Tử</title>
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-            padding-top: 30px;
-        }
-
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-control {
-            border-radius: 5px;
-            padding: 12px;
-            font-size: 14px;
-            border: 1px solid #ccc !important; /* Nếu có đoạn này thì nó ghi đè viền mặc định */
-        }
-
-            .form-control:focus {
-                border-color: #007bff; /* Thêm màu viền khi focus */
-                box-shadow: none; /* Loại bỏ hiệu ứng shadow khi focus */
-            }
-
-        .custom-form-control {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 12px;
-        }
-
-        .btn-primary {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-            .btn-primary:hover {
-                background-color: #0056b3;
-            }
-
-        /* Khung ảnh chính */
-        .product-image-container {
-            width: 100%;
-            height: 200px; /* Chiều cao cố định */
-            background-color: #e0e0e0; /* Màu nền khi chưa có ảnh */
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer; /* Thêm cursor pointer để báo cho người dùng là có thể click */
-        }
-
-        /* Ảnh trong khung */
-        .product-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Đảm bảo ảnh không bị biến dạng */
-        }
-
-        .img-thumbnail {
-            max-width: 100px;
-            margin: 5px;
-            border-radius: 5px;
-            object-fit: cover;
-        }
-
-        /* Khung ảnh phụ */
-        .additional-images-container {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-        }
-
-        .additional-image-container {
-            width: 100%;
-            height: 100px;
-            background-color: #f0f0f0;
-            border-radius: 8px;
-            position: relative;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-            .additional-image-container img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-            .additional-image-container span {
-                position: absolute;
-                color: #fff;
-                font-size: 18px;
-                font-weight: bold;
-            }
-
-        .slick-carousel .slick-slide {
-            display: flex;
-            justify-content: center;
-        }
-
-        .slick-prev, .slick-next {
-            background-color: #007bff;
-            color: white;
-            border-radius: 50%;
-            padding: 5px;
-            font-size: 18px;
-        }
-
-            .slick-prev:hover, .slick-next:hover {
-                background-color: #0056b3;
-            }
-
-        .slick-prev {
-            left: -15px;
-        }
-
-        .slick-next {
-            right: -15px;
-        }
-    </style>
+    <link rel="stylesheet" href="~/assets/css/DisplayProduct.css" />
 </head>
 <body>
     <div id="app">
         <div class="container">
             <h2>Đăng Sản Phẩm Mới</h2>
             <form id="productForm">
-                <div class="row">
+                <div class="row" @@submit="submitProduct">
                     <!-- Phần chi tiết sản phẩm -->
                     <div class="col-md-6 product-details">
                         <div class="form-group">
@@ -184,18 +50,18 @@
                         <!-- Khung ảnh chính -->
                         <div class="form-group">
                             <label for="productImages">Ảnh chính</label>
-                            <div class="product-image-container" id="mainImageContainer">
+                            <div class="product-image-container" id="mainImageContainer" @@click="chooseMainImage">
                                 <img :src="product.mainImagePreview" v-if="product.mainImagePreview" class="product-image" alt="Ảnh chính">
                                 <span v-if="!product.mainImagePreview">Ảnh chính</span>
                             </div>
-                            <input type="file" id="updateMainImage" class="d-none" />
+                            <input type="file" id="updateMainImage" class="d-none" @@change="updateMainImage" />
                         </div>
 
                         <!-- Khung ảnh phụ -->
                         <div class="form-group">
                             <label for="productImages">Ảnh phụ</label>
                             <div class="additional-images-container mt-3">
-                                <div v-for="(image, index) in product.additionalImagesPreview" :key="index" class="additional-image-container" :id="'additionalImageContainer' + index">
+                                <div v-for="(image, index) in product.additionalImagesPreview" :key="index" class="additional-image-container" @@click="chooseAdditionalImage(index)">
                                     <img :src="image" alt="Ảnh phụ" v-if="image" class="product-image">
                                     <span v-if="!image">Ảnh phụ {{ index + 1 }}</span>
                                 </div>
@@ -220,14 +86,16 @@
             </form>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+    <!-- Thư viện Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script>
         new Vue({
             el: '#app',
             data: {
                 product: {
                     mainImagePreview: null,
+                    mainImageFile: null,
                     additionalImagesPreview: Array(5).fill(null), // Khởi tạo mảng 5 phần tử null cho ảnh phụ
                     name: '',
                     code: '',
@@ -245,6 +113,7 @@
                     const file = event.target.files[0];
                     if (file) {
                         this.product.mainImagePreview = URL.createObjectURL(file);
+                        this.product.mainImageFile = file; // Lưu file thực tế để gửi
                     }
                 },
                 chooseAdditionalImage(index) {
@@ -261,24 +130,51 @@
                 },
                 submitProduct(event) {
                     event.preventDefault();
-                    alert("Sản phẩm đã được đăng!");
-                    console.log(this.product);
+
+                    const formData = new FormData();
+                    formData.append('Name', this.product.name);
+                    formData.append('Code', this.product.code);
+                    formData.append('Price', this.product.price);
+                    formData.append('Stock', this.product.stock);
+                    formData.append('Description', this.product.description);
+                    formData.append('Category', this.product.category);
+
+                    // Nếu có ảnh chính
+                    if (this.product.mainImageFile) {
+                        formData.append('MainImage', this.product.mainImageFile);
+                    }
+
+                    fetch('/Product/DisplayProduct', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Sản phẩm đã được đăng thành công!');
+                            this.resetForm();
+                        } else {
+                            alert('Có lỗi xảy ra: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Đã xảy ra lỗi khi gửi dữ liệu!');
+                    });
+                },
+                resetForm() {
+                    this.product = {
+                        mainImagePreview: null,
+                        mainImageFile: null,
+                        additionalImagesPreview: Array(5).fill(null),
+                        name: '',
+                        code: '',
+                        price: '',
+                        stock: '',
+                        description: '',
+                        category: 'Điện thoại'
+                    };
                 }
-            },
-            mounted() {
-                // Gắn sự kiện submit form
-                document.getElementById('productForm').addEventListener('submit', this.submitProduct);
-
-                // Gắn sự kiện cho ảnh chính
-                document.getElementById('mainImageContainer').addEventListener('click', this.chooseMainImage);
-
-                // Gắn sự kiện cho ảnh phụ
-                for (let i = 0; i < 5; i++) {
-                    document.getElementById('additionalImageContainer' + i).addEventListener('click', () => this.chooseAdditionalImage(i));
-                }
-
-                // Thêm sự kiện cho input ảnh chính
-                document.getElementById('updateMainImage').addEventListener('change', this.updateMainImage);
             }
         });
     </script>

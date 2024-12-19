@@ -2,6 +2,7 @@
 using DATN.MVC.Request.Friends;
 using DATN.MVC.Request.User;
 using DATN.MVC.Respone.Friends;
+using DATN.MVC.Respone.MarketPlace;
 using DATN.MVC.Respone.User;
 using DATN.MVC.Ultilities;
 using Microsoft.AspNetCore.Http;
@@ -41,14 +42,45 @@ namespace DATN.MVC.Controllers
         }
         public IActionResult RequestFriends()
         {
-            var viewSettings = new ViewSettings
+            using (var httpClient = new HttpClient())
             {
-                ShowSidebar = false, // Tắt sidebar
-                ShowHeader = true,   // Bật header
-                ShowFriendList = false // Tắt danh sách bạn bè
-            };
-            ViewBag.ViewSettings = viewSettings;
-            return View();
+                // Extract UserId from HttpContext
+                var userId = HttpContext.Items["userId"]?.ToString();
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return BadRequest("User ID is missing.");
+                }
+
+                // Prepare the request
+                var req = new FriendListReq
+                {
+                    UserId = int.Parse(userId), // Convert UserId to int
+                    Status = FriendStatus.Pending
+                };
+                // Serialize the request to JSON
+                var jsonContent = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = httpClient.PostAsync("https://localhost:7296/api/friends/get-friend-list", jsonContent).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonData = response.Content.ReadAsStringAsync().Result;
+                    var users = JsonConvert.DeserializeObject<List<FriendListRes>>(jsonData);
+
+                    var viewSettings = new ViewSettings
+                    {
+                        ShowSidebar = false, // Tắt sidebar
+                        ShowHeader = true,   // Bật header
+                        ShowFriendList = false // Tắt danh sách bạn bè
+                    };
+                    ViewBag.ViewSettings = viewSettings;
+                    return View(users);
+                }
+                else
+                {
+                    TempData["Error"] = "Không có lời mời nào.";
+                    return View(new List<FriendListRes>());
+                }
+            }
         }
         [HttpPost]
         public IActionResult Unfriend(Friend_Manage req)
@@ -317,52 +349,12 @@ namespace DATN.MVC.Controllers
                 }
             }
         }
-        public IActionResult MarketPlace()
-        {
-            var viewSettings = new ViewSettings
-            {
-                ShowSidebar = false, // Tắt sidebar
-                ShowHeader = true,   // Bật header
-                ShowFriendList = false // Tắt danh sách bạn bè
-            };
-            ViewBag.ViewSettings = viewSettings;
-            return View();
-        }
 
-        public IActionResult DetailProduct()
-        {
-            var viewSettings = new ViewSettings
-            {
-                ShowSidebar = false, // Tắt sidebar
-                ShowHeader = true,   // Bật header
-                ShowFriendList = false // Tắt danh sách bạn bè
-            };
-            ViewBag.ViewSettings = viewSettings;
-            return View();
-        }
 
-        public IActionResult DisplayProduct()
-        {
-            var viewSettings = new ViewSettings
-            {
-                ShowSidebar = false, // Tắt sidebar
-                ShowHeader = true,   // Bật header
-                ShowFriendList = false // Tắt danh sách bạn bè
-            };
-            ViewBag.ViewSettings = viewSettings;
-            return View();
-        }
-        public IActionResult SaleMans()
-        {
-            var viewSettings = new ViewSettings
-            {
-                ShowSidebar = false, // Tắt sidebar
-                ShowHeader = true,   // Bật header
-                ShowFriendList = false // Tắt danh sách bạn bè
-            };
-            ViewBag.ViewSettings = viewSettings;
-            return View();
-        }
+       
+
+     
+     
 
     }
 }

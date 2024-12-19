@@ -1,0 +1,123 @@
+
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+    padding-top: 30px;
+}
+.container {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+.form-group {
+    margin-bottom: 1.5rem;
+}
+.form-group input{
+    height: 3.5rem;
+ }
+
+.form-group select{
+    height: 3.5rem;
+}
+
+.form-control {
+    height: 50px; /* Cho phép chiều cao tự điều chỉnh */
+    border-radius: 5px;
+    padding: 12px;
+    border: 1px solid #ccc !important;
+    font-size: 14px;
+}
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Khung ảnh chính */
+.product-image-container {
+    width: 100%;
+    height: 200px; /* Chiều cao cố định */
+    background-color: #e0e0e0; /* Màu nền khi chưa có ảnh */
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Ảnh trong khung */
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Đảm bảo ảnh không bị biến dạng */
+}
+
+.img-thumbnail {
+    max-width: 100px;
+    margin: 5px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+/* Khung ảnh phụ */
+.additional-images-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.additional-image-container {
+    width: 100%;
+    height: 100px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.additional-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.additional-image-container span {
+    position: absolute;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.slick-carousel .slick-slide {
+    display: flex;
+    justify-content: center;
+}
+
+.slick-prev, .slick-next {
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 18px;
+}
+.slick-prev:hover, .slick-next:hover {
+    background-color: #0056b3;
+}
+.slick-prev {
+    left: -15px;
+}
+.slick-next {
+    right: -15px;
+}
