@@ -53,19 +53,48 @@ namespace DATN.MVC.Controllers
         }
 
 
-        public IActionResult UserProfile() 
-        {
-            var viewSettings = new ViewSettings
-            {
-                ShowSidebar = false, // Tắt sidebar
-                ShowHeader = true,   // Bật header
-                ShowFriendList = false // Tắt danh sách bạn bè
-            };
-            ViewBag.ViewSettings = viewSettings;
-            return View();
-        }
+		public async Task<IActionResult> UserProfile()
+		{
+			var userId = HttpContext.Items["userId"]?.ToString();
 
-        public IActionResult RequestFriends()
+			if (string.IsNullOrEmpty(userId))
+			{
+				return Redirect("/Account/Login"); // Nếu không có userId, chuyển hướng tới trang đăng nhập
+			}
+
+			using (var httpClient = new HttpClient())
+			{
+				HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7296/api/UserAdmin/get-user/{userId}");
+
+				if (response.IsSuccessStatusCode)
+				{
+					var jsonData = await response.Content.ReadAsStringAsync();
+					var userInfo = JsonConvert.DeserializeObject<UserResponse>(jsonData);
+
+					// Chỉ truyền những thông tin cần thiết vào View
+					var model = new UserResponse
+					{
+						FullName = userInfo.FullName,
+						Birth = userInfo.Birth,
+						Gender = userInfo.Gender,
+						PhoneNumber = userInfo.PhoneNumber,
+						Email = userInfo.Email,
+                        Image = userInfo.Image,
+						BackgroundImage = userInfo.BackgroundImage
+					};
+
+					return View(model); // Trả lại view với model đã lọc thông tin
+				}
+				else
+				{
+					TempData["Error"] = "Lỗi khi lấy thông tin người dùng.";
+					return RedirectToAction("Index", "Home");
+				}
+			}
+		}
+
+
+		public IActionResult RequestFriends()
         {
             var viewSettings = new ViewSettings
             {
@@ -358,7 +387,12 @@ namespace DATN.MVC.Controllers
         }
 
 
+
+
+
+
+
     }
 
-}
+}   
 
