@@ -4,6 +4,8 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public string Image { get; set; }
         public bool IsActived { get; set; }
         public int CreatedDate { get; set; }
         public int UpdatedDate { get; set; }

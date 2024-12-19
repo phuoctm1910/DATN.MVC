@@ -1,25 +1,17 @@
 ﻿using DATN.MVC.Ultilities;
 namespace DATN.MVC.Respone.MarketPlace
 {
-
-    public class GetAllProductRes
+    public class SalePlaceRes
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public decimal Price { get; set; }  // Giá có thể là kiểu decimal
-        public int Quantity { get; set; }
-        public string Size { get; set; }
-        public string Description { get; set; }
+        public int UserId { get; set; }
         public string Image { get; set; }
-        public bool IsActived { get; set; }
-        public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
-        public int SalePlaceId { get; set; }
-        public string SalePlaceName { get; set; }
+        public byte Status { get; set; }
+        public bool IsActived { get; set; } // Dùng kiểu bool cho dữ liệu kiểu bit
         public int CreatedDate { get; set; }
         public int UpdatedDate { get; set; }
 
-        // Chuyển đổi Unix timestamp sang DateTime
         public DateTime CreatedDateTime => ConvertFromUnixTimestamp(CreatedDate);
         public DateTime UpdatedDateTime => ConvertFromUnixTimestamp(UpdatedDate);
 
