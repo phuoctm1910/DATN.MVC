@@ -40,6 +40,32 @@ namespace DATN.MVC.Controllers
 
             return View();
         }
+
+        public IActionResult SuggestFriends()
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = false // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+            return View();
+        }
+
+
+        public IActionResult UserProfile() 
+        {
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false, // Tắt sidebar
+                ShowHeader = true,   // Bật header
+                ShowFriendList = false // Tắt danh sách bạn bè
+            };
+            ViewBag.ViewSettings = viewSettings;
+            return View();
+        }
+
         public IActionResult RequestFriends()
         {
             using (var httpClient = new HttpClient())
