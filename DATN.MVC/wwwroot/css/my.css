@@ -29,7 +29,7 @@
 }
 
 /* Style for action buttons */
-.action-buttons {
+.action-button-posts {
     display: flex;
     justify-content: space-around;
     padding: 10px;
@@ -420,6 +420,7 @@
         color: white;
     }
 
+
 .message-images {
     display: flex;
     flex-wrap: wrap;
@@ -523,6 +524,59 @@
     color: #666;
     margin-top: 3px;
 }
+
+.image-preview-container {
+    position: relative; /* Ensure proper positioning within parent */
+    z-index: 10; /* Ensure it sits above other elements */
+    margin-bottom: 10px; /* Add some spacing below the previews */
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap; /* Prevent previews from wrapping */
+}
+
+    .image-preview-container .image-chat-preview {
+        position: relative;
+        width: 30%;
+        max-height: 100%;
+        overflow: hidden;
+        text-align: center;
+        display: flex; /* Use flex to align content */
+        align-items: center; /* Center vertically */
+        justify-content: center; /* Center horizontally */
+    }
+
+.image-preview img {
+    width: auto; /* Maintain aspect ratio */
+    height: 100%; /* Fit the height */
+    max-height: 100%; /* Ensure the image fits within the preview box */
+    border-radius: 10px;
+    object-fit: cover; /* Crop the image if necessary */
+}
+
+.image-preview .remove-image {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    color: #333;
+    font-size: 12px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .image-preview .remove-image:hover {
+        background-color: rgba(255, 0, 0, 0.8);
+        color: white;
+    }
+
+
 
 /* Chat Input Styling */
 .vd-chat-input {

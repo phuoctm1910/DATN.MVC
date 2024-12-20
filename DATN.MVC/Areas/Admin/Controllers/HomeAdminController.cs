@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DATN.MVC.Controllers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DATN.MVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class HomeAdminController : Controller
+    public class HomeAdminController : BaseController
     {
         public IActionResult Index()
         {

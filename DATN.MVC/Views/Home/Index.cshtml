@@ -230,7 +230,11 @@
                 }
 
 
-
+        .comments-section {
+            max-height: 50vh; /* Giới hạn chiều cao là 50% chiều cao viewport */
+            overflow-y: auto; /* Cho phép cuộn dọc khi nội dung vượt quá chiều cao */
+            padding-right: 10px; /* Tạo không gian cho thanh cuộn */
+        }
         .comment-item {
             display: block;
             position: relative;
@@ -304,8 +308,9 @@
         }
 
             .add-comment .avatar {
-                width: 40px;
+                width: 50px;
                 height: 40px;
+                margin-top: 10px;
             }
 
         .box-input {
@@ -577,7 +582,8 @@
                 showSlideshow: false,
                 slideshowImages: [],
                 currentSlideIndex: 0,
-                selectedImages: []
+                selectedImages: [],
+                isCommentModalOpen: false
             },
             created() {
                 this.setupSignalR();
@@ -625,34 +631,67 @@
                         console.log(comment);  // Kiểm tra lại bài viết sau khi cập nhật
                     });
 
-                    // Cập nhật lượt thích từ SignalR
-                    this.connection.on("ReceiveNewComment", (data) => {
+                    this.connection.on("ReceiveNewComment", (data, postId) => {
 
-                        console.log("New comment added:", data);
-                        // Kiểm tra nếu bình luận thuộc bài viết đang xem
-                        if (data.postId === this.selectedPost.id) {
-                            // Thêm bình luận mới vào danh sách comments
-                            this.comments.push({
-                                id: data.commentId,          // ID của bình luận
-                                userId: data.userId,         // ID người dùng
-                                content: data.content,       // Nội dung bình luận
-                                createdDate: data.CreatedDate, // Thời gian tạo bình luận
-                            });
+                        if (postId === this.selectedPost.id) {
 
-                            // Tăng số lượng bình luận hiển thị (commentCount) nếu thuộc tính này tồn tại
-                            if (this.selectedPost.commentCount !== undefined) {
-                                this.selectedPost.commentCount += 1;
+                            const createdDate = new Date(data.createdDate * 1000);
+                            data.displayDate = this.getRelativeTime(createdDate);
+                            data.childrenArray = [];
+                            data.expanded = true;
+                            // Cập nhật lượt thích từ SignalR
+                            const MAX_DEPTH = 2;
+
+
+                            // Find parent comment
+                            if (data.commentId !== null) {
+                                const parentComment = this.findCommentById(data.commentId, this.comments);
+                                if (parentComment) {
+                                    // Calculate depth
+                                    data.depth = parentComment.depth + 1;
+
+                                    // Check MAX_DEPTH
+                                    if (data.depth > MAX_DEPTH) {
+                                        console.warn("Comment depth exceeds MAX_DEPTH. Adjusting...");
+                                        data.depth = MAX_DEPTH;
+
+                                        // Find an ancestor within MAX_DEPTH - 1
+                                        let ancestor = parentComment;
+                                        while (ancestor && ancestor.depth >= MAX_DEPTH - 1) {
+                                            ancestor = this.findCommentById(ancestor.commentId, this.comments);
+                                        }
+
+                                        // Add to ancestor instead of direct parent
+                                        if (ancestor) {
+                                            ancestor.childrenArray.push(data);
+                                            console.log("Added comment to ancestor:", ancestor);
+                                        } else {
+                                            console.warn("No valid ancestor found. Adding as root-level comment.");
+                                            data.depth = 0;
+                                            this.comments.push(data);
+                                        }
+                                    } else {
+                                        parentComment.childrenArray.push(data);
+                                        console.log("Added new comment to parent:", parentComment);
+                                    }
+                                } else {
+                                    console.warn("Parent comment not found. Adding as root-level comment.");
+                                    data.depth = 0;
+                                    this.comments.push(data);
+                                }
+                            } else {
+                                // Root-level comment
+                                data.depth = 0;
+                                this.comments.push(data);
                             }
 
-                            // Nếu có `commentsNotBuild`, cũng cập nhật tại đây (nếu cần thiết)
-                            const commentNotBuild = this.commentsNotBuild.find(c => c.id === data.commentId);
-                            if (!commentNotBuild) {
-                                this.commentsNotBuild.push({
-                                    id: data.commentId,
-                                    userId: data.userId,
-                                    content: data.content,
-                                    createdDate: data.CreatedDate,
-                                });
+                            const postBeCommented = this.posts.find(p => p.id === postId);
+                            if (postBeCommented) {
+                                postBeCommented.commentCount = (postBeCommented.commentCount || 0) + 1;
+                            }
+
+                            if (!this.commentsNotBuild.some(c => c.id === data.id)) {
+                                this.commentsNotBuild.push(data);
                             }
 
                             
@@ -660,6 +699,21 @@
                             console.log("New comment received for another post:", data);
                         }
                     });
+
+                },
+                findCommentById(id, comments) {
+                    for (const comment of comments) {
+                        if (comment.id === id) {
+                            return comment;
+                        }
+                        if (comment.childrenArray && comment.childrenArray.length > 0) {
+                            const childComment = this.findCommentById(id, comment.childrenArray);
+                            if (childComment) {
+                                return childComment;
+                            }
+                        }
+                    }
+                    return null;
                 },
                 toggleImageUpload() {
                     this.showImageUpload = true;
@@ -884,6 +938,7 @@
                             });
                             // Sau khi xử lý thời gian, xây dựng cấu trúc bình luận
                             this.comments = this.buildCommentThread(this.comments);
+                            console.log(this.comments);
                         })
                         .catch(error => console.error('Error fetching comments:', error));
                 },
@@ -912,6 +967,7 @@
                 showComments(post) {
                     this.selectedPost = post;
                     this.loadComments(post.id);
+
                     $('#commentsModal').modal('show');
                 },
                 buildCommentThread(comments) {
@@ -996,19 +1052,12 @@
                     };
 
                     try {
-                        // const response = await fetch('/Comment/AddNew', {
-                        //     method: 'POST',
-                        //     headers: {
-                        //         'Content-Type': 'application/json',
-                        //     },
-                        //     body: JSON.stringify(newCommentData),
-                        // });
-                        // const data = await response.json();
+                        console.log(newCommentData);
                         await this.connection.invoke("AddComment", newCommentData);
 
 
                         this.newComment = '';  // Clear the comment input
-                            this.replyTarget = null;  // Reset the reply target after submitting
+                        this.replyTarget = null;  // Reset the reply target after submitting
                        
                     } catch (error) {
                         console.error('Error submitting comment:', error);
@@ -1084,7 +1133,7 @@
                                     <div class="d-flex flex-column">
                                         <div class="d-flex">@Context.Items["fullName"]?.ToString()</div>
                                         <div>
-                                            <select v-model="newPostFor">
+                                            <select class="form-select" v-model="newPostFor">
                                                 <option v-bind:value="0" selected>Công khai</option>
                                                 <option v-bind:value="1">Bạn bè</option>
                                                 <option v-bind:value="2">Chỉ một mình tôi</option>
@@ -1145,13 +1194,12 @@
                                                  alt="">
                                         </figure>
                                         <div class="friend-name">
-                                            <div class="more">
+                                            <div class="more" v-if="post.userId === userId">
                                                 <div class="more-post-optns">
                                                     <i class="ti-more-alt"></i>
                                                     <ul>
                                                         <li v-on:click="editPost(post)"><i class="fa-sharp fa-regular fa-square-pen"></i> Chỉnh sửa bài viết</li>
                                                         <li v-on:click="deletePost(post)"><i class="fa-regular fa-trash"></i> Xóa bài viết</li>
-                                                        <li v-on:click="toggleNotifications(post)"><i class="fa-sharp fa-regular fa-bell"></i> Tắt thông báo</li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1206,14 +1254,12 @@
                                                 <span class="share-count" style="margin-right: 5px;">{{ post.shareCount }} chia sẻ</span>
                                             </div>
                                         </div>
-                                        <div class="action-buttons">
+                                        <div class="action-button-posts">
                                             <button class="action-btn like-btn"
                                                     v-on:click="likePost(post)"
                                                     v-bind:class="{ active: post.likedByCurrentUser }">
                                                 <i class="fa fa-thumbs-up" style="margin-right: 7px;"></i> Thích
                                             </button>
-
-
                                             <button class="action-btn comment-btn" v-on:click="showComments(post)">
                                                 <i class="fa fa-comment" style="margin-right: 7px;"></i> Bình luận
                                             </button>
@@ -1235,7 +1281,10 @@
                         <div class="modal-content">
                             <!-- Modal header -->
                             <div class="modal-header d-flex align-items-center">
-                                <h5 class="modal-title mx-auto" id="commentsModalLabel">Bài viết của {{ selectedPost.fullName }}</h5>
+                                <h5 class="modal-title ml-auto" id="commentsModalLabel">
+                                    Bài viết của {{ selectedPost.fullName }}
+
+                                </h5>
                                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -1255,6 +1304,27 @@
                                         </div>
                                         <div class="post-meta">
                                             <p class="content">{{ selectedPost.postContent }}</p>
+                                            <div v-if="selectedPost.imageUrls && selectedPost.imageUrls.length > 0">
+                                                <div v-if="selectedPost.imageUrls.length === 4" class="image-grid-four">
+                                                    <img v-for="url in selectedPost.imageUrls" :key="url" :src="url" alt="Post Image" class="image-item">
+                                                </div>
+                                                <div v-else-if="selectedPost.imageUrls.length === 3" class="image-grid-three">
+                                                    <img v-for="url in selectedPost.imageUrls" :key="url" :src="url" alt="Post Image" class="image-item">
+                                                </div>
+                                                <div v-else-if="selectedPost.imageUrls.length === 2" class="image-grid-two">
+                                                    <img v-for="url in selectedPost.imageUrls" :key="url" :src="url" alt="Post Image" class="image-item">
+                                                </div>
+                                                <div v-else-if="selectedPost.imageUrls.length > 4" class="image-grid-more">
+                                                    <img v-for="(url, index) in selectedPost.imageUrls.slice(0, 3)" :key="url" :src="url" alt="Post Image" class="image-item">
+                                                    <div class="image-item overlay-container" v-on:click="openSlideshow(selectedPost.imageUrls, 3)">
+                                                        <img :src="selectedPost.imageUrls[3]" alt="Post Image" class="overlay-image">
+                                                        <div class="overlay-text">+{{ selectedPost.imageUrls.length - 4 }}</div>
+                                                    </div>
+                                                </div>
+                                                <div v-else class="post-image-container">
+                                                    <img :src="selectedPost.imageUrls[0]" alt="Post Image" class="single-image">
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="interaction-bar">
                                             <div class="reaction-summary">
@@ -1268,7 +1338,7 @@
                                                 <span class="share-count" style="margin-right: 5px;">{{ selectedPost.shareCount }} chia sẻ</span>
                                             </div>
                                         </div>
-                                        <div class="action-buttons">
+                                        <div class="action-button-posts">
                                             <button class="action-btn like-btn" v-bind:class="{ active: selectedPost.likedByCurrentUser }" v-on:click="likePost(selectedPost)">
                                                 <i class="fa fa-thumbs-up" style="margin-right: 7px;"></i> Thích
                                             </button>

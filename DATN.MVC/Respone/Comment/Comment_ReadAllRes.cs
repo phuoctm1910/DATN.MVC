@@ -14,7 +14,7 @@ namespace DATN.API.Models.Response
         public int CreatedDate { get; set; }
         public int UpdatedDate { get; set; }
         public int ReactCount { get; set; }
-
+        public int PostId { get; set; }
         // Định dạng DateTime từ Unix timestamp
         public DateTime CreatedDateTime
         {

@@ -1,5 +1,6 @@
 ﻿using DATN.MVC.Areas.Admin.Models.AdminCategory.Request;
 using DATN.MVC.Areas.Admin.Models.AdminCategory.Response;
+using DATN.MVC.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Text;
 namespace DATN.MVC.Areas.Admin.Controllers.AdminCategory
 {
     [Area("Admin")]
-    public class AdminCategoryController : Controller
+    public class AdminCategoryController : BaseController
     {
         private readonly IHttpClientFactory _httpClientFactory;
 

@@ -2,6 +2,7 @@
 using DATN.MVC.Areas.Admin.Models.AdminCategory.Response;
 using DATN.MVC.Areas.Admin.Models.AdminPost.Request;
 using DATN.MVC.Areas.Admin.Models.AdminPost.Response;
+using DATN.MVC.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
@@ -9,7 +10,7 @@ using System.Text;
 namespace DATN.MVC.Areas.Admin.Controllers.AdminPost
 {
     [Area("Admin")]
-    public class AdminPostController : Controller
+    public class AdminPostController : BaseController
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
@@ -26,7 +27,7 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminPost
             try
             {
                 var client = _httpClientFactory.CreateClient();
-                var response = await client.GetAsync("https://localhost:7296/api/Posts/getAll");
+                var response = await client.GetAsync("https://localhost:7296/api/ManagePosts/getAll");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -63,7 +64,7 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminPost
         public async Task<IActionResult> Edit(int Id)
         {
             var client = _httpClientFactory.CreateClient();
-            var response = await client.GetAsync($"https://localhost:7296/api/Posts/getById/{Id}");
+            var response = await client.GetAsync($"https://localhost:7296/api/ManagePosts/getById/{Id}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -99,7 +100,7 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminPost
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
                 try
                 {
-                    var response = await client.PutAsync($"https://localhost:7296/api/Posts/edit-status/{model.PostId}", content); // Đảm bảo URL đúng
+                    var response = await client.PutAsync($"https://localhost:7296/api/ManagePosts/edit-status/{model.PostId}", content); // Đảm bảo URL đúng
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -130,7 +131,7 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminPost
             var client = _httpClientFactory.CreateClient();
             try
             {
-                var response = await client.DeleteAsync($"https://localhost:7296/api/Posts/delete/{id}");
+                var response = await client.DeleteAsync($"https://localhost:7296/api/ManagePosts/delete/{id}");
 
                 if (response.IsSuccessStatusCode)
                 {

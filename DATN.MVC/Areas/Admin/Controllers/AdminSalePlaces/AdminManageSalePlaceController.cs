@@ -7,12 +7,13 @@ using Newtonsoft.Json;
 using DATN.MVC.Areas.Admin.Models.AdminPost.Request;
 using DATN.MVC.Areas.Admin.Models.AdminPost.Response;
 using System.Text;
+using DATN.MVC.Controllers;
 
 namespace DATN.MVC.Areas.Admin.Controllers.AdminSalePlaces
 {
     [Area("Admin")]
 
-    public class AdminManageSalePlaceController : Controller
+    public class AdminManageSalePlaceController : BaseController
     {
         private readonly IHttpClientFactory _httpClientFactory;
 

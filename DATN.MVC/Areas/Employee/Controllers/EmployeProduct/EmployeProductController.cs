@@ -2,6 +2,7 @@
 using DATN.MVC.Areas.Admin.Models.AdminCategory.Response;
 using DATN.MVC.Areas.Employee.Models.EmployeProduct.Request;
 using DATN.MVC.Areas.Employee.Models.EmployeProduct.Response;
+using DATN.MVC.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
@@ -9,7 +10,7 @@ using System.Text;
 namespace DATN.MVC.Areas.Employee.Controllers.EmployeProduct
 {
     [Area("Employee")]
-    public class EmployeProductController : Controller
+    public class EmployeProductController : BaseController
     {
         private readonly IHttpClientFactory _httpClientFactory;
 

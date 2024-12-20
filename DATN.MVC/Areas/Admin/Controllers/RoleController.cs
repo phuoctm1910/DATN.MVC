@@ -11,11 +11,12 @@ using System.Net.Http.Headers;
 using System.Text;
 using DATN.MVC.Respone.User;
 using System.Text.Json;
+using DATN.MVC.Controllers;
 
 namespace DATN.MVC.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class RoleController : Controller
+    public class RoleController : BaseController
     {
         private readonly IConfiguration _configuration;
 

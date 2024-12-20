@@ -1,45 +1,38 @@
 ﻿using DATN.MVC.Helpers;
+using DATN.MVC.Models;
 using DATN.MVC.Models.Response;
 using DATN.MVC.Request.Post;
 using DATN.MVC.Respone.Post;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using System.Collections.Concurrent;
 
 namespace DATN.MVC.Controllers
 {
     public class PostController : BaseController
     {
-        private readonly IMemoryCache _memoryCache;
-
-        // Constructor để inject IMemoryCache
-        public PostController(IMemoryCache memoryCache)
+        public PostController()
         {
-            _memoryCache = memoryCache;
         }
 
         [HttpGet]
         public JsonResult GetAll()
         {
-            // Nếu không có cache, gọi API để lấy dữ liệu
+            // Gọi API để lấy dữ liệu nếu ConcurrentDictionary chưa có giá trị
             var result = ApiHelpers.GetMethod<List<Post_ReadAllRes>>("https://localhost:7296/api/post/getall", null);
 
-            // Kiểm tra cache trước khi gọi API
-            if (!_memoryCache.TryGetValue("PostLikes", out Dictionary<int, int> postLikes))
+            // Nếu ConcurrentDictionary chưa có dữ liệu, cập nhật từ API
+            if (GlobalCache.PostLikes.IsEmpty)
             {
-
-                // Giả sử mỗi bài viết có một ID và một số lượt like (reactCount), ta cần lưu vào cache
-                postLikes = result.ToDictionary(p => p.Id, p => p.ReactCount);
-
-                // Lưu kết quả vào cache với thời gian sống là 5 phút (có thể điều chỉnh)
-                _memoryCache.Set("PostLikes", postLikes, TimeSpan.FromMinutes(5));
-
-               
+                foreach (var post in result)
+                {
+                    GlobalCache.PostLikes.AddOrUpdate(post.Id, post.ReactCount, (key, oldValue) => post.ReactCount);
+                }
             }
 
-            // Nếu đã có cache, chỉ cần trả về số lượt like từ cache
             return Json(new
             {
-                ApiData = result,
+                ApiData = result
             });
         }
 

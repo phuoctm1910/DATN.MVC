@@ -1,4 +1,5 @@
-﻿using DATN.MVC.Respone.User;
+﻿using DATN.MVC.Controllers;
+using DATN.MVC.Respone.User;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace DATN.MVC.Areas.Employee.Controllers.EmployeUser
 {
     [Area("Employee")]
-    public class EmployeUserController : Controller
+    public class EmployeUserController : BaseController
     {
         private readonly IConfiguration _configuration;
 

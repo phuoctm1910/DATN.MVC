@@ -15,10 +15,10 @@ namespace DATN.MVC.Controllers
                 return;
             }
 
-            // Lấy role và các thông tin khác từ HttpContext.Items
+            // Kiểm tra role từ HttpContext.Items
             if (!context.HttpContext.Items.ContainsKey("roleName"))
             {
-                context.Result = new RedirectToActionResult("Login", "Account", null);
+                ClearContextAndRedirectToLogin(context);
                 return;
             }
 
@@ -29,17 +29,42 @@ namespace DATN.MVC.Controllers
             // Kiểm tra quyền truy cập theo area và action
             if (area == "admin" && roleName?.ToLower() != "admin")
             {
-                context.Result = new ForbidResult();
+                // Chỉ admin mới được vào area admin
+                ClearContextAndRedirectToLogin(context);
                 return;
             }
 
-            if (area == "employee" && action == "edit" && roleName?.ToLower() != "admin")
+            if (area == "employee" && roleName?.ToLower() != "admin" && roleName?.ToLower() != "employee")
             {
-                context.Result = new ForbidResult();
+                // Chỉ admin và employee mới được vào area employee
+                ClearContextAndRedirectToLogin(context);
                 return;
             }
+
 
             base.OnActionExecuting(context);
         }
+
+        private void ClearContextAndRedirectToLogin(ActionExecutingContext context)
+        {
+            // Clear tất cả session, cookies và context
+            context.HttpContext.Session.Clear();
+
+            // Xóa cookies (nếu có)
+            foreach (var cookie in context.HttpContext.Request.Cookies.Keys)
+            {
+                context.HttpContext.Response.Cookies.Delete(cookie);
+            }
+
+            // Reset area nếu tồn tại để tránh bị thêm vào đường dẫn
+            if (context.RouteData.Values.ContainsKey("area"))
+            {
+                context.RouteData.Values.Remove("area");
+            }
+
+            // Chuyển hướng đến trang Login
+            context.Result = new RedirectToActionResult("Login", "Account", new { area = "" });
+        }
+
     }
 }

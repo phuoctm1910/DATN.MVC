@@ -400,20 +400,31 @@ Vue.component('chatbox', {
             </span>
         </div>
     </div>
+    <!-- Image Preview Section -->
+
     <div class="vd-chat-input" v-show="!isMinimized">
+        
+        <!-- Textarea Section -->
         <textarea v-model="newMessage" placeholder="Nhập tin nhắn..."
                   @input="adjustTextareaHeight" @keydown="handleKeyDown" rows="1"></textarea>
+
+        <!-- File Upload & Send Button -->
         <div class="file-upload">
             <label for="fileInput">
-                <span><i class="fa-solid fa-image"></i></span> <!-- Icon or placeholder for file upload -->
+                <span><i class="fa-solid fa-image"></i></span>
             </label>
             <input type="file" id="fileInput" @change="handleFileInput" multiple hidden>
-            <div v-if="selectedFiles.length" class="selected-files">
-                <span v-for="(file, index) in selectedFiles" :key="index">{{ file.name }}</span>
-            </div>
         </div>
         <button @click="sendMessage">Gửi</button>
     </div>
+<div class="image-preview-container">
+    <div class="image-chat-preview" v-for="(file, index) in selectedFiles" :key="index">
+        <img :src="file.previewUrl" alt="Preview Image" />
+        <button class="remove-image" @click="removeImage(index)">×</button>
+    </div>
+</div>
+
+
 </div>
     `,
     props: ['friend', 'isMinimized', 'messages'],
@@ -476,32 +487,29 @@ Vue.component('chatbox', {
         },
 
         handleFileInput(event) {
-            const files = Array.from(event.target.files); // Lấy danh sách file từ input
-            const validFiles = []; // Danh sách file hợp lệ
-            const maxFileSize = 100 * 1024 * 1024; 
+            const files = Array.from(event.target.files);
+            const validFiles = [];
+            const maxFileSize = 100 * 1024 * 1024;
 
             const allowedMimeTypes = [
-                'image/jpeg',  // JPEG
-                'image/jpg',   // JPG
-                'image/png',   // PNG
-                'image/gif',   // GIF
-                'image/bmp',   // BMP
-                'image/webp',  // WebP
-                'image/svg+xml', // SVG
-                'image/tiff',  // TIFF
-                'image/x-icon', // ICO
+                'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp',
+                'image/webp', 'image/svg+xml', 'image/tiff', 'image/x-icon',
             ];
 
-            files.forEach(file => {
+            files.forEach((file) => {
                 if (allowedMimeTypes.includes(file.type) && file.size <= maxFileSize) {
-                    validFiles.push(file); // Chỉ thêm file hợp lệ
+                    file.previewUrl = URL.createObjectURL(file); // Tạo URL xem trước
+                    validFiles.push(file);
                 } else {
                     console.error(`File "${file.name}" không hợp lệ hoặc vượt quá kích thước cho phép.`);
                 }
             });
 
-            this.selectedFiles = validFiles; // Lưu các file hợp lệ
+            this.selectedFiles = validFiles;
             console.log("Danh sách file được chọn:", this.selectedFiles);
+        },
+        removeImage(index) {
+            this.selectedFiles.splice(index, 1);
         },
         formatTime(timestamp) {
             const messageDate = new Date(timestamp * 1000);

@@ -1,5 +1,6 @@
 ﻿using DATN.API.Models.Response;
 using DATN.MVC.Helpers;
+using DATN.MVC.Models;
 using DATN.MVC.Models.Request;
 using DATN.MVC.Models.Response.Comment;
 using DATN.MVC.Request.Comment;
@@ -25,17 +26,18 @@ namespace DATN.MVC.Controllers
         {
             var result = ApiHelpers.GetMethod<List<Comment_ReadAllRes>>("https://localhost:7296/api/Comment/getListCommentByPostId/" + Id);
 
-            // Kiểm tra cache trước khi gọi API
-            if (!_memoryCache.TryGetValue("CommentLikes", out Dictionary<int, int> commentLikes))
+            
+            // Nếu ConcurrentDictionary chưa có dữ liệu, cập nhật từ API
+            if (result != null )
             {
-
-                // Giả sử mỗi bài viết có một ID và một số lượt like (reactCount), ta cần lưu vào cache
-                commentLikes = result.ToDictionary(p => p.Id, p => p.ReactCount);
-
-                // Lưu kết quả vào cache với thời gian sống là 5 phút (có thể điều chỉnh)
-                _memoryCache.Set("CommentLikes", commentLikes, TimeSpan.FromMinutes(5));
-
-
+                if (GlobalCache.CommentLikes.IsEmpty)
+                {
+                    foreach (var comment in result)
+                    {
+                        GlobalCache.CommentLikes.AddOrUpdate(comment.Id, comment.ReactCount, (key, oldValue) => comment.ReactCount);
+                    }
+                }
+                
             }
             return Json(new { ApiData = result });
         }
@@ -57,11 +59,13 @@ namespace DATN.MVC.Controllers
             try
             {
                 // Call to the Web API via ApiHelpers.
-                var result = ApiHelpers.PostMethodAsync<bool, Comment_CreateReq>("https://localhost:7296/api/Comment/create", newComment);
+                var result = ApiHelpers.PostMethodAsync<Comment_ReadAllRes, Comment_CreateReq>("https://localhost:7296/api/Comment/create", newComment);
 
                 // Return success or failure response
-                if (result)
+                if (result != null)
                 {
+                    GlobalCache.CommentLikes.AddOrUpdate(result.Id, result.ReactCount, (key, oldValue) => result.ReactCount);
+
                     return Json(new { success = true, message = "Post created successfully." });
                 }
                 else

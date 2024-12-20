@@ -6,13 +6,13 @@ using DATN.MVC.Areas.Admin.Models.AdminCategory.Request;
 using System.Text;
 using DATN.MVC.Areas.Admin.Models.AdminChildCategory.Request;
 using DATN.MVC.Areas.Admin.Models.AdminChildCategory.ViewModels;
+using DATN.MVC.Controllers;
 
 
 namespace DATN.MVC.Areas.Admin.Controllers.AdminChildCategory
 {
     [Area("Admin")]
-
-    public class AdminChildCategoryController : Controller
+    public class AdminChildCategoryController : BaseController
     {
         private readonly IHttpClientFactory _httpClientFactory;
 

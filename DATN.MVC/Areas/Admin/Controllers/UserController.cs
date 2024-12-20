@@ -1,4 +1,5 @@
-﻿using DATN.MVC.Request.User;
+﻿using DATN.MVC.Controllers;
+using DATN.MVC.Request.User;
 using DATN.MVC.Respone.User;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
@@ -8,7 +9,7 @@ using System.Text.Json;
 namespace DATN.MVC.Areas.Admin.Controllers;
 
 [Area("Admin")]
-public class UserController : Controller
+public class UserController : BaseController
 {
     private readonly IConfiguration _configuration;
 
