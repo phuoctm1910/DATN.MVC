@@ -1,12 +1,13 @@
-﻿namespace DATN.MVC.Respone.MarketPlace
+﻿namespace DATN.MVC.Respone.SalePlaceApprove
 {
-    public class CaterorisRes
+    public class ApproveSalePlace_Res
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-
-        public string Image { get; set; }
-        public bool IsActived { get; set; }
+        public int Id { get; set; } // ID của SalePlace
+        public string Name { get; set; } // Tên SalePlace
+        public int? UserId { get; set; } // ID của người dùng
+        public string Image { get; set; } // Link hình ảnh của SalePlace
+        public byte? Status { get; set; } // Trạng thái (0: Chờ, 1: Đang hoạt động,...)
+        public bool IsActived { get; set; }  // Đã được duyệt hay chưa
         public int CreatedDate { get; set; }
         public int UpdatedDate { get; set; }
 
@@ -20,4 +21,5 @@
             return epoch.AddSeconds(unixTimestamp);
         }
     }
+
 }

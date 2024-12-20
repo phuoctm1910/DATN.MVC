@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Manage Sale Place Approve";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (!string.IsNullOrEmpty(ViewData["ErrorMessage"] as string))
+{
+    <div class="alert alert-danger">
+        @ViewData["ErrorMessage"]
+    </div>
+}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Danh Sách Gian Hàng
+    </div>
+    <div class="card-body">
+        <table id="datatablesApproveSalePlace" class="table table-striped table-bordered">
+            <thead>
+                <tr style="text-center align-middle">
+                    <th class="text-center align-middle">Tên Gian Hàng</th>
+                    <th class="text-center align-middle">Người Tạo</th>
+                    <th class="text-center align-middle">Trạng Thái</th>
+                    <th class="text-center align-middle">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var salePlace in Model)
+                {
+                    <tr style="text-align: center; vertical-align: middle">
+                        <td>@salePlace.Name</td>
+                        <td>@salePlace.UserId</td>
+                        <td>
+                            @if (salePlace.IsActived)
+                            {
+                                <span class="badge bg-success">Đã duyệt</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">Chờ</span>
+                            }
+                        </td>
+                        <td>
+                            <!-- Show "Xác Nhận" button only if the IsActived is false -->
+                            @if (!salePlace.IsActived)
+                            {
+                                <button type="button" class="btn btn-primary edit-saleplace-btn" data-id="@salePlace.Id"  data-status="@salePlace.IsActived">Xác Nhận</button>
+                            }
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/admin/js/ApproveSalePlace.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.edit-saleplace-btn').click(function () {
+                var id = $(this).data('id');
+                var isActive = $(this).data('status'); // This should be the current status in boolean
+
+                // Toggle status for next PUT request
+                isActive = !isActive;
+
+                var data = {
+                    Id: id,
+                    IsApproved: true
+                };
+                console.log(data);
+                $.ajax({
+                    type: "POST",
+                    url: 'https://localhost:7260/Admin/AdminSalePlaceApprove/ApproveSalePlaceStatus',
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        alert('Duyệt gian hàng thành công!');
+                        location.reload(); // Reload the page to reflect changes
+                    },
+                    error: function (error) {
+                        console.log('Error updating sale place status:', error);
+                        alert('Không thể kết nối đến API. Vui lòng kiểm tra lại kết nối.');
+                    }
+                });
+            });
+        });
+
+    </script>
+}
