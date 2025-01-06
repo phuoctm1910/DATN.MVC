@@ -223,12 +223,13 @@ namespace DATN.MVC.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> SortProducts(string sortOrder)
+        public async Task<IActionResult> SortProducts(string sortOrder, string categoryFilter = null)
         {
             var data = new GetALLProductAndCategory
             {
                 Categories = new List<CaterorisRes>(),
-                Products = new List<GetAllProductRes>()
+                Products = new List<GetAllProductRes>(),
+                salePlace = new List<SalePlaceRes>()  // Thêm phần này để chứa danh sách gian hàng
             };
 
             using (var httpClient = new HttpClient())
@@ -254,6 +255,12 @@ namespace DATN.MVC.Controllers
                         var productJson = await productResponse.Content.ReadAsStringAsync();
                         data.Products = JsonConvert.DeserializeObject<List<GetAllProductRes>>(productJson);
 
+                        // Lọc theo category nếu có filter
+                        if (!string.IsNullOrEmpty(categoryFilter))
+                        {
+                            data.Products = data.Products.Where(p => p.CategoryName.Equals(categoryFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+                        }
+
                         // Lọc và sắp xếp sản phẩm theo yêu cầu
                         if (data.Products != null && data.Products.Count > 0)
                         {
@@ -275,10 +282,28 @@ namespace DATN.MVC.Controllers
                                     break;
                             }
                         }
+                        else
+                        {
+                            TempData["Error"] = "Không có sản phẩm phù hợp.";
+                        }
                     }
                     else
                     {
                         TempData["Error"] = "Không thể tải danh sách sản phẩm.";
+                    }
+
+                    // Lấy danh sách gian hàng
+                    HttpResponseMessage saleplaceResponse = await httpClient.GetAsync("https://localhost:7296/api/ManageSalePlace/GetAll");
+                    if (saleplaceResponse.IsSuccessStatusCode)
+                    {
+                        var saleplacesJson = await saleplaceResponse.Content.ReadAsStringAsync();
+                        data.salePlace = JsonConvert.DeserializeObject<List<SalePlaceRes>>(saleplacesJson);
+
+                        // Nếu cần, bạn có thể thêm lọc và sắp xếp cho salePlace tại đây nếu có
+                    }
+                    else
+                    {
+                        TempData["Error"] = "Không thể tải danh sách gian hàng.";
                     }
                 }
                 catch (Exception ex)
@@ -301,13 +326,15 @@ namespace DATN.MVC.Controllers
         }
 
 
+
         [HttpGet]
-        public async Task<IActionResult> FilterByPrice(decimal? minPrice, decimal? maxPrice)
+        public async Task<IActionResult> FilterByPrice(decimal? minPrice, decimal? maxPrice, decimal? minRentalPrice, decimal? maxRentalPrice)
         {
             var data = new GetALLProductAndCategory
             {
                 Categories = new List<CaterorisRes>(),
-                Products = new List<GetAllProductRes>()
+                Products = new List<GetAllProductRes>(),
+                salePlace = new List<SalePlaceRes>() // Thêm phần này để chứa gian hàng
             };
 
             using (var httpClient = new HttpClient())
@@ -347,6 +374,20 @@ namespace DATN.MVC.Controllers
                     {
                         TempData["Error"] = "Không thể tải danh sách sản phẩm.";
                     }
+
+                    // Lấy danh sách gian hàng
+                    HttpResponseMessage saleplaceResponse = await httpClient.GetAsync("https://localhost:7296/api/ManageSalePlace/GetAll");
+                    if (saleplaceResponse.IsSuccessStatusCode)
+                    {
+                        var saleplacesJson = await saleplaceResponse.Content.ReadAsStringAsync();
+                        data.salePlace = JsonConvert.DeserializeObject<List<SalePlaceRes>>(saleplacesJson);
+
+                      
+                    }
+                    else
+                    {
+                        TempData["Error"] = "Không thể tải danh sách gian hàng.";
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -368,13 +409,15 @@ namespace DATN.MVC.Controllers
         }
 
 
+
         [HttpGet]
         public async Task<IActionResult> FilterByCategory(int? categoryId)
         {
             var data = new GetALLProductAndCategory
             {
                 Categories = new List<CaterorisRes>(),
-                Products = new List<GetAllProductRes>()
+                Products = new List<GetAllProductRes>(),
+                salePlace = new List<SalePlaceRes>() // Thêm SalePlaceRes vào data
             };
 
             using (var httpClient = new HttpClient())
@@ -391,7 +434,7 @@ namespace DATN.MVC.Controllers
                     else
                     {
                         TempData["Error"] = "Không thể tải danh sách danh mục.";
-                    }   
+                    }
 
                     // Lấy danh sách sản phẩm
                     HttpResponseMessage productResponse = await httpClient.GetAsync("https://localhost:7296/EmployeProductGetAll");
@@ -409,6 +452,20 @@ namespace DATN.MVC.Controllers
                     else
                     {
                         TempData["Error"] = "Không thể tải danh sách sản phẩm.";
+                    }
+
+                    // Lấy danh sách gian hàng
+                    HttpResponseMessage saleplaceResponse = await httpClient.GetAsync("https://localhost:7296/api/ManageSalePlace/GetAll");
+                    if (saleplaceResponse.IsSuccessStatusCode)
+                    {
+                        var saleplacesJson = await saleplaceResponse.Content.ReadAsStringAsync();
+                        data.salePlace = JsonConvert.DeserializeObject<List<SalePlaceRes>>(saleplacesJson);
+
+                    
+                    }
+                    else
+                    {
+                        TempData["Error"] = "Không thể tải danh sách gian hàng.";
                     }
                 }
                 catch (Exception ex)
@@ -436,7 +493,8 @@ namespace DATN.MVC.Controllers
             var data = new GetALLProductAndCategory
             {
                 Categories = new List<CaterorisRes>(),
-                Products = new List<GetAllProductRes>()
+                Products = new List<GetAllProductRes>(),
+                salePlace = new List<SalePlaceRes>()  // Thêm SalePlaceRes vào
             };
 
             using (var httpClient = new HttpClient())
@@ -465,31 +523,48 @@ namespace DATN.MVC.Controllers
                                 .Where(p => p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
                                 .ToList();
                         }
-
-                        // Tính toán tổng số trang
-                        var totalProducts = data.Products.Count;
-                        var totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);  // Số trang
-
-                        // Tính toán phạm vi trang cần hiển thị (hiển thị 5 trang)
-                        int startPage = Math.Max(1, page - 2);  // Nếu trang hiện tại nhỏ hơn 3 thì bắt đầu từ trang 1
-                        int endPage = Math.Min(totalPages, startPage + 4);  // Nếu tổng số trang ít hơn 5 thì dừng ở cuối cùng
-
-                        // Gán các giá trị phân trang vào ViewBag và đảm bảo chúng không phải là null
-                        ViewBag.Page = page > 0 ? page : 1;  // Nếu page null hoặc 0, gán mặc định là 1
-                        ViewBag.PageSize = pageSize;
-                        ViewBag.TotalPages = totalPages;
-                        ViewBag.StartPage = startPage;
-                        ViewBag.EndPage = endPage;
-                        ViewBag.SearchTerm = searchTerm;
-
-                        // Phân trang: Lấy 10 sản phẩm mỗi trang
-                        var pagedProducts = data.Products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                        data.Products = pagedProducts;
                     }
                     else
                     {
                         TempData["Error"] = "Không thể tải danh sách sản phẩm.";
                     }
+
+                    // Lấy danh sách gian hàng
+                    HttpResponseMessage saleplaceResponse = await httpClient.GetAsync("https://localhost:7296/api/ManageSalePlace/GetAll");
+                    if (saleplaceResponse.IsSuccessStatusCode)
+                    {
+                        var saleplacesJson = await saleplaceResponse.Content.ReadAsStringAsync();
+                        data.salePlace = JsonConvert.DeserializeObject<List<SalePlaceRes>>(saleplacesJson);
+
+                 
+                       
+                    }
+                    else
+                    {
+                        TempData["Error"] = "Không thể tải danh sách gian hàng.";
+                    }
+
+                    // Phân trang cho sản phẩm
+                    var totalProducts = data.Products.Count;
+                    var totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);  // Số trang
+                    ViewBag.Page = page;
+                    ViewBag.PageSize = pageSize;
+                    ViewBag.TotalPages = totalPages;
+
+                    // Phân trang: Lấy 10 sản phẩm mỗi trang
+                    var pagedProducts = data.Products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                    data.Products = pagedProducts;
+
+                    // Phân trang cho gian hàng (SalePlace)
+                    var totalSalePlaces = data.salePlace.Count;
+                    var totalSalePlacePages = (int)Math.Ceiling((double)totalSalePlaces / pageSize);
+                    Console.WriteLine($"Total SalePlace Pages: {totalSalePlacePages}");  // In ra tổng số trang
+                    ViewBag.TotalSalePlacePages = totalSalePlacePages;
+
+                    // Phân trang: Lấy gian hàng mỗi trang
+                    var pagedSalePlaces = data.salePlace.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                    data.salePlace = pagedSalePlaces;
+
                 }
                 catch (Exception ex)
                 {
@@ -500,7 +575,11 @@ namespace DATN.MVC.Controllers
             return View("Index", data); // Trả dữ liệu về View
         }
 
-      
+
+
+
+
+
 
 
     }

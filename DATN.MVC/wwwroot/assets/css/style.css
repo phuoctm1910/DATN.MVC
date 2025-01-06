@@ -1080,11 +1080,14 @@ border-color: red green blue yellow */
 }
 
 .home-product-item__img {
-    padding-top: 100%;
+    position: relative; /* Đảm bảo container hoạt động đúng */
+    width: 100%; /* Chiều rộng chiếm toàn bộ container */
+    padding-top: 50%; /* Chiều cao bằng 50% chiều rộng (2:1) */
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
 }
+
 
 .home-product-item__info {
     padding: 10px;

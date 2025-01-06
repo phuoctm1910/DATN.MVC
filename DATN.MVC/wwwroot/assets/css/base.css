@@ -166,3 +166,14 @@ html {
     cursor: default;
     box-shadow: none;
 }
+
+.btnSuccess {
+    color: #fff;
+    background-color: #fb5533;
+    border-color: #fb5533;
+}
+
+    .btnSuccess:hover {
+        color: #fb5533;
+        background-color: white;
+    }

@@ -76,6 +76,23 @@ body {
     border: 4px solid #b8b8b8;
 }
 
+.shop-info-left-id {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    margin-bottom: 15px;
+    padding-top: 10px;
+    color: #fff;
+}
+
+.shop-logo-id {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: 4px solid #b8b8b8;
+}
+
 .shop-details {
     display: flex;
     flex-direction: column;
