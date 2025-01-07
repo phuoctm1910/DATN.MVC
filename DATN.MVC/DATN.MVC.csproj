@@ -12,6 +12,7 @@
     <Folder Include="Request\Post\" />
     <Folder Include="Respone\Post\" />
     <Folder Include="wwwroot\images\New folder\" />
+    <Folder Include="wwwroot\ImgSalcePlace\" />
   </ItemGroup>
 
   <ItemGroup>

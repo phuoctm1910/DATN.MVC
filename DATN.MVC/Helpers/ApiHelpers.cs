@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DATN.MVC.Request.MarketPlaces;
+using Newtonsoft.Json;
 using System.Net.Http.Headers;
 
 namespace DATN.MVC.Helpers
@@ -172,6 +173,16 @@ namespace DATN.MVC.Helpers
         private static HttpRequestMessage GetHttpRequestMessage(HttpMethod method, string url)
         {
             return new HttpRequestMessage(method, url);
+        }
+
+        internal static Task<T1> PostMethodWithFileAsync<T1, T2>(string v, Request.MarketPlaces.CreateSalceplaces request, IEnumerable<IFormFile> imageFiles, T2 newPost)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static T1 PostMethodWithFileAsync<T1, T2>(string v, CreateSalceplaces request, IEnumerable<IFormFile> imageFiles, string fileKeyName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

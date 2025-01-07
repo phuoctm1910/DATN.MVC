@@ -1,0 +1,170 @@
+﻿@model DATN.MVC.Request.MarketPlaces.CreateSalceplaces
+
+@{
+    ViewData["Title"] = "Tạo Gian Hàng";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            color: #495057;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 600px;
+            margin: 50px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+         
+
+        }
+
+        .form-control {
+            border-radius: 5px;
+            box-shadow: none;
+            border: 1px solid black !important;
+            padding:10px !important;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center; /* Đảm bảo text căn giữa theo chiều ngang */
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            display: flex; /* Chuyển sang kiểu Flexbox */
+            justify-content: center; /* Căn giữa theo chiều ngang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #0056b3;
+            }
+
+
+        .alert {
+            border-radius: 5px;
+            font-size: 16px;
+            padding: 10px;
+            text-align:center;
+        }
+
+        .alert-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .alert-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+        }
+
+            .form-group input[type="file"]:focus {
+                border-color: #007bff;
+                box-shadow: none;
+            }
+
+        /* Khung ảnh */
+        .image-container {
+            position: relative;
+            width: 100%;
+            max-width: 200px; /* Kích thước khung ảnh */
+            height: 150px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #f8f9fa;
+        }
+
+            .image-container img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* Đảm bảo ảnh vừa khung mà không bị méo */
+            }
+
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>@ViewData["Title"]</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="Name">Tên Gian Hàng</label>
+                <input type="text" class="form-control input-name" id="Name" name="Name" placeholder="Điền tên gian hàng" value="@Model?.Name" required />
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+
+            <div class="form-group">
+                <label for="ImageFile">Hình Ảnh</label>
+                <input type="file" class="form-control input-image" id="ImageFile" name="ImageFile" accept="image/*" onchange="previewImage(event)" required />
+                @Html.ValidationMessageFor(model => model.ImageFile)
+            </div>
+
+            <!-- Khung ảnh nhỏ -->
+            <div class="form-group">
+                <div class="image-container" id="imagePreview">
+                    <img id="imagePreviewImg" src="" alt="Ảnh sẽ hiển thị ở đây" />
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Tạo Gian Hàng</button>
+        </form>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger mt-3">@TempData["ErrorMessage"]</div>
+        }
+    </div>
+
+    <script>
+        // Hàm xem trước ảnh
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function() {
+                const imagePreview = document.getElementById('imagePreviewImg');
+                imagePreview.src = reader.result;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+</html>

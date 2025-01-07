@@ -1,17 +1,19 @@
 ﻿using DATN.MVC.Models;
+using DATN.MVC.Request.MarketPlaces;
 using DATN.MVC.Request.Product;
 using DATN.MVC.Respone.MarketPlace;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Text;
+
 
 namespace DATN.MVC.Controllers
 {
     public class MarketPlaceController : BaseController
     {
+
         private readonly HttpClient _httpClient;
-      
+
         public MarketPlaceController()
         {
             _httpClient = new HttpClient();
@@ -103,9 +105,6 @@ namespace DATN.MVC.Controllers
             return View(data);
         }
 
-
-
-
         [HttpGet]
         public IActionResult DisplayProduct()
         {
@@ -149,8 +148,6 @@ namespace DATN.MVC.Controllers
             // Nếu lỗi, trả về model hiện tại để tránh mất dữ liệu đã nhập
             return View(model);
         }
-
-
 
         public async Task<IActionResult> SalePlace(int saleplace)
         {
@@ -407,9 +404,6 @@ namespace DATN.MVC.Controllers
             // Trả về dữ liệu cho View
             return View("Index", data);
         }
-
-
-
         [HttpGet]
         public async Task<IActionResult> FilterByCategory(int? categoryId)
         {
@@ -536,8 +530,8 @@ namespace DATN.MVC.Controllers
                         var saleplacesJson = await saleplaceResponse.Content.ReadAsStringAsync();
                         data.salePlace = JsonConvert.DeserializeObject<List<SalePlaceRes>>(saleplacesJson);
 
-                 
-                       
+
+
                     }
                     else
                     {
@@ -576,9 +570,64 @@ namespace DATN.MVC.Controllers
         }
 
 
+        // create saleplace
 
+        [HttpGet]
+        public IActionResult CreateSalePlace()
+        {
+            var model = new CreateSalceplaces(); // Khởi tạo model mặc định
+            return View(model); // Trả model về view
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateSalePlace(CreateSalceplaces model)
+        {
+            if (ModelState.IsValid)
+            {
+                var formData = new MultipartFormDataContent();
+                var userId = HttpContext.Items["userId"]?.ToString();
+                // Thêm các trường văn bản vào formData
+                formData.Add(new StringContent(model.Name), "Name");
+                formData.Add(new StringContent(userId), "UserId");
 
+                // Kiểm tra xem có tệp hình ảnh nào được chọn hay không
+                if (model.ImageFile != null && model.ImageFile.Any())
+                {
+                    foreach (var file in model.ImageFile)
+                    {
+                        var fileContent = new StreamContent(file.OpenReadStream());
+                        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+                        formData.Add(fileContent, "ImageFile", file.FileName);
+                    }
+                }
+
+                try
+                {
+                    // Gửi request đến API
+                    var response = await _httpClient.PostAsync("https://localhost:7296/api/ManageSalePlace/CreateSalePlace", formData);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Xử lý khi tạo gian hàng thành công
+                        TempData["SuccessMessage"] = "Gian hàng đã được tạo thành công!";
+                        return View(model); // Trả lại view CreateSalePlace với thông báo thành công
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Không thể tạo gian hàng. Vui lòng thử lại.";
+                        return View(model); // Trả lại view CreateSalePlace với thông báo lỗi
+                    }
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = $"Đã xảy ra lỗi: {ex.Message}";
+                    return View(model); // Trả lại view CreateSalePlace nếu có lỗi
+                }
+            }
+
+            // Nếu model không hợp lệ, trả lại lại trang với model và lỗi
+            return View(model);
+        }
 
 
 
