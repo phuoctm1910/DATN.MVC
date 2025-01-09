@@ -4,6 +4,7 @@ using DATN.MVC.Request.Product;
 using DATN.MVC.Respone.MarketPlace;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http;
 using System.Text;
 
 
@@ -17,10 +18,9 @@ namespace DATN.MVC.Controllers
         public MarketPlaceController()
         {
             _httpClient = new HttpClient();
+           
+            
         }
-
-
-        // Action để lấy tất cả sản phẩm
         public async Task<ActionResult> Index(int page = 1, int pageSize = 10)
         {
             // Khai báo đối tượng chứa danh sách sản phẩm, danh mục và địa điểm bán hàng
@@ -106,47 +106,25 @@ namespace DATN.MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult DisplayProduct()
+        public async Task<IActionResult> DisplayProduct()
         {
+            // Lấy danh sách Category từ API hoặc từ cơ sở dữ liệu
+            var categories = await GetCategoriesFromApi();
+            ViewBag.Categories = categories;
 
-            var viewSettings = new ViewSettings
-            {
-                ShowSidebar = false, // Tắt sidebar
-                ShowHeader = true,   // Bật header
-                ShowFriendList = false // Tắt danh sách bạn bè
-            };
-            ViewBag.ViewSettings = viewSettings;
-            return View(); ;
+            return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> DisplayProduct(DisplayProduct model)
+        // Hàm giả định lấy dữ liệu từ API
+        private async Task<List<CaterorisRes>> GetCategoriesFromApi()
         {
-            if (ModelState.IsValid)
+            var response = await _httpClient.GetAsync("https://localhost:7296/api/ParentCategories/getAll");
+            if (response.IsSuccessStatusCode)
             {
-                var apiUrl = "https://localhost:7296/api/Product/add";
-                var jsonContent = JsonConvert.SerializeObject(model);
-                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-                var response = await _httpClient.PostAsync(apiUrl, content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    TempData["SuccessMessage"] = "Product created successfully!";
-                    return RedirectToAction("DisplayProduct");
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "Failed to create product. Please try again.";
-                }
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<CaterorisRes>>(json);
             }
-            else
-            {
-                TempData["ErrorMessage"] = "Invalid data. Please check the form.";
-            }
-
-            // Nếu lỗi, trả về model hiện tại để tránh mất dữ liệu đã nhập
-            return View(model);
+            return new List<CaterorisRes>();
         }
 
         public async Task<IActionResult> SalePlace(int saleplace)
@@ -571,6 +549,75 @@ namespace DATN.MVC.Controllers
 
 
         // create saleplace
+        [HttpPost]
+        public async Task<IActionResult> DisplayProduct(DisplayProduct product)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                               .Select(e => e.ErrorMessage)
+                                               .ToList();
+                TempData["ErrorList"] = errors;
+                TempData["ErrorMessage"] = "Dữ liệu không hợp lệ. Vui lòng kiểm tra chi tiết lỗi.";
+                ViewBag.Categories = await GetCategoriesFromApi();
+                return View(product);
+            }
+
+            try
+            {
+                // Xử lý file ảnh
+                if (Request.Form.Files.Count > 0)
+                {
+                    var file = Request.Form.Files[0];
+                    if (file.Length > 0)
+                    {
+                        var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+                        var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                        Directory.CreateDirectory(uploadPath);
+
+                        var filePath = Path.Combine(uploadPath, fileName);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+
+                        product.Image = $"{fileName}";
+                        //product.Image = $"/uploads/{fileName}";
+                    }
+                }
+                else
+                {
+                    product.Image = null; // Nếu không tải lên ảnh, để null
+                }
+
+                // Gửi dữ liệu đến API
+                var client = new HttpClient();
+                var apiUrl = "https://localhost:7296/api/Product/add";
+                var jsonContent = new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, "application/json");
+
+                var response = await client.PostAsync(apiUrl, jsonContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessMessage"] = "Sản phẩm đã được thêm thành công!";
+                    return RedirectToAction("DisplayProduct");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    TempData["ErrorMessage"] = $"Lỗi từ API: {error}";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Đã xảy ra lỗi: {ex.Message}";
+            }
+
+            ViewBag.Categories = await GetCategoriesFromApi();
+            return View(product);
+        }
+
+
 
         [HttpGet]
         public IActionResult CreateSalePlace()
@@ -629,7 +676,7 @@ namespace DATN.MVC.Controllers
             return View(model);
         }
 
-
+        
 
     }
 }

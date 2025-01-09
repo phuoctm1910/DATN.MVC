@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model DATN.MVC.Request.Product.DisplayProduct
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -10,63 +11,42 @@
     <div id="app">
         <div class="container">
             <h2>Đăng Sản Phẩm Mới</h2>
-            <form id="productForm">
-                <div class="row" @@submit="submitProduct">
+            <form id="productForm" method="post" enctype="multipart/form-data">
+                <div class="row">
                     <!-- Phần chi tiết sản phẩm -->
                     <div class="col-md-6 product-details">
                         <div class="form-group">
                             <label for="productName">Tên sản phẩm</label>
-                            <input type="text" class="form-control" id="productName" v-model="product.name" placeholder="Nhập tên sản phẩm" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="productCode">Mã sản phẩm</label>
-                            <input type="text" class="form-control" id="productCode" v-model="product.code" placeholder="Nhập mã sản phẩm">
+                            <input type="text" name="Name" class="form-control" id="productName" placeholder="Nhập tên sản phẩm">
                         </div>
 
                         <div class="form-group">
                             <label for="productPrice">Giá bán</label>
-                            <input type="number" class="form-control" id="productPrice" v-model="product.price" placeholder="Nhập giá bán" required>
+                            <input type="number" name="Price" class="form-control" id="productPrice" placeholder="Nhập giá bán">
                         </div>
 
                         <div class="form-group">
-                            <label for="productStock">Số lượng</label>
-                            <input type="number" class="form-control" id="productStock" v-model="product.stock" placeholder="Nhập số lượng còn lại" required>
+                            <label for="productQuantity">Số lượng</label>
+                            <input type="number" name="Quantity" class="form-control" id="productQuantity" placeholder="Nhập số lượng còn lại">
                         </div>
 
                         <div class="form-group">
-                            <label for="productCategory">Danh mục sản phẩm</label>
-                            <select class="form-control" id="productCategory" v-model="product.category" required>
-                                <option value="Điện thoại">Điện thoại</option>
-                                <option value="Thời trang">Thời trang</option>
-                                <option value="Đồ gia dụng">Đồ gia dụng</option>
-                                <option value="Mỹ phẩm">Mỹ phẩm</option>
+                            <label for="productCategory">Loại sản phẩm</label>
+                            <select class="form-control" name="CategoryId" id="productCategory">
+                                @foreach (var category in ViewBag.Categories)
+                                {
+                                    <option value="@category.Id">@category.Name</option>
+                                }
                             </select>
                         </div>
                     </div>
 
                     <!-- Phần ảnh sản phẩm -->
                     <div class="col-md-6 product-images">
-                        <!-- Khung ảnh chính -->
                         <div class="form-group">
-                            <label for="productImages">Ảnh chính</label>
-                            <div class="product-image-container" id="mainImageContainer" @@click="chooseMainImage">
-                                <img :src="product.mainImagePreview" v-if="product.mainImagePreview" class="product-image" alt="Ảnh chính">
-                                <span v-if="!product.mainImagePreview">Ảnh chính</span>
-                            </div>
-                            <input type="file" id="updateMainImage" class="d-none" @@change="updateMainImage" />
-                        </div>
-
-                        <!-- Khung ảnh phụ -->
-                        <div class="form-group">
-                            <label for="productImages">Ảnh phụ</label>
-                            <div class="additional-images-container mt-3">
-                                <div v-for="(image, index) in product.additionalImagesPreview" :key="index" class="additional-image-container" @@click="chooseAdditionalImage(index)">
-                                    <img :src="image" alt="Ảnh phụ" v-if="image" class="product-image">
-                                    <span v-if="!image">Ảnh phụ {{ index + 1 }}</span>
-                                </div>
-                            </div>
-                            <input type="file" id="additionalImageInput" class="d-none" />
+                            <label for="mainImage">Ảnh sản phẩm</label>
+                            <input type="file" id="mainImage" name="mainImage" class="form-control" accept="image/*">
+                            <img id="imagePreview" alt="Xem trước ảnh" style="display:none; width:100px; height:100px; margin-top:10px;">
                         </div>
                     </div>
 
@@ -74,7 +54,7 @@
                     <div class="col-md-12 product-description">
                         <div class="form-group">
                             <label for="productDescription">Mô tả sản phẩm</label>
-                            <textarea class="form-control" id="productDescription" v-model="product.description" rows="6" placeholder="Mô tả chi tiết về sản phẩm"></textarea>
+                            <textarea class="form-control" name="Description" id="productDescription" rows="6" placeholder="Mô tả chi tiết về sản phẩm"></textarea>
                         </div>
                     </div>
                 </div>
@@ -84,97 +64,47 @@
                     <button type="submit" class="btn btn-primary">Đăng Sản Phẩm</button>
                 </div>
             </form>
+
+            <!-- Hiển thị thông báo -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+            @if (TempData["ErrorList"] != null)
+            {
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach (var error in (List<string>)TempData["ErrorList"])
+                        {
+                            <li>@error</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+
         </div>
     </div>
 
-    <!-- Thư viện Vue -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script>
-        new Vue({
-            el: '#app',
-            data: {
-                product: {
-                    mainImagePreview: null,
-                    mainImageFile: null,
-                    additionalImagesPreview: Array(5).fill(null), // Khởi tạo mảng 5 phần tử null cho ảnh phụ
-                    name: '',
-                    code: '',
-                    price: '',
-                    stock: '',
-                    description: '',
-                    category: 'Điện thoại'
-                }
-            },
-            methods: {
-                chooseMainImage() {
-                    document.getElementById('updateMainImage').click();
-                },
-                updateMainImage(event) {
-                    const file = event.target.files[0];
-                    if (file) {
-                        this.product.mainImagePreview = URL.createObjectURL(file);
-                        this.product.mainImageFile = file; // Lưu file thực tế để gửi
-                    }
-                },
-                chooseAdditionalImage(index) {
-                    document.getElementById('additionalImageInput').click();
-                    document.getElementById('additionalImageInput').onchange = (event) => {
-                        this.updateAdditionalImage(event, index);
-                    };
-                },
-                updateAdditionalImage(event, index) {
-                    const file = event.target.files[0];
-                    if (file) {
-                        this.product.additionalImagesPreview.splice(index, 1, URL.createObjectURL(file));
-                    }
-                },
-                submitProduct(event) {
-                    event.preventDefault();
-
-                    const formData = new FormData();
-                    formData.append('Name', this.product.name);
-                    formData.append('Code', this.product.code);
-                    formData.append('Price', this.product.price);
-                    formData.append('Stock', this.product.stock);
-                    formData.append('Description', this.product.description);
-                    formData.append('Category', this.product.category);
-
-                    // Nếu có ảnh chính
-                    if (this.product.mainImageFile) {
-                        formData.append('MainImage', this.product.mainImageFile);
-                    }
-
-                    fetch('/Product/DisplayProduct', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Sản phẩm đã được đăng thành công!');
-                            this.resetForm();
-                        } else {
-                            alert('Có lỗi xảy ra: ' + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Đã xảy ra lỗi khi gửi dữ liệu!');
-                    });
-                },
-                resetForm() {
-                    this.product = {
-                        mainImagePreview: null,
-                        mainImageFile: null,
-                        additionalImagesPreview: Array(5).fill(null),
-                        name: '',
-                        code: '',
-                        price: '',
-                        stock: '',
-                        description: '',
-                        category: 'Điện thoại'
-                    };
-                }
+        document.getElementById('mainImage').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
             }
         });
     </script>
