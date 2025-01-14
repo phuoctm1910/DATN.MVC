@@ -37,10 +37,10 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminSalePlaces
                     var jsonData = await response.Content.ReadAsStringAsync();
 
                     // Deserialize vào ApiResponse thay vì List<ParentCategoriesReadAll_Res> trực tiếp
-                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse<ViewSalePlace_Res>>(jsonData);
-                    if (apiResponse != null && apiResponse.Data != null)
+                    var apiResponse = JsonConvert.DeserializeObject<List<ViewSalePlace_Res>>(jsonData);
+                    if (apiResponse != null)
                     {
-                        post = apiResponse.Data;
+                        post = apiResponse;
                     }
                     else
                     {

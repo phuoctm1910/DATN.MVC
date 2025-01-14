@@ -33,10 +33,10 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminCategory
                     var jsonData = await response.Content.ReadAsStringAsync();
 
                     // Deserialize vào ApiResponse thay vì List<ParentCategoriesReadAll_Res> trực tiếp
-                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse<ParentCategoriesReadAll_Res>>(jsonData);
-                    if (apiResponse != null && apiResponse.Data != null)
+                    var apiResponse = JsonConvert.DeserializeObject<List<ParentCategoriesReadAll_Res>>(jsonData);
+                    if (apiResponse != null)
                     {
-                        parentCategories = apiResponse.Data;
+                        parentCategories = apiResponse;
                     }
                     else
                     {

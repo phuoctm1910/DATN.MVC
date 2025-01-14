@@ -12,11 +12,13 @@
         isImageSliderVisible: false,
         selectedImageIndex: 0,
         allImages: [],
+        statusConnection: null,
         swiperInstance: null // Swiper instance
     },
     created() {
         this.loadFriendOfUser();
         this.initializeSignalR();
+        this.initializeSignalRStatus();
     },
     methods: {
         formatTime(timestamp) {
@@ -133,6 +135,45 @@
                 this.errorMessage = "";
             }); 
 
+        },
+        initializeSignalRStatus() {
+            this.statusConnection = new signalR.HubConnectionBuilder()
+                .withUrl("/statushub?userId=" + this.userId)
+                .withAutomaticReconnect()
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
+
+            this.statusConnection.start()
+                .then(() => {
+                    console.log("StatusHub connected");
+                })
+                .catch(err => console.error("StatusHub connection error:", err));
+
+            // Khi có user online
+            this.statusConnection.on("UserOnline", (onlineUserId) => {
+                // Tìm trong friends, set isFriendOnline = true
+                let friend = this.friends.find(f => f.friendUserId == onlineUserId);
+                if (friend) {
+                    friend.isFriendOnline = true;
+                }
+            });
+
+            this.statusConnection.on("FriendsAlreadyOnline", (onlineUserId) => {
+                // Tìm trong friends, set isFriendOnline = true
+                let friend = this.friends.find(f => f.friendUserId == onlineUserId);
+                if (friend) {
+                    friend.isFriendOnline = true;
+                }
+            });
+
+            // Khi có user offline
+            this.statusConnection.on("UserOffline", (offlineUserId) => {
+                // Tìm trong friends, set isFriendOnline = false
+                let friend = this.friends.find(f => f.friendUserId == offlineUserId);
+                if (friend) {
+                    friend.isFriendOnline = false;
+                }
+            });
         },
         playNotificationSound() {
             const audio = new Audio('/sound/notification.mp3');  // Make sure the path is correct

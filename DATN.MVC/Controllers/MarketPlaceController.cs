@@ -623,6 +623,7 @@ namespace DATN.MVC.Controllers
         public IActionResult CreateSalePlace()
         {
             var model = new CreateSalceplaces(); // Khởi tạo model mặc định
+
             return View(model); // Trả model về view
         }
 

@@ -2,17 +2,19 @@
     ViewData["Title"] = "Thống Kê Người Dùng";
 }
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Thêm Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
-       
-            <div class="card-header">
-            <h2>  <i class="fas fa-chart-bar me-1"></i>Thống Kê Người Dùng Mới</h2>
-             <button id="exportChart" class="btn btn-success">Export Biểu Đồ</button>
-            </div>
-            <div class="card-body"><canvas id="registrationChart" width="100%" height="50"></canvas></div>
-            <div class="card-footer small text-muted">Cập nhật gần nhất lúc: @DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy")</div>
-
+<div class="card-header">
+    <h2><i class="fas fa-chart-bar me-1"></i> Thống Kê Người Dùng Mới</h2>
+    <button id="exportChart" class="btn btn-success">Export Biểu Đồ</button>
+</div>
+<div class="card-body">
+    <canvas id="registrationChart" width="100%" height="50"></canvas>
+</div>
+<div class="card-footer small text-muted">
+    Cập nhật gần nhất lúc: @DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy")
+</div>
 
 <script>
     $(document).ready(function () {
@@ -24,65 +26,80 @@
             success: function (data) {
                 console.log(data); // Kiểm tra dữ liệu từ API
 
-                // Chuẩn bị dữ liệu cho biểu đồ
-                const labels = data.map(item => item.date); // Lấy các ngày từ API
-                const registrations = data.map(item => item.totalRegistrations); // Lấy số lượng đăng ký từ API
+                // Giả sử mỗi phần tử "item" trong data có dạng:
+                // {
+                //    "date": "2023-01-10", // Hoặc "yyyy-MM-dd"
+                //    "totalRegistrations": 15
+                // }
+
+                // Định dạng lại ngày sang "MM/yyyy".
+                // Nếu muốn "dd/MM/yyyy" chỉ cần chỉnh lại trong phần return `${day}/${month}/${year}`
+                const labels = data.map(item => {
+                    const dateObj = new Date(item.date);
+                    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+                    const year = dateObj.getFullYear();
+                    return `${month}/${year}`; // Tháng/Năm
+                });
+
+                // Lấy số lượng đăng ký từ API
+                const registrations = data.map(item => item.totalRegistrations);
 
                 // Vẽ biểu đồ dạng cột
                 const ctx = document.getElementById('registrationChart').getContext('2d');
                 new Chart(ctx, {
-                    type: 'bar', // Loại biểu đồ cột
+                    type: 'bar',
                     data: {
-                        labels: labels, // Các nhãn trục X
+                        labels: labels,
                         datasets: [{
-                            label: 'Số lượng người mới', // Nhãn dữ liệu
-                            data: registrations, // Số lượng đăng ký
-                            backgroundColor: 'rgba(75, 192, 192, 0.6)', // Màu nền cột
-                            borderColor: 'rgba(75, 192, 192, 1)', // Màu viền cột
-                            borderWidth: 1 // Độ dày viền
+                            label: 'Số lượng người mới',
+                            data: registrations,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
                         }]
                     },
                     options: {
-                        responsive: true, // Responsive trên mọi thiết bị
+                        responsive: true,
                         plugins: {
                             legend: {
-                                display: true, // Hiển thị chú thích
+                                display: true,
                                 position: 'top'
                             },
                             tooltip: {
-                                enabled: true // Hiển thị tooltip khi hover
+                                enabled: true
                             },
                             title: {
                                 display: true,
-                                text: 'Thống kê số lượng người đăng ký' // Tiêu đề biểu đồ
+                                text: 'Thống kê số lượng người đăng ký'
                             }
                         },
                         scales: {
                             x: {
                                 title: {
                                     display: true,
-                                    text: 'Ngày' // Tiêu đề trục X
+                                    // Đổi tiêu đề trục X từ "Năm - Tháng" sang "Tháng/Năm"
+                                    text: 'Tháng/Năm'
                                 },
                                 grid: {
-                                    display: true, // Hiển thị lưới trên trục X
-                                    color: 'rgba(200, 200, 200, 0.3)' // Màu lưới trục X
+                                    display: true,
+                                    color: 'rgba(200, 200, 200, 0.3)'
                                 }
                             },
                             y: {
                                 title: {
                                     display: true,
-                                    text: 'Số lượng đăng ký' // Tiêu đề trục Y
+                                    text: 'Số lượng đăng ký'
                                 },
-                                beginAtZero: true, // Bắt đầu từ 0
+                                beginAtZero: true,
                                 ticks: {
-                                    stepSize: 1, // Khoảng cách giữa các giá trị trên trục Y là 1
+                                    stepSize: 1,
                                     callback: function (value) {
-                                        return Number.isInteger(value) ? value : null; // Chỉ hiển thị số nguyên
+                                        return Number.isInteger(value) ? value : null;
                                     }
                                 },
                                 grid: {
-                                    display: true, // Hiển thị lưới trên trục Y
-                                    color: 'rgba(200, 200, 200, 0.3)' // Màu lưới trục Y
+                                    display: true,
+                                    color: 'rgba(200, 200, 200, 0.3)'
                                 }
                             }
                         }
@@ -90,24 +107,21 @@
                 });
             },
             error: function (xhr, status, error) {
-                console.error("Lỗi khi lấy dữ liệu từ API:", error); // Thông báo lỗi
+                console.error("Lỗi khi lấy dữ liệu từ API:", error);
             }
         });
 
+        // Chức năng export biểu đồ dưới dạng PDF
         $('#exportChart').on('click', function () {
             const canvas = document.getElementById('registrationChart');
             const canvasImage = canvas.toDataURL('image/png'); // Chuyển Canvas thành hình ảnh
 
-            // Tạo tài liệu PDF
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF();
 
-            // Thêm hình ảnh vào PDF
-            pdf.addImage(canvasImage, 'PNG', 10, 10, 190, 100); // Vị trí và kích thước
-            pdf.save('users_chart.pdf'); // Lưu file PDF
+            // Thêm hình ảnh vào PDF (tọa độ 10,10; kích thước 190 x 100)
+            pdf.addImage(canvasImage, 'PNG', 10, 10, 190, 100);
+            pdf.save('users_chart.pdf');
         });
     });
-
 </script>
-
-

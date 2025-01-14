@@ -85,6 +85,7 @@ namespace DATN.MVC
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<GeneralHub>("/generalHub");
+                endpoints.MapHub<StatusHub>("/statushub");
             });
 
             app.Run();
