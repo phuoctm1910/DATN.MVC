@@ -1,6 +1,8 @@
 ﻿using DATN.MVC.Areas.Admin.Models.AdminCategory.Request;
 using DATN.MVC.Areas.Admin.Models.AdminCategory.Response;
 using DATN.MVC.Controllers;
+using DATN.MVC.Helpers;
+using DATN.MVC.Request.Post;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
@@ -68,44 +70,37 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminCategory
 
         // POST: AdminCategory/CreateParentCategory
         [HttpPost]
-        public async Task<IActionResult> CreateParentCategory([FromBody] ParentCategories_Req model)
+        public async Task<IActionResult> CreateParentCategory([FromForm] ParentCategories_Req model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                // Tạo client HTTP để gửi yêu cầu đến API
-                var client = _httpClientFactory.CreateClient();
-                var jsonContent = JsonConvert.SerializeObject(model);
-                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-                try
+                // Kiểm tra nếu có file ảnh để upload
+                if (model.ImageFile != null)
                 {
-                    // Gửi yêu cầu POST tới API để tạo danh mục cha
-                    var response = await client.PostAsync("https://localhost:7296/api/ParentCategories/create-parent-category", content);
+                    // Gọi API backend để lưu trữ thông tin bài đăng (bao gồm cả file ảnh)
+                    var result = ApiHelpers.PostMethodWithFileAsync<bool, ParentCategories_Req>("https://localhost:7296/api/ParentCategories/create-parent-category", model, model.ImageFile, fileKeyName: "ImageFile");
 
-                    if (response.IsSuccessStatusCode)
+                    if (result)
                     {
-                        // Trả về kết quả thành công dưới dạng JSON
-                        return Json(new { success = true, message = "Thêm danh mục thành công!" });
+                        return Json(new { success = true, message = "Post created successfully." });
                     }
                     else
                     {
-                        // Nếu có lỗi khi gọi API, trả về thông báo lỗi
-                        return Json(new { success = false, message = "Có lỗi xảy ra khi tạo danh mục. Vui lòng thử lại." });
+                        return Json(new { success = false, message = "Failed to create post." });
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    // Trường hợp xảy ra lỗi ngoài mong đợi (ví dụ: không thể kết nối API)
-                    return Json(new { success = false, message = $"Lỗi hệ thống: {ex.Message}" });
+                    return Json(new { success = false, message = "No image file provided." });
                 }
             }
-
-            // Nếu Model không hợp lệ, trả về thông báo lỗi
-            return Json(new { success = false, message = "Dữ liệu không hợp lệ." });
-        }
-
-
-
+            catch (Exception ex)
+            {
+                // Xử lý lỗi và trả về phản hồi lỗi
+                return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
+            }
+        
+    }
 
 
         [HttpGet]
@@ -184,7 +179,7 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminCategory
             try
             {
                 // Gửi yêu cầu DELETE đến API
-                var response =  client.DeleteAsync($"https://localhost:7296/api/ParentCategories/delete-parent-category/{id}").Result;
+                var response = client.DeleteAsync($"https://localhost:7296/api/ParentCategories/delete-parent-category/{id}").Result;
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -194,7 +189,7 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminCategory
                 else
                 {
                     // Ghi lại thông tin lỗi vào console hoặc log
-                    var errorDetails =  response.Content.ReadAsStringAsync();
+                    var errorDetails = response.Content.ReadAsStringAsync();
                     Console.WriteLine($"Error Status: {response.StatusCode}");
                     Console.WriteLine($"Error Details: {errorDetails}");
 
@@ -204,7 +199,7 @@ namespace DATN.MVC.Areas.Admin.Controllers.AdminCategory
             catch (Exception ex)
             {
                 Console.WriteLine("Exception khi gửi yêu cầu DELETE: " + ex.Message);
-                    return Json(new { success = false, message = "Không thể kết nối đến API. Vui lòng kiểm tra lại kết nối." });
+                return Json(new { success = false, message = "Không thể kết nối đến API. Vui lòng kiểm tra lại kết nối." });
             }
 
         }

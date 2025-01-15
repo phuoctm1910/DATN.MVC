@@ -357,7 +357,7 @@ namespace DATN.MVC.Controllers
                         var saleplacesJson = await saleplaceResponse.Content.ReadAsStringAsync();
                         data.salePlace = JsonConvert.DeserializeObject<List<SalePlaceRes>>(saleplacesJson);
 
-                      
+
                     }
                     else
                     {
@@ -433,7 +433,7 @@ namespace DATN.MVC.Controllers
                         var saleplacesJson = await saleplaceResponse.Content.ReadAsStringAsync();
                         data.salePlace = JsonConvert.DeserializeObject<List<SalePlaceRes>>(saleplacesJson);
 
-                    
+
                     }
                     else
                     {
@@ -620,62 +620,77 @@ namespace DATN.MVC.Controllers
 
 
         [HttpGet]
-        public IActionResult CreateSalePlace()
+        public async Task<IActionResult> CreateSalePlace()
         {
-            var model = new CreateSalceplaces(); // Khởi tạo model mặc định
+                        
+            var viewSettings = new ViewSettings
+            {
+                ShowSidebar = false,
+                ShowHeader = false,
+                ShowFriendList = false
+            };
+            ViewBag.ViewSettings = viewSettings;
 
-            return View(model); // Trả model về view
+            return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> CreateSalePlace(CreateSalceplaces model)
         {
-            if (ModelState.IsValid)
+            // Kiểm tra tính hợp lệ của ModelState
+            if (!ModelState.IsValid)
             {
-                var formData = new MultipartFormDataContent();
-                var userId = HttpContext.Items["userId"]?.ToString();
-                // Thêm các trường văn bản vào formData
-                formData.Add(new StringContent(model.Name), "Name");
-                formData.Add(new StringContent(userId), "UserId");
+                TempData["ErrorMessage"] = "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại!";
+                return View(model);
+            }
 
-                // Kiểm tra xem có tệp hình ảnh nào được chọn hay không
-                if (model.ImageFile != null && model.ImageFile.Any())
-                {
-                    foreach (var file in model.ImageFile)
-                    {
-                        var fileContent = new StreamContent(file.OpenReadStream());
-                        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
-                        formData.Add(fileContent, "ImageFile", file.FileName);
-                    }
-                }
+            var formData = new MultipartFormDataContent();
+            var userId = HttpContext.Items["userId"]?.ToString();
 
-                try
-                {
-                    // Gửi request đến API
-                    var response = await _httpClient.PostAsync("https://localhost:7296/api/ManageSalePlace/CreateSalePlace", formData);
+            if (string.IsNullOrEmpty(userId))
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy thông tin người dùng!";
+                return View(model);
+            }
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        // Xử lý khi tạo gian hàng thành công
-                        TempData["SuccessMessage"] = "Gian hàng đã được tạo thành công!";
-                        return View(model); // Trả lại view CreateSalePlace với thông báo thành công
-                    }
-                    else
-                    {
-                        TempData["ErrorMessage"] = "Không thể tạo gian hàng. Vui lòng thử lại.";
-                        return View(model); // Trả lại view CreateSalePlace với thông báo lỗi
-                    }
-                }
-                catch (Exception ex)
+            formData.Add(new StringContent(model.Name), "Name");
+            formData.Add(new StringContent(userId), "UserId");
+
+            if (model.ImageFile != null && model.ImageFile.Any())
+            {
+                foreach (var file in model.ImageFile)
                 {
-                    TempData["ErrorMessage"] = $"Đã xảy ra lỗi: {ex.Message}";
-                    return View(model); // Trả lại view CreateSalePlace nếu có lỗi
+                    var fileContent = new StreamContent(file.OpenReadStream());
+                    fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+                    formData.Add(fileContent, "ImageFile", file.FileName);
                 }
             }
 
-            // Nếu model không hợp lệ, trả lại lại trang với model và lỗi
-            return View(model);
+            try
+            {
+                // Gửi request đến API tạo gian hàng
+                var response = await _httpClient.PostAsync("https://localhost:7296/api/ManageSalePlace/CreateSalePlace", formData);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["SuccessMessage"] = "Gian hàng đã được tạo thành công!";
+                    return RedirectToAction("SalePlace", "MarketPlace"); // Chuyển hướng sau khi thành công
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Bạn chỉ được tạo duy nhất 1 gian hàng, không thể tạo thêm.";
+                    return View(model);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Bắt lỗi và hiển thị thông báo
+                TempData["ErrorMessage"] = $"Đã xảy ra lỗi khi tạo gian hàng: {ex.Message}";
+                return View(model);
+            }
         }
+       
+
+
 
         
 

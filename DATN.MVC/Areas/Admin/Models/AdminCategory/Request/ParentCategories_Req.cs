@@ -5,5 +5,6 @@
         public int Id { get; set; }
         public string? Name { get; set; }
         public bool IsActived { get; set; }
+        public IEnumerable<IFormFile>? ImageFile { get; set; }
     }
 }

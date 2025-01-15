@@ -1,12 +1,21 @@
 ﻿<h1>Danh Sách Danh Mục</h1>
+
 <div style="margin: 20px 0;">
+
     <!-- Nút kích hoạt Modal Thêm -->
+
     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createParentCategoryModal">
+
         <i class="fas fa-plus"></i>
+
         Thêm danh mục
+
     </button>
+
 </div>
+
 <style>
+
     .btn2.btn-primary {
         margin-top: 10px;
         background-color: #007bff;
@@ -16,27 +25,43 @@
         padding: 10px 20px;
         transition: background-color 0.3s, transform 0.2s;
     }
-
-      
-
+    .btn2.btn-primary:hover{
+        background-color: #0056b3;
+        border: 2px solid #0056b3;
+    }
 </style>
-<div class="card mb-4">
-    <div class="card-header">
-        <i class="fas fa-table me-1"></i>
-        Danh Mục
-    </div>
-    <div class="card-body">
-        <table id="datatablesParentCategory" class="table table-striped table-bordered" style="margin-top: 20px;">
-            <thead >
-                <tr >
-                    <th class="text-center align-middle">Tên danh mục</th>
-                    <th class="text-center align-middle">Trạng thái</th>
-                    <th class="text-center align-middle">Ngày tạo</th>  <!-- Thêm cột Ngày tạo -->
-                    <th class="text-center align-middle">Ngày cập nhật</th> <!-- Thêm cột Ngày cập nhật -->
-                    <th class="text-center align-middle">Hành động</th>
-                </tr>
-            </thead>
 
+<div class="card mb-4">
+
+    <div class="card-header">
+
+        <i class="fas fa-table me-1"></i>
+
+        Danh Mục
+
+    </div>
+
+    <div class="card-body">
+
+        <table id="datatablesParentCategory" class="table table-striped table-bordered" style="margin-top: 20px;">
+
+            <thead>
+
+                <tr>
+
+                    <th class="text-center align-middle">Tên danh mục</th>
+
+                    <th class="text-center align-middle">Trạng thái</th>
+
+                    <th class="text-center align-middle">Ngày tạo</th> <!-- Thêm cột Ngày tạo -->
+
+                    <th class="text-center align-middle">Ngày cập nhật</th> <!-- Thêm cột Ngày cập nhật -->
+
+                    <th class="text-center align-middle">Hành động</th>
+
+                </tr>
+
+            </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
@@ -75,19 +100,29 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="createCategoryForm">
+                <form id="createCategoryForm" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="Name">Tên Danh Mục:</label>
-                        <input type="text" id="Name" name="Name" class="form-control"  />
+                        <input type="text" id="Name" name="Name" class="form-control" />
                         <span id="NameError" class="error-message" style="color: red;"></span> <!-- Thông báo lỗi -->
                     </div>
+                   
                     <div class="form-group">
                         <label for="IsActived">Trạng Thái Danh Mục:</label>
-                        <select id="IsActived" name="IsActived" class="form-control" >
+                        <select id="IsActived" name="IsActived" class="form-control">
                             <option value="true">Sử dụng</option>
                             <option value="false">Không sử dụng</option>
                         </select>
                         <span id="IsActivedError" class="error-message"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="ImageFile">Chọn Hình Ảnh:</label>
+                        <input type="file" id="ImageFile" name="ImageFile" class="form-control-file" accept="image/*" multiple />
+                        <span id="ImageFileError" class="error-message" style="color: red;"></span> <!-- Thông báo lỗi -->
+                    </div>
+                    <div class="form-group">
+                        <label>Xem trước hình ảnh:</label>
+                        <div id="imagePreview" style="display: flex; flex-wrap: wrap;"></div>
                     </div>
                     <button type="submit" class="btn2 btn-primary">Tạo</button>
                 </form>
@@ -97,27 +132,46 @@
 </div>
 
 <!-- Modal Chỉnh sửa danh mục -->
-<div class="modal fade" id="editParentCategoryModal" tabindex="-1" aria-labelledby="editParentCategoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editParentCategoryModalLabel">Chỉnh sửa danh mục lớn</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="editCategoryForm">
-                    <div class="form-group">
-                        <label for="editName">Tên Danh Mục:</label>
-                        <input type="text" id="editName" name="Name" class="form-control"  />
-                        <span id="NameErrorEdit" class="error-message" style="color: red;"></span> <!-- Thông báo lỗi -->
-                    </div>
-                    <div class="form-group">
-                        <label for="editIsActived">Trạng Thái Danh Mục:</label>
-                        <select id="editIsActived" name="IsActived" class="form-control" >
-                            <option value="true">Sử dụng</option>
-                            <option value="false">Không sử dụng</option>
-                        </select>
 
+<div class="modal fade" id="editParentCategoryModal" tabindex="-1" aria-labelledby="editParentCategoryModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="editParentCategoryModalLabel">Chỉnh sửa danh mục lớn</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form id="editCategoryForm">
+
+                    <div class="form-group">
+
+                        <label for="editName">Tên Danh Mục:</label>
+
+                        <input type="text" id="editName" name="Name" class="form-control" />
+
+                        <span id="NameErrorEdit" class="error-message" style="color: red;"></span> <!-- Thông báo lỗi -->
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="editIsActived">Trạng Thái Danh Mục:</label>
+
+                        <select id="editIsActived" name="IsActived" class="form-control">
+
+                            <option value="true">Sử dụng</option>
+
+                            <option value="false">Không sử dụng</option>
+
+                        </select>
                     </div>
                     <input type="hidden" id="editId" name="Id" />
                     <button type="submit" class="btn2 btn-primary">Cập nhật</button>
@@ -128,7 +182,5 @@
 </div>
 
 @section Scripts {
-  
-
     <script src="~/admin/js/datatable-parent-category.js"></script>
 }

@@ -25,6 +25,7 @@
             padding: 30px;
             max-width: 600px;
             margin: 50px auto;
+            transition: all 0.3s ease-in-out;
         }
 
         h1 {
@@ -35,15 +36,12 @@
 
         .form-group label {
             font-weight: bold;
-         
-
         }
 
         .form-control {
             border-radius: 5px;
-            box-shadow: none;
             border: 1px solid black !important;
-            padding:10px !important;
+            padding: 10px !important;
         }
 
         .btn-primary {
@@ -52,12 +50,12 @@
             width: 100%;
             padding: 10px;
             font-size: 16px;
-            text-align: center; /* Đảm bảo text căn giữa theo chiều ngang */
+            text-align: center;
             border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             transition: background-color 0.3s;
-            display: flex; /* Chuyển sang kiểu Flexbox */
-            justify-content: center; /* Căn giữa theo chiều ngang */
-            align-items: center; /* Căn giữa theo chiều dọc */
         }
 
             .btn-primary:hover {
@@ -65,39 +63,31 @@
                 border-color: #0056b3;
             }
 
-
         .alert {
             border-radius: 5px;
             font-size: 16px;
-            padding: 10px;
-            text-align:center;
+            padding: 15px;
+            text-align: center;
+            margin-top: 20px;
         }
 
         .alert-success {
             background-color: #28a745;
             color: white;
+            font-size: 18px;
         }
 
         .alert-danger {
             background-color: #dc3545;
             color: white;
+            font-size: 18px;
         }
 
-        .form-group input[type="file"] {
-            padding: 10px;
-        }
-
-            .form-group input[type="file"]:focus {
-                border-color: #007bff;
-                box-shadow: none;
-            }
-
-        /* Khung ảnh */
         .image-container {
             position: relative;
             width: 100%;
-            max-width: 200px; /* Kích thước khung ảnh */
-            height: 150px;
+            max-width: 300px;
+            height: 200px;
             margin-top: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -108,63 +98,158 @@
             .image-container img {
                 width: 100%;
                 height: 100%;
-                object-fit: cover; /* Đảm bảo ảnh vừa khung mà không bị méo */
+                object-fit: fill;
+                display: block;
             }
 
+        /* Ẩn form khi có thông báo */
+        .form-container.hidden {
+            display: none;
+        }
+
+        .alert-container {
+            text-align: center;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 50px auto;
+        }
+
+        .ok-button {
+            font-size: 16px;
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .ok-button:hover {
+                background-color: #0056b3;
+            }
     </style>
+    <link rel="icon" href="/assets/img/logo/shopee-logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/category.css">
+    <link rel="stylesheet" href="/assets/css/grid.css">
+    <link rel="stylesheet" href="/assets/css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/fonts/fontawesome-free-5.12.1-web/css/all.min.css" />
 </head>
 <body>
-    <div class="form-container">
-        <h1>@ViewData["Title"]</h1>
 
-        <form method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="Name">Tên Gian Hàng</label>
-                <input type="text" class="form-control input-name" id="Name" name="Name" placeholder="Điền tên gian hàng" value="@Model?.Name" required />
-                @Html.ValidationMessageFor(model => model.Name)
-            </div>
+    <!--Navbar-->
+    @Html.Partial("_Header")
 
-            <div class="form-group">
-                <label for="ImageFile">Hình Ảnh</label>
-                <input type="file" class="form-control input-image" id="ImageFile" name="ImageFile" accept="image/*" onchange="previewImage(event)" required />
-                @Html.ValidationMessageFor(model => model.ImageFile)
-            </div>
-
-            <!-- Khung ảnh nhỏ -->
-            <div class="form-group">
-                <div class="image-container" id="imagePreview">
-                    <img id="imagePreviewImg" src="" alt="Ảnh sẽ hiển thị ở đây" />
+    <header class="header" style="color: ">
+        <div class="grid wide">
+            <!-- navbar -->
+            <nav class="header__navbar hide-on-mobile-tablet">
+            </nav>
+            <!-- search -->
+            <div class="header__contain">
+                <label for="mobile-search" class="header__mobile-search">
+                    <i class="header__mobile-search-icon fas fa-search"></i>
+                </label>
+                <div class="header__logo">
+                    <a href="#" class="header__logo-link"></a>
+                </div>
+                <input type="checkbox" id="mobile-search" class="header__search-check" hidden>
+                <form action="@Url.Action("SearchByName", "MarketPlace")" method="get" class="header__search">
+                    <div class="header__search-input-wrap">
+                        <input type="text" name="searchTerm" class="header__search-input" placeholder="Tìm kiếm sản phẩm..." value="@ViewBag.SearchTerm">
+                    </div>
+                    <button type="submit" class="btn header__search-btn">
+                        <i class="header__search-btn-icon fas fa-search"></i>
+                    </button>
+                </form>
+                <div class="header__cart header__cart--has-cart">
                 </div>
             </div>
+        </div>
+    </header>
 
-            <button type="submit" class="btn btn-primary">Tạo Gian Hàng</button>
-        </form>
+    <div class="form-container @(TempData["ErrorMessage"] != null ? "hidden" : "")">
+        <h1>@ViewData["Title"]</h1>
 
         @if (TempData["SuccessMessage"] != null)
         {
             <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
         }
+
+        @if (TempData["ErrorMessage"] == null)
+        {
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="Name">Tên Gian Hàng</label>
+                    <input type="text" class="form-control input-name" id="Name" name="Name" placeholder="Điền tên gian hàng" value="@Model?.Name" required />
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+
+                <div class="form-group">
+                    <label for="ImageFile">Hình Ảnh</label>
+                    <input type="file" class="form-control input-image" id="ImageFile" name="ImageFile" accept="image/*" onchange="previewImage(event)" required />
+                    @Html.ValidationMessageFor(model => model.ImageFile)
+                </div>
+
+                <div class="form-group">
+                    <div class="image-container" id="imagePreview">
+                        <img id="imagePreviewImg" src="" alt="Ảnh sẽ hiển thị ở đây" />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Tạo Gian Hàng</button>
+            </form>
+        }
+
+        <!-- Hiển thị thông báo lỗi và nút OK khi không thể tạo gian hàng -->
         @if (TempData["ErrorMessage"] != null)
         {
-            <div class="alert alert-danger mt-3">@TempData["ErrorMessage"]</div>
+            <div class="alert-container">
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+                <button class="ok-button" onclick="goToSalePlace()">OK</button>
+            </div>
         }
     </div>
+    <!-- Hiển thị thông báo lỗi và nút OK khi không thể tạo gian hàng -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert-container">
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            <button class="ok-button" onclick="goToSalePlace()">OK</button>
+        </div>
+    }
 
-    <script>
-        // Hàm xem trước ảnh
-        function previewImage(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
+    
+        <script>
+            // Hàm xem trước ảnh
+            function previewImage(event) {
+                const file = event.target.files[0];
+                const reader = new FileReader();
 
-            reader.onload = function() {
-                const imagePreview = document.getElementById('imagePreviewImg');
-                imagePreview.src = reader.result;
+                reader.onload = function () {
+                    const imagePreview = document.getElementById('imagePreviewImg');
+                    imagePreview.src = reader.result;
+                };
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                }
             }
 
-            if (file) {
-                reader.readAsDataURL(file);
-            }
+        // Chuyển hướng về trang gian hàng sau khi nhấn nút OK
+        function goToSalePlace() {
+            window.location.href = '@Url.Action("SalePlace", "MarketPlace")';
         }
+   
     </script>
+
+
 </body>
 </html>
