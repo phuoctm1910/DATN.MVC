@@ -375,6 +375,43 @@ namespace DATN.MVC.Controllers
                 }
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> Search(string keyword)
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    // Gửi yêu cầu đến API
+                    HttpResponseMessage response = await httpClient.GetAsync($"https://localhost:7296/api/User/search?keyword={Uri.EscapeDataString(keyword)}");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Đọc kết quả trả về từ API
+                        var jsonData = await response.Content.ReadAsStringAsync();
+                        var users = JsonConvert.DeserializeObject<List<UserResponse>>(jsonData);
+
+                        // Truyền từ khóa và danh sách người dùng vào View
+                        ViewBag.Keyword = keyword;
+                        return View("SearchResults", users);
+                    }
+                    else
+                    {
+                        // Xử lý nếu API trả về lỗi
+                        TempData["Error"] = "Không thể tìm kiếm người dùng. Vui lòng thử lại.";
+                        return RedirectToAction("About");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi ngoại lệ
+                TempData["Error"] = $"Đã xảy ra lỗi: {ex.Message}";
+                return RedirectToAction("About");
+            }
+        }
+
+
     }
 }
 

@@ -20936,7 +20936,7 @@ table.adition tbody tr td {
     color: #525165;
     display: inline-block;
     font-size: 21px;
-    margin-bottom: 20px;
+    margin-bottom: -5px;
     padding: 0px 10px;
     position: relative;
     width: 100%;

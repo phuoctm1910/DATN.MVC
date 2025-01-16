@@ -1,315 +1,160 @@
-﻿@model DATN.MVC.Respone.MarketPlace.ByIdSalePlaceAndGetALLProduct
+﻿    @model DATN.MVC.Respone.MarketPlace.ByIdSalePlaceAndGetALLProduct
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopee</title>
-    <link rel="icon" href="./assets/img/logo/shopee-logo.png" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-    <link rel="stylesheet" href="/assets/css/base.css">
-    <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/fonts/fontawesome-free-5.12.1-web/css/all.min.css" />
-</head>
-<body>
-    <div class="app__container">
-        <div class="infoShop">
-            <div class="shop-container">
-                <div class="shop-info-section">
-                        <div class="shop-info-left-container">
-                            <div class="bg-blur"></div>
-                            <div class="bg-dark"></div>
-                            <div class="shop-info-left">
-                                <img src="/assets/img/ImageSalePlace/@Model.saleplace.Image" alt="Shop Logo" class="shop-logo">
-                                <div class="shop-details">
-                                <h2 class="shop-name">@Model.saleplace.Name</h2>
-                                </div>
-                                <br>
-                            </div>
-                        </div>
-
-                        <div class="shop-info-right">
-                            <div class="shop-stats">
-                             <p><span>Sản Phẩm: @ViewBag.TotalProducts</span></p>
-                            </div>
-                        </div>
-                    </div>
-                <!-- Navigation Tabs -->
-                <div class="shop-navigation">
-                    <a href="#" class="navigation-link active">Dạo</a>
-                    <a href="@Url.Action("Index", "Marketplace")" class="navigation-link">TẤT CẢ SẢN PHẨM</a>
-                </div>
-            </div>
-        </div>
-        <div class="custom-grid wide">
-            <div class="custom-row sm-gutter app__content">
-                <div>
-                    <div class="title">
-                        <h2>Gợi ý cho bạn</h2>
-                    </div>
-                    <!-- Product -->
-                    <div class="home-product">      
-                        <div class="box-list-product">
-                            <div class="custom-row sm-gutter list-product">         
-                                
-                                <div class="col l-2 m-4 c-6 product-item">                                 
-                                        <a href="#" class="home-product-item">
-                                        <div class="home-product-item__img" style="background-image: url(/assets/img/MEDILINE/1111.Webp);">
-                                            </div>
-                                            <h4 class="home-product-item__name">
-                                                ĐỒNG HỒ
-                                            </h4>
-                                            <div class="home-product-item__price">
-                                                <span class="home-product-item__price-current">500.000 đ</span>
-                                            </div>
-
-                                        </a>
-                                    <div class="home-product-item-footer">LIÊN HỆ SHOP</div>
-                                  
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Shopee</title>
+        <link rel="icon" href="./assets/img/logo/shopee-logo.png" type="image/x-icon">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+        <link rel="stylesheet" href="/assets/css/base.css">
+        <link rel="stylesheet" href="/assets/css/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="/assets/fonts/fontawesome-free-5.12.1-web/css/all.min.css" />
+    </head>
+    <body>
+        <div class="app__container">
+            <div class="infoShop">
+                <div class="shop-container">
+                    <div class="shop-info-section">
+                            <div class="shop-info-left-container">
+                                <div class="bg-blur"></div>
+                                <div class="bg-dark"></div>
+                                <div class="shop-info-left">
+                                    <img src="~/assets/img/ImageSalePlace/@Model.saleplace.Image" alt="Shop Logo" class="shop-logo">
+                                    <div class="shop-details">
+                                    <h2 class="shop-name">@Model.saleplace.Name</h2>
                                     </div>
-                                <div class="col l-2 m-4 c-6 product-item">
-                                    <a href="#" class="home-product-item">
-                                        <div class="home-product-item__img" style="background-image: url(/assets/img/10.png);">
-                                        </div>
-                                        <h4 class="home-product-item__name">
-                                            XE MÁY
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-current">5000000 đ</span>
-                                        </div>
-
-                                    </a>
-                                    <div class="home-product-item-footer">LIÊN HỆ SHOP</div>
+                                    <br>
                                 </div>
-                                <div class="col l-2 m-4 c-6 product-item">
-                                    <a href="#" class="home-product-item">
-                                        <div class="home-product-item__img" style="background-image: url(/assets/img/product.png);">
-                                        </div>
-                                        <h4 class="home-product-item__name">
-                                            SẢN PHẨM 1
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-current">500.000 đ</span>
-                                        </div>
-
-                                    </a>
-                                    <div class="home-product-item-footer">LIÊN HỆ SHOP</div>
-                                </div>
-                                <div class="col l-2 m-4 c-6 product-item">                                 
-                                        <a href="#" class="home-product-item">
-                                        <div class="home-product-item__img" style="background-image: url(/assets/img/MEDILINE/2222.Webp);">
-                                            </div>
-                                            <h4 class="home-product-item__name">
-                                                ĐỒNG HỒ
-                                            </h4>
-                                            <div class="home-product-item__price">
-                                                <span class="home-product-item__price-current">500.000 đ</span>
-                                            </div>
-
-                                        </a>
-                                    <div class="home-product-item-footer">LIÊN HỆ SHOP</div>
-                                    </div>
-                                <div class="col l-2 m-4 c-6 product-item">
-                                    <a href="#" class="home-product-item">
-                                        <div class="home-product-item__img" style="background-image: url(/assets/img/1.png);">
-                                        </div>
-                                        <h4 class="home-product-item__name">
-                                            ÁO THUN NAM
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-current">500.000 đ</span>
-                                        </div>
-
-                                    </a>
-                                    <div class="home-product-item-footer">LIÊN HỆ SHOP</div>
-                                </div>
-                                <div class="col l-2 m-4 c-6 product-item">
-                                    <a href="#" class="home-product-item">
-                                        <div class="home-product-item__img" style="background-image: url(/assets/img/11.png);">
-                                        </div>
-                                        <h4 class="home-product-item__name">
-                                            ÁO THUN NỮ
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-current">500.000 đ</span>
-                                        </div>
-
-                                    </a>
-                                    <div class="home-product-item-footer">LIÊN HỆ SHOP</div>
-                                </div>
-                                <div class="col l-2 m-4 c-6 product-item">
-                                    <a href="#" class="home-product-item">
-                                        <div class="home-product-item__img" style="background-image: url(/assets/img/3.png);">
-                                        </div>
-                                        <h4 class="home-product-item__name">
-                                            LAP TOP
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-current">6500000 đ</span>
-                                        </div>
-
-                                    </a>
-                                    <div class="home-product-item-footer">LIÊN HỆ SHOP</div>
-                                </div>
-                                <div class="col l-2 m-4 c-6 product-item">
-                                    <a href="#" class="home-product-item">
-                                        <div class="home-product-item__img" style="background-image: url(/assets/img/product.png);">
-                                        </div>
-                                        <h4 class="home-product-item__name">
-                                            THIẾT BỊ GIA DỤNG
-                                        </h4>
-                                        <div class="home-product-item__price">
-                                            <span class="home-product-item__price-current">500.000 đ</span>
-                                        </div>
-
-                                    </a>
-                                    <div class="home-product-item-footer">LIÊN HỆ SHOP</div>
-                                </div>
-                                    
                             </div>
-                          
+
+                            <div class="shop-info-right">
+                                <div class="shop-stats">
+                                 <p><span>Sản Phẩm: @ViewBag.TotalProducts</span></p>
+                                </div>
+                            </div>
                         </div>
-                          
+                    <!-- Navigation Tabs -->
+                    <div class="shop-navigation">
+                        <a href="@Url.Action("Index", "Marketplace")" class="navigation-link">TẤT CẢ SẢN PHẨM</a>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="">
-            <div class="grid wide">
-                <div class="row sm-gutter">
-                    <div class="col l-2 m-0 c-0">
-                        <!-- category -->
-                        <nav class="category">
-                            <h3 class="category-heading">
-                                <i class="category-heading-icon fas fa-list-ul"></i>
-                                Bộ lọc tìm kiếm
-                            </h3>
+            <div class="">
+                <div class="grid wide">
+                    <div class="row sm-gutter">
+                        <div class="col l-2 m-0 c-0">
+                            <!-- category -->
+                            <nav class="category">
+                                <h3 class="category-heading">
+                                    <i class="category-heading-icon fas fa-list-ul"></i>
+                                    Bộ lọc tìm kiếm
+                                </h3>
                             <div class="category-group">
                                 <div class="category-group-title">Khoảng Giá</div>
-                                <form action="@Url.Action("FilterByPrice", "MarketPlace")" method="get">
+                                <form action="@Url.Action("SalePlace", "MarketPlace")" method="get">
+                                    <!-- Gửi SalePlaceId qua form -->
+                                    <input type="hidden" name="saleplace" value="@Model.saleplace.Id" />
+
+                                    <!-- Nhập giá trị tối thiểu -->
                                     <div class="category-group-filter">
                                         <input type="number" name="minPrice" placeholder="đ TỪ" class="category-group-filter-input">
                                         <i class="fas fa-arrow-right"></i>
+                                        <!-- Nhập giá trị tối đa -->
                                         <input type="number" name="maxPrice" placeholder="đ ĐẾN" class="category-group-filter-input">
                                     </div>
+
+                                    <!-- Nút áp dụng -->
                                     <button type="submit" class="btn btn--primary category-group-filter-btn">Áp dụng</button>
                                 </form>
-
                             </div>
-                        </nav>
-                    </div>
-                    <div class="col l-10 m-12 c-12">
-                        <!-- home filter -->
-                        <div class="home-filter hide-on-mobile-tablet">
+
+
+                            </nav>
+                        </div>
+                        <div class="col l-10 m-12 c-12">
+                            <!-- home filter -->
+                            <div class="home-filter hide-on-mobile-tablet">
                             <div class="home-filter-control">
-                                <p class="home-filter-title">Sắp xếp theo</p>
-                                <a href="@Url.Action("SortProducts", "MarketPlace", new { sortOrder = "newest" })" class="btn btn-success">Mới nhất</a>
-
-                                <div class="btn home-filter-sort">
-                                    <p class="home-filter-sort-btn">Giá</p>
-                                    <i class="fas fa-sort-amount-down-alt"></i>
-                                    <ul class="home-filter-sort-list">
-                                        <div class="home-filter-control">
-                                            <a href="/MarketPlace/SortProducts?sortOrder=asc" class="btn btn-primary">Sắp xếp tăng dần</a>
-                                            <a href="/MarketPlace/SortProducts?sortOrder=desc" class="btn btn-secondary">Sắp xếp giảm dần</a>
-                                        </div>
-                                    </ul>
+                                <a href="@Url.Action("SalePlace", "MarketPlace", new { saleplace = @Model.saleplace.Id, sortOrder = "newest" })" class="btn btnSuccess">Mới nhất</a>
+                                <a href="@Url.Action("SalePlace", "MarketPlace", new { saleplace = @Model.saleplace.Id, sortOrder = "asc" })" class="btn btnSuccess">Sắp xếp giá tăng dần</a>
+                                <a href="@Url.Action("SalePlace", "MarketPlace", new { saleplace = @Model.saleplace.Id, sortOrder = "desc" })" class="btn btnSuccess">Sắp xếp giá giảm dần</a>
+                            </div>
+                                <div class="home-filter-page">
+                                    <div class="home-filter-page-number">
+                                    </div>
+                                    <div class="home-filter-page-control">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="home-filter-page">
-                                <div class="home-filter-page-number">
-                                </div>
-                                <div class="home-filter-page-control">
-                                </div>
-                            </div>
-                        </div>
-                        <!-- home product -->
-                        <div class="home-product">
-                            <div id="list-product" class="row sm-gutter">
-                                @if (!string.IsNullOrEmpty(ViewBag.SearchTerm))
-                                {
-                                    <p>Kết quả tìm kiếm cho: <strong>@ViewBag.SearchTerm</strong></p>
-                                }
-                                @if (Model.Products == null || !Model.Products.Any())
-                                {
-                                    <p>Không có sản phẩm nào.</p>
-
-                                }
-                                else
-                                {
-                                    @foreach (var product in Model.Products)
+                            <!-- home product -->
+                            <div class="home-product">
+                                <div id="list-product" class="row sm-gutter">
+                                    @if (!string.IsNullOrEmpty(ViewBag.SearchTerm))
                                     {
-                                        <div class="col l-2 m-3 c-6 home-product-item">
-                                            <a class="home-product-item-link" href="#">
-                                                <div class="home-product-item__img" style="background-image: url(/assets/img/home/20.PNG);"></div>
-                                                <div class="home-product-item__info">
-                                                    <h4 class="home-product-item__name">@product.Name</h4>
-                                                    <div class="home-product-item__price">
-
-                                                        <p class="home-product-item__price-new">@product.Price đ</p>
-                                                        <i class="home-product-item__ship fas fa-shipping-fast"></i>
-                                                    </div>
-                                                    <div class="home-product-item__origin">@product.CategoryName</div>
-
-
-                                                </div>
-                                                <div class="home-product-item-footer">LIÊN HỆ SHOP</div>
-                                            </a>
-                                        </div>
+                                        <p>Kết quả tìm kiếm cho: <strong>@ViewBag.SearchTerm</strong></p>
                                     }
-                                }
+                                    @if (Model.Products == null || !Model.Products.Any())
+                                    {
+                                        <p>Không có sản phẩm nào.</p>
 
+                                    }
+                                    else
+                                    {
+                                        @foreach (var product in Model.Products)
+                                        {
+                                            <div class="col l-2 m-3 c-6 home-product-item">
+                                                <a class="home-product-item-link" href="#">
+                                                    <div class="home-product-item__img" style="background-image: url(/assets/img/MarketPlace/@product.Image);"></div>
+                                                    <div class="home-product-item__info">
+                                                        <h4 class="home-product-item__name">@product.Name</h4>
+                                                        <div class="home-product-item__price">
+
+                                                            <p class="home-product-item__price-new">@product.Price đ</p>
+                                                            <i class="home-product-item__ship fas fa-shipping-fast"></i>
+                                                        </div>
+                                                        <div class="home-product-item__origin">@product.CategoryName</div>
+
+
+                                                    </div>
+                                                <div class="home-product-item-footer">
+                                                    <button style="background-color:#ee4d2d; color:white; border:none">LIÊN HỆ SHOP</button>
+                                                </div>
+                                            </a>
+                                            </div>
+                                        }
+                                    }
+
+                                </div>
                             </div>
+                            @{
+                                var currentPage = ViewBag.Page ?? 1;  // Gán mặc định là 1 nếu null
+                                var totalPages = ViewBag.TotalPages ?? 1;  // Gán mặc định là 1 nếu null
+                                var startPage = ViewBag.StartPage ?? 1;  // Gán mặc định là 1 nếu null
+                                var endPage = ViewBag.EndPage ?? totalPages;  // Gán giá trị cuối cùng nếu null
+                            }
+
+
                         </div>
-                        @{
-                            var currentPage = ViewBag.Page ?? 1;  // Gán mặc định là 1 nếu null
-                            var totalPages = ViewBag.TotalPages ?? 1;  // Gán mặc định là 1 nếu null
-                            var startPage = ViewBag.StartPage ?? 1;  // Gán mặc định là 1 nếu null
-                            var endPage = ViewBag.EndPage ?? totalPages;  // Gán giá trị cuối cùng nếu null
-                        }
+
+
+                
+
 
 
                     </div>
-
-
-                    <ul class="pagination home-product-pagination">
-                        @if (currentPage > 1)
-                        {
-                            <li class="pagination-item">
-                                <a href="@Url.Action("SearchByName", "MarketPlace", new { searchTerm = ViewBag.SearchTerm, page = 1, pageSize = ViewBag.PageSize })" class="pagination-item-link">Đầu</a>
-                            </li>
-                        }
-
-                        @for (int i = startPage; i <= endPage; i++)
-                        {
-                            <li class="pagination-item @(currentPage == i ? "pagination-item--active" : "")">
-                                <a href="@Url.Action("SearchByName", "MarketPlace", new { searchTerm = ViewBag.SearchTerm, page = i, pageSize = ViewBag.PageSize })" class="pagination-item-link">@i</a>
-                            </li>
-                        }
-
-                        @if (currentPage < totalPages)
-                        {
-                            <li class="pagination-item">
-                                <a href="@Url.Action("SearchByName", "MarketPlace", new { searchTerm = ViewBag.SearchTerm, page = totalPages, pageSize = ViewBag.PageSize })" class="pagination-item-link">Cuối</a>
-                            </li>
-                        }
-                    </ul>
-
-
-
                 </div>
+            </div>
             </div>
         </div>
         </div>
-    </div>
-    </div>
-    <div class=""></div>
+        <div class=""></div>
 
-    </div>
-    <script src="/assets/js/shopdetail.js"></script>
-</body>
-</html>
+        </div>
+        <script src="/assets/js/shopdetail.js"></script>
+    </body>
+    </html>

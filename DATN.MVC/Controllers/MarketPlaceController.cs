@@ -127,7 +127,8 @@ namespace DATN.MVC.Controllers
             return new List<CaterorisRes>();
         }
 
-        public async Task<IActionResult> SalePlace(int saleplace)
+        [HttpGet("{saleplace:int}")]
+        public async Task<IActionResult> SalePlace(int saleplace, decimal? minPrice, decimal? maxPrice, string sortOrder)
         {
             // Đối tượng chứa thông tin địa điểm bán hàng và sản phẩm
             var data = new ByIdSalePlaceAndGetALLProduct
@@ -160,9 +161,31 @@ namespace DATN.MVC.Controllers
                         var allProducts = JsonConvert.DeserializeObject<List<GetAllProductRes>>(productJson);
 
                         // Lọc sản phẩm theo SalePlaceId
-                        data.Products = allProducts
-                            .Where(p => p.SalePlaceId == saleplace) // SalePlaceId là thuộc tính trong đối tượng sản phẩm
-                            .ToList();
+                        data.Products = allProducts.Where(p => p.SalePlaceId == saleplace).ToList();
+
+                        // Lọc theo mức giá nếu có
+                        if (minPrice.HasValue)
+                        {
+                            data.Products = data.Products.Where(p => p.Price >= minPrice.Value).ToList();
+                        }
+                        if (maxPrice.HasValue)
+                        {
+                            data.Products = data.Products.Where(p => p.Price <= maxPrice.Value).ToList();
+                        }
+
+                        // Sắp xếp sản phẩm theo yêu cầu
+                        switch (sortOrder?.ToLower())
+                        {
+                            case "newest":
+                                data.Products = data.Products.OrderByDescending(p => p.CreatedDateTime).ToList();
+                                break;
+                            case "asc":
+                                data.Products = data.Products.OrderBy(p => p.Price).ToList();
+                                break;
+                            case "desc":
+                                data.Products = data.Products.OrderByDescending(p => p.Price).ToList();
+                                break;
+                        }
 
                         // Tính tổng số lượng sản phẩm
                         ViewBag.TotalProducts = data.Products.Count;
@@ -181,8 +204,6 @@ namespace DATN.MVC.Controllers
             // Trả về dữ liệu vào View
             return View(data);
         }
-
-
 
         public IActionResult DetailProduct()
         {
@@ -299,8 +320,6 @@ namespace DATN.MVC.Controllers
             // Trả về dữ liệu cho View
             return View("Index", data);
         }
-
-
 
         [HttpGet]
         public async Task<IActionResult> FilterByPrice(decimal? minPrice, decimal? maxPrice, decimal? minRentalPrice, decimal? maxRentalPrice)
@@ -692,7 +711,19 @@ namespace DATN.MVC.Controllers
 
 
 
-        
+
+        [HttpGet]
+        public IActionResult SalePlaceRedirect(int saleplace)
+        {
+            // Chuyển hướng tới action SalePlace với route parameter
+            return RedirectToAction("SalePlace", new { saleplace });
+        }
+
+
+
+
+
+
 
     }
 }
