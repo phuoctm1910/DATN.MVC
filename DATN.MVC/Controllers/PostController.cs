@@ -56,7 +56,7 @@ namespace DATN.MVC.Controllers
                 if (newPost.ImageFile != null)
                 {
                     // Gọi API backend để lưu trữ thông tin bài đăng (bao gồm cả file ảnh)
-                    var result = ApiHelpers.PostMethodWithFileAsync<bool, Post_CreateReq>("https://localhost:7296/api/post/create", newPost, newPost.ImageFile, fileKeyName: "ImageFile");
+                    var result = ApiHelpers.PostMethodWithFileAsync<bool, Post_CreateReq>("https://localhost:7296/api/post/create", newPost, newPost.ImageFile, "ImageFile");
 
                     if (result)
                     {
@@ -69,8 +69,84 @@ namespace DATN.MVC.Controllers
                 }
                 else
                 {
-                    return Json(new { success = false, message = "No image file provided." });
+                    // Gọi API backend để lưu trữ thông tin bài đăng (bao gồm cả file ảnh)
+                    var result = ApiHelpers.PostMethodAsyncV2<bool, Post_CreateReq>("https://localhost:7296/api/post/create", newPost);
+
+                    if (result)
+                    {
+                        return Json(new { success = true, message = "Post created successfully." });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Failed to create post." });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi và trả về phản hồi lỗi
+                return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
+            }
+        }
+        [HttpPost]
+        public JsonResult EditPost([FromForm] Post_UpdateReq editPost)
+        {
+            try
+            {
+                // Kiểm tra nếu có file ảnh để upload
+                if (editPost.NewImageFile != null)
+                {
+                    // Gọi API backend để lưu trữ thông tin bài đăng (bao gồm cả file ảnh)
+                    var result = ApiHelpers.PutMethodWithFileAsync<bool, Post_UpdateReq>("https://localhost:7296/api/post/edit", editPost, editPost.NewImageFile, "NewImageFile");
+
+                    if (result)
+                    {
+                        return Json(new { success = true, message = "Post edited successfully." });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Failed to edit post." });
+                    }
+                }
+                else
+                {
+                    // Gọi API backend để lưu trữ thông tin bài đăng (bao gồm cả file ảnh)
+                    var result = ApiHelpers.PutMethodAsyncV2<bool, Post_UpdateReq>("https://localhost:7296/api/post/edit", editPost);
+
+                    if (result)
+                    {
+                        return Json(new { success = true, message = "Post edited successfully." });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Failed to edit post." });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi và trả về phản hồi lỗi
+                return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
+            }
+        }
+        [HttpPost]
+        public JsonResult DeletePost([FromBody] Post_DeleteReq req)
+        {
+            try
+            {
+
+                    // Gọi API backend để lưu trữ thông tin bài đăng (bao gồm cả file ảnh)
+                    var result = ApiHelpers.DeleteMethodAsync<bool, Post_DeleteReq>("https://localhost:7296/api/post/delete/", req);
+
+                    if (result)
+                    {
+                        return Json(new { success = true, message = "Post delete successfully." });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Failed to delete post." });
+                    }
+
             }
             catch (Exception ex)
             {

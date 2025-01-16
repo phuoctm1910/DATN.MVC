@@ -18,6 +18,7 @@ namespace DATN.MVC.Models.Response
         public int CommentCount { get; set; }
         public int ReactCount { get; set; }
         public int ShareCount { get; set; }
+        public string PostImage { get; set; }
         public List<string>? ImageUrls { get; set; }
 
 

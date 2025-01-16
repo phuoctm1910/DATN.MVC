@@ -24,23 +24,36 @@ namespace DATN.MVC.Controllers
         [HttpGet]
         public JsonResult GetCommentByPostId(int Id)
         {
-            var result = ApiHelpers.GetMethod<List<Comment_ReadAllRes>>("https://localhost:7296/api/Comment/getListCommentByPostId/" + Id);
+            // Gọi API để lấy danh sách comment theo PostId
+            var result = ApiHelpers.GetMethod<List<Comment_ReadAllRes>>(
+                "https://localhost:7296/api/Comment/getListCommentByPostId/" + Id
+            );
 
-            
-            // Nếu ConcurrentDictionary chưa có dữ liệu, cập nhật từ API
-            if (result != null )
+            // Nếu result = null hoặc rỗng thì ta return ngay một list rỗng.
+            // Điều này đảm bảo khi bài post không có comment,
+            // ta không hiển thị comment của bài cũ.
+            if (result == null || !result.Any())
             {
-                if (GlobalCache.CommentLikes.IsEmpty)
-                {
-                    foreach (var comment in result)
-                    {
-                        GlobalCache.CommentLikes.AddOrUpdate(comment.Id, comment.ReactCount, (key, oldValue) => comment.ReactCount);
-                    }
-                }
-                
+                return Json(new { ApiData = new List<Comment_ReadAllRes>() });
             }
+
+            // Nếu có comment, chỉ lúc này mới cập nhật vào GlobalCache
+            // (để lưu số lượng reactCount cho comment).
+            if (GlobalCache.CommentLikes.IsEmpty)
+            {
+                foreach (var comment in result)
+                {
+                    GlobalCache.CommentLikes.AddOrUpdate(
+                        comment.Id,
+                        comment.ReactCount,
+                        (key, oldValue) => comment.ReactCount
+                    );
+                }
+            }
+
             return Json(new { ApiData = result });
         }
+
         [HttpGet]
         public JsonResult GetReactionByComment(int commentid)
         {

@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Employee\Data\" />
-    <Folder Include="Request\Post\" />
     <Folder Include="Respone\Post\" />
     <Folder Include="wwwroot\images\New folder\" />
     <Folder Include="wwwroot\ImgSalcePlace\" />

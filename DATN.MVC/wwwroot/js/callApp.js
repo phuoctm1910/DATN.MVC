@@ -19,20 +19,15 @@
         async initializeSignalR() {
             this.connection = new signalR.HubConnectionBuilder()
                 .withUrl("/chathub")
-                .withAutomaticReconnect()
-                .configureLogging(signalR.LogLevel.Information)
-                .build();
+                .withAutomaticReconnect();
 
             try {
                 await this.connection.start();
-                console.log("SignalR connected for call");
             } catch (err) {
                 console.error("SignalR connection error:", err);
             }
 
-            this.connection.onreconnected(() => {
-                console.log("SignalR reconnected");
-            });
+            this.connection.onreconnected();
 
             // Handle incoming call request
             this.connection.on("ReceiveCallRequest", this.handleReceiveCallRequest);

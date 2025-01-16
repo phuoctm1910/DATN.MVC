@@ -71,15 +71,11 @@
             this.connection = new signalR.HubConnectionBuilder()
                 .withUrl("/chathub")
                 .withAutomaticReconnect()
-                .configureLogging(signalR.LogLevel.Information)
                 .build();
 
             this.connection.serverTimeoutInMilliseconds = 60000;
 
-            this.connection.start().then(() => {
-                console.log("SignalR connected");
-            }).catch(err => console.error("SignalR connection error:", err));
-
+            this.connection.start();
             this.connection.on("UpdateMessageStatus", (messageId, status) => {
                 const message = this.$refs.chatbox.messages.find(msg => msg.id === messageId);
                 if (message) {
@@ -139,16 +135,9 @@
         initializeSignalRStatus() {
             this.statusConnection = new signalR.HubConnectionBuilder()
                 .withUrl("/statushub?userId=" + this.userId)
-                .withAutomaticReconnect()
-                .configureLogging(signalR.LogLevel.Information)
-                .build();
+                .withAutomaticReconnect().build();
 
-            this.statusConnection.start()
-                .then(() => {
-                    console.log("StatusHub connected");
-                })
-                .catch(err => console.error("StatusHub connection error:", err));
-
+            this.statusConnection.start();
             // Khi có user online
             this.statusConnection.on("UserOnline", (onlineUserId) => {
                 // Tìm trong friends, set isFriendOnline = true
